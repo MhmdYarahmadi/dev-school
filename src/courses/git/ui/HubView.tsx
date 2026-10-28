@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import type { GitMachine } from '../engine';
 import type { PullRequest } from '../engine/hub';
+import { mark, t } from '../../../shared/i18n';
+import { T } from '../../../shared/T';
 
-const STATE = { OPEN: ['🟢 Open', 'good'], MERGED: ['🟣 Merged', 'accent'], CLOSED: ['⚪ Closed', ''] } as const;
+const STATE = { OPEN: [mark('🟢 Open'), 'good'], MERGED: [mark('🟣 Merged'), 'accent'], CLOSED: [mark('⚪ Closed'), ''] } as const;
 
 /**
  * The hub's web page for the repository you're in (or every hub repository): branches, pull
@@ -19,7 +21,7 @@ export function HubView({ machine, version, run }: { machine: GitMachine; versio
   const name = picked && names.includes(picked) ? picked : (mine ?? names[0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  if (!name) return <div className="gempty">Nothing on the hub yet. Repositories you clone from <code>https://hub.zilber.tech/…</code> show up here.</div>;
+  if (!name) return <div className="gempty"><T text={t('Nothing on the hub yet. Repositories you clone from {url} show up here.')} vars={{ url: <code>https://hub.zilber.tech/…</code> }} /></div>;
   const hub = machine.hub.repos.get(name)!;
   const prs = [...(machine.hub.prs.get(name) ?? [])].reverse();
   const branches = hub.branches();
@@ -36,16 +38,16 @@ export function HubView({ machine, version, run }: { machine: GitMachine; versio
     return (
       <div key={p.number} className="hub-pr">
         <div className="row" style={{ gap: 8 }}>
-          <span className={`tag ${cls}`}>{label}</span>
+          <span className={`tag ${cls}`}>{t(label)}</span>
           <b>
             {p.title} <span className="muted">#{p.number}</span>
           </b>
         </div>
         <div className="small muted">
-          <span className="mono">{p.head}</span> → <span className="mono">{p.base}</span> · opened by {p.author}
+          <span className="mono">{p.head}</span> → <span className="mono">{p.base}</span> · {t('opened by {who}', { who: p.author })}
         </div>
         {p.body && <div className="small hub-body">{p.body}</div>}
-        {[...p.reviews.map((r) => ({ at: r.at, who: r.author, what: r.state === 'APPROVED' ? '✅ approved' : r.state === 'CHANGES_REQUESTED' ? '🔴 requested changes' : '💬 reviewed', body: r.body })), ...p.comments.map((c) => ({ at: c.at, who: c.author, what: '💬 commented', body: c.body }))]
+        {[...p.reviews.map((r) => ({ at: r.at, who: r.author, what: r.state === 'APPROVED' ? t('✅ approved') : r.state === 'CHANGES_REQUESTED' ? t('🔴 requested changes') : t('💬 reviewed'), body: r.body })), ...p.comments.map((c) => ({ at: c.at, who: c.author, what: t('💬 commented'), body: c.body }))]
           .sort((a, b) => a.at - b.at)
           .map((x, i) => (
             <div key={i} className="hub-review small">
@@ -55,17 +57,17 @@ export function HubView({ machine, version, run }: { machine: GitMachine; versio
           ))}
         {p.state === 'OPEN' && inClone && (
           <div className="row" style={{ gap: 6, marginTop: 6 }}>
-            <button className="btn small" disabled={!!blocker} title={blocker ?? `Runs: gh pr merge ${p.number} --merge`} onClick={() => run(`gh pr merge ${p.number} --merge`)}>
-              🔀 Merge pull request
+            <button className="btn small" disabled={!!blocker} title={blocker ?? t('Runs: {cmd}', { cmd: `gh pr merge ${p.number} --merge` })} onClick={() => run(`gh pr merge ${p.number} --merge`)}>
+              {t('🔀 Merge pull request')}
             </button>
             <button className="btn small ghost" onClick={() => run(`gh pr view ${p.number}`)}>
-              View
+              {t('View')}
             </button>
             <button className="btn small ghost" onClick={() => run(`gh pr diff ${p.number}`)}>
-              Files changed
+              {t('Files changed')}
             </button>
-            {blocker && <span className="small bad-text">Can't merge yet: {blocker}.</span>}
-            {!blocker && latest.size === 0 && <span className="small muted">No reviews yet.</span>}
+            {blocker && <span className="small bad-text">{t("Can't merge yet: {why}.", { why: blocker })}</span>}
+            {!blocker && latest.size === 0 && <span className="small muted">{t('No reviews yet.')}</span>}
           </div>
         )}
       </div>
@@ -86,20 +88,20 @@ export function HubView({ machine, version, run }: { machine: GitMachine; versio
         )}
       </div>
       <div className="small">
-        <b>Branches:</b>{' '}
+        <b>{t('Branches:')}</b>{' '}
         {branches.length ? (
           branches.map((b) => (
             <span key={b} className="tag mono" style={{ marginRight: 4 }}>
               {b}
-              {b === defaultBranch ? ' (default)' : ''}
+              {b === defaultBranch ? ` ${t('(default)')}` : ''}
               {machine.hub.isProtected(hub, b) ? ' 🔒' : ''}
             </span>
           ))
         ) : (
-          <span className="muted">none yet (an empty repository)</span>
+          <span className="muted">{t('none yet (an empty repository)')}</span>
         )}
       </div>
-      <div className="small muted mono">Clone: git clone {machine.hub.url(name)}</div>
+      <div className="small muted mono">{t('Clone:')} git clone {machine.hub.url(name)}</div>
       {canOpen && (
         <form
           className="hub-new stack"
@@ -112,18 +114,18 @@ export function HubView({ machine, version, run }: { machine: GitMachine; versio
           }}
         >
           <b className="small">
-            Open a pull request: <span className="mono">{current}</span> → <span className="mono">{defaultBranch}</span>
+            {t('Open a pull request:')} <span className="mono">{current}</span> → <span className="mono">{defaultBranch}</span>
           </b>
-          <input className="input" placeholder="Title (what does this change do?)" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <textarea className="input" rows={2} placeholder="Description (optional)" value={body} onChange={(e) => setBody(e.target.value)} />
+          <input className="input" placeholder={t('Title (what does this change do?)')} value={title} onChange={(e) => setTitle(e.target.value)} />
+          <textarea className="input" rows={2} placeholder={t('Description (optional)')} value={body} onChange={(e) => setBody(e.target.value)} />
           <button className="btn small primary" disabled={!title.trim()}>
-            Create pull request
+            {t('Create pull request')}
           </button>
         </form>
       )}
       <div className="stack" style={{ gap: 8 }}>
-        <b className="small">Pull requests</b>
-        {prs.length ? prs.map(pr) : <div className="ev-empty">No pull requests yet.</div>}
+        <b className="small">{t('Pull requests')}</b>
+        {prs.length ? prs.map(pr) : <div className="ev-empty">{t('No pull requests yet.')}</div>}
       </div>
     </div>
   );

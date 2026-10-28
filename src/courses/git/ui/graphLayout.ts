@@ -6,6 +6,7 @@
 import type { GitMachine } from '../engine';
 import type { Repo } from '../engine/repo';
 import type { GitEvent } from '../engine/types';
+import { t } from '../../../shared/i18n';
 
 export interface GraphCommit {
   sha: string;
@@ -69,11 +70,11 @@ export function machineGraphs(m: GitMachine): GraphData[] {
   if (local) {
     const home = m.learner.home;
     const where = local.root!.startsWith(home) ? '~' + local.root!.slice(home.length) : local.root!;
-    out.push(graphData(local, m.repoId(m.learner, local), `Your repository · ${where}`));
+    out.push(graphData(local, m.repoId(m.learner, local), t('Your repository · {where}', { where })));
     const url = local.config.get('remote.origin.url');
     const name = url ? m.hub.parseUrl(url) : null;
     const hub = name ? m.hub.repos.get(name) : undefined;
-    if (hub && name) out.push(graphData(hub, `hub:${name}`, `On the hub · ${name}`, true));
+    if (hub && name) out.push(graphData(hub, `hub:${name}`, t('On the hub · {name}', { name }), true));
   }
   return out;
 }
@@ -138,25 +139,37 @@ export function layout(g: GraphData): { nodes: Node[]; edges: Edge[]; lanes: num
 export function describeEvents(events: GitEvent[]): string[] {
   const out: string[] = [];
   const short = (s: string | null) => (s ? s.slice(0, 7) : '');
-  const repoName = (id: string) => (id.startsWith('hub:') ? `the hub (${id.slice(4)})` : 'your repository');
+  const onHub = (repo: string) => repo.startsWith('hub:');
+  const commits = (n: number) => (n === 0 ? t('no new commits') : n === 1 ? t('1 commit') : t('{n} commits', { n }));
+  const repoName = (id: string) => (onHub(id) ? t('the hub ({name})', { name: id.slice(4) }) : t('your repository'));
   for (const e of events) {
-    if (e.type === 'commit') out.push(e.kind === 'merge' ? `🔀 New merge commit ${short(e.sha)} with two parents${e.repo.startsWith('hub:') ? ' on the hub' : ''}.` : e.kind === 'revert' ? `↩️ New commit ${short(e.sha)} that undoes an earlier one.` : `🟢 New commit ${short(e.sha)}${e.parents.length ? '' : ' (the first one: no parent)'}.`);
-    else if (e.type === 'ref') {
+    if (e.type === 'commit') {
+      const sha = short(e.sha);
+      if (e.kind === 'merge') out.push(onHub(e.repo) ? t('🔀 New merge commit {sha} with two parents on the hub.', { sha }) : t('🔀 New merge commit {sha} with two parents.', { sha }));
+      else if (e.kind === 'revert') out.push(t('↩️ New commit {sha} that undoes an earlier one.', { sha }));
+      else out.push(e.parents.length ? t('🟢 New commit {sha}.', { sha }) : t('🟢 New commit {sha} (the first one: no parent).', { sha }));
+    } else if (e.type === 'ref') {
       const name = e.ref.replace(/^refs\/(heads|remotes)\//, '');
       const remote = e.ref.startsWith('refs/remotes/');
-      const where = e.repo.startsWith('hub:') ? ' on the hub' : '';
-      if (!e.from) out.push(remote ? `📡 ${name} appeared (what the hub has).` : `🏷️ Branch ${name} created${where} at ${short(e.to)}.`);
-      else if (!e.to) out.push(`✂️ Branch ${name} deleted${where}.`);
-      else if (remote) out.push(`📡 ${name} moved to ${short(e.to)} (the hub's ${name.split('/').slice(1).join('/')}).`);
-      else out.push(`➡️ ${name}${where} moved ${e.fastForward ? 'forward' : ''} ${short(e.from)} → ${short(e.to)}${e.fastForward && !events.some((x) => x.type === 'commit' && x.repo === e.repo) ? ' (fast-forward: no new commit needed)' : ''}.`.replace('  ', ' '));
-    } else if (e.type === 'head') out.push(e.branch ? `👉 HEAD is now on ${e.branch}.` : `👉 HEAD is detached at ${short(e.to)} (not on a branch).`);
+      const hub = onHub(e.repo);
+      const v = { name, from: short(e.from), to: short(e.to) };
+      if (!e.from) out.push(remote ? t('📡 {name} appeared (what the hub has).', v) : hub ? t('🏷️ Branch {name} created on the hub at {to}.', v) : t('🏷️ Branch {name} created at {to}.', v));
+      else if (!e.to) out.push(hub ? t('✂️ Branch {name} deleted on the hub.', v) : t('✂️ Branch {name} deleted.', v));
+      else if (remote) out.push(t("📡 {name} moved to {to} (the hub's {branch}).", { ...v, branch: name.split('/').slice(1).join('/') }));
+      else if (!e.fastForward) out.push(hub ? t('➡️ {name} on the hub moved {from} → {to}.', v) : t('➡️ {name} moved {from} → {to}.', v));
+      else if (events.some((x) => x.type === 'commit' && x.repo === e.repo)) out.push(hub ? t('➡️ {name} on the hub moved forward {from} → {to}.', v) : t('➡️ {name} moved forward {from} → {to}.', v));
+      else out.push(hub ? t('➡️ {name} on the hub moved forward {from} → {to} (fast-forward: no new commit needed).', v) : t('➡️ {name} moved forward {from} → {to} (fast-forward: no new commit needed).', v));
+    } else if (e.type === 'head') out.push(e.branch ? t('👉 HEAD is now on {branch}.', { branch: e.branch }) : t('👉 HEAD is detached at {sha} (not on a branch).', { sha: short(e.to) }));
     else if (e.type === 'transfer') {
-      const n = e.commits.length;
-      const what = n ? `${n} commit${n === 1 ? '' : 's'}` : 'no new commits';
-      out.push(e.kind === 'push' ? `⬆️ Pushed ${what} to ${repoName(e.to)}.` : e.kind === 'fetch' ? `⬇️ Downloaded ${what} from ${repoName(e.from)}.` : `📥 Cloned: copied ${what} from ${repoName(e.from)}.`);
-    } else if (e.type === 'conflict') out.push(`⚠️ Conflict in ${e.paths.join(', ')}: fix the file${e.paths.length === 1 ? '' : 's'}, git add, then git commit.`);
-    else if (e.type === 'repo') out.push(e.action === 'init' ? (e.repo.startsWith('hub:') ? `🌐 New repository on the hub.` : `📁 New repository (a hidden .git folder).`) : `🗑️ Repository deleted (.git removed).`);
-    else if (e.type === 'pr') out.push(`📬 Pull request #${e.number} ${e.action}.`);
+      const what = commits(e.commits.length);
+      out.push(e.kind === 'push' ? t('⬆️ Pushed {what} to {repo}.', { what, repo: repoName(e.to) }) : e.kind === 'fetch' ? t('⬇️ Downloaded {what} from {repo}.', { what, repo: repoName(e.from) }) : t('📥 Cloned: copied {what} from {repo}.', { what, repo: repoName(e.from) }));
+    } else if (e.type === 'conflict') out.push(e.paths.length === 1 ? t('⚠️ Conflict in {files}: fix the file, git add, then git commit.', { files: e.paths.join(', ') }) : t('⚠️ Conflict in {files}: fix the files, git add, then git commit.', { files: e.paths.join(', ') }));
+    else if (e.type === 'repo') out.push(e.action === 'init' ? (onHub(e.repo) ? t('🌐 New repository on the hub.') : t('📁 New repository (a hidden .git folder).')) : t('🗑️ Repository deleted (.git removed).'));
+    else if (e.type === 'pr') {
+      const n = e.number;
+      const said = { opened: t('📬 Pull request #{n} opened.', { n }), updated: t('📬 Pull request #{n} updated.', { n }), reviewed: t('📬 Pull request #{n} reviewed.', { n }), commented: t('📬 Pull request #{n} commented.', { n }), merged: t('📬 Pull request #{n} merged.', { n }), closed: t('📬 Pull request #{n} closed.', { n }) };
+      out.push(said[e.action]);
+    }
   }
   return [...new Set(out)];
 }

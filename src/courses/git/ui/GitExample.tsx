@@ -6,6 +6,7 @@ import { machineGraphs } from './graphLayout';
 import { GraphView } from './GraphView';
 import { promptOf, type TermEntry } from './Terminal';
 import { Workspace, type View } from './Workspace';
+import { t } from '../../../shared/i18n';
 
 /** Runs every command of `code` on a fresh machine prepared by `env`. */
 function runAll(code: string, env?: SandboxEnv) {
@@ -40,10 +41,10 @@ export function GitExampleRunner({ code, disabled, env }: { code: string; disabl
       <pre style={{ margin: 0 }}>{code}</pre>
       <div className="row">
         <button className="btn" disabled={disabled} onClick={() => setRunKey((k) => k + 1)}>
-          ▶ {runKey ? 'Run again (fresh machine)' : 'Run example'}
+          ▶ {runKey ? t('Run again (fresh machine)') : t('Run example')}
         </button>
         <Link className="small" to="/playground">
-          Experiment in the playground →
+          {t('Experiment in the playground →')}
         </Link>
       </div>
       {runKey > 0 && <LiveResult key={runKey} code={code} env={env} />}
@@ -58,7 +59,7 @@ export function GitPredictSetup({ code, env }: { code: string; env?: SandboxEnv 
     <div className="stack" style={{ gap: 8 }}>
       {graphs.length > 0 && (
         <details open>
-          <summary className="small muted">The repository before these commands</summary>
+          <summary className="small muted">{t('The repository before these commands')}</summary>
           <GraphView graphs={graphs} />
         </details>
       )}

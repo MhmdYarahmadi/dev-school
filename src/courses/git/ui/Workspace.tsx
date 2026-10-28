@@ -9,9 +9,11 @@ import { describeEvents, machineGraphs, type GraphData } from './graphLayout';
 import { GraphView, type Arrivals } from './GraphView';
 import { HubView } from './HubView';
 import { promptOf, Terminal, type TermEntry } from './Terminal';
+import { mark, t } from '../../../shared/i18n';
+import { T } from '../../../shared/T';
 
 export type View = 'graph' | 'areas' | 'hub' | 'files';
-const LABELS: Record<View, string> = { graph: '🌳 Graph', areas: '📋 Areas', hub: '🌐 Hub', files: '✏️ Files' };
+const LABELS: Record<View, string> = { graph: mark('🌳 Graph'), areas: mark('📋 Areas'), hub: mark('🌐 Hub'), files: mark('✏️ Files') };
 
 /** Which commits fly in from where, after a push or fetch. */
 function arrivalsOf(events: GitEvent[]): Record<string, Arrivals> {
@@ -46,7 +48,7 @@ function FilesPanel({ machine, version, run }: { machine: GitMachine; version: n
   return (
     <div className="stack" style={{ gap: 8 }}>
       <div className="small muted">
-        Files in <span className="mono">{base.startsWith(u.home) ? '~' + base.slice(u.home.length) : base}</span>. Saving runs a <code>cat &gt; file</code> command in the terminal, like saving in an editor.
+        <T text={t('Files in {dir}. Saving runs a {cmd} command in the terminal, like saving in an editor.')} vars={{ dir: <span className="mono">{base.startsWith(u.home) ? '~' + base.slice(u.home.length) : base}</span>, cmd: <code>cat &gt; file</code> }} />
       </div>
       <div className="files-tabs">
         {files.map((f) => (
@@ -54,12 +56,12 @@ function FilesPanel({ machine, version, run }: { machine: GitMachine; version: n
             {f}
           </button>
         ))}
-        {!files.length && <span className="ev-empty">no files yet</span>}
+        {!files.length && <span className="ev-empty">{t('no files yet')}</span>}
       </div>
       {open !== null && (
         <>
           <CodeEditor key={open} value={text} onChange={setText} lang="text" minHeight="160px" />
-          {/^<<<<<<< |^=======$|^>>>>>>> /m.test(text) && <div className="small warn-text">⚠️ This file still has conflict markers. Keep the lines you want and delete the three marker lines.</div>}
+          {/^<<<<<<< |^=======$|^>>>>>>> /m.test(text) && <div className="small warn-text">{t('⚠️ This file still has conflict markers. Keep the lines you want and delete the three marker lines.')}</div>}
           <div className="row">
             <button
               className="btn small primary"
@@ -68,10 +70,10 @@ function FilesPanel({ machine, version, run }: { machine: GitMachine; version: n
                 setOpen(null);
               }}
             >
-              💾 Save {open}
+              {t('💾 Save {file}', { file: open })}
             </button>
             <button className="btn small ghost" onClick={() => setOpen(null)}>
-              Cancel
+              {t('Cancel')}
             </button>
           </div>
         </>
@@ -87,8 +89,8 @@ function FilesPanel({ machine, version, run }: { machine: GitMachine; version: n
           setText(u.fs.read(`${base}/${n}`) ?? '');
         }}
       >
-        <input className="input" placeholder="new file, e.g. notes.txt" value={name} onChange={(e) => setName(e.target.value)} />
-        <button className="btn small">+ New file</button>
+        <input className="input" placeholder={t('new file, e.g. notes.txt')} value={name} onChange={(e) => setName(e.target.value)} />
+        <button className="btn small">{t('+ New file')}</button>
       </form>
     </div>
   );
@@ -154,7 +156,7 @@ export function Workspace({ machine, initial = [], views = ['graph', 'areas', 'f
           <div className="ws-tabs" role="tablist">
             {tabs.map((v) => (
               <button key={v} type="button" role="tab" aria-selected={tab === v} className={`ws-tab ${tab === v ? 'on' : ''}`} onClick={() => setTab(v)}>
-                {LABELS[v]}
+                {t(LABELS[v])}
               </button>
             ))}
           </div>
@@ -168,10 +170,10 @@ export function Workspace({ machine, initial = [], views = ['graph', 'areas', 'f
         {caption.length > 0 && (
           <div className="ws-caption small">
             <div className="row" style={{ justifyContent: 'space-between', gap: 6 }}>
-              <b>What the last command did</b>
+              <b>{t('What the last command did')}</b>
               {tab === 'graph' && (
-                <button type="button" className="btn ghost small" onClick={doReplay} title="Show the graph before the last command, then play the change slowly">
-                  ▶ Replay
+                <button type="button" className="btn ghost small" onClick={doReplay} title={t('Show the graph before the last command, then play the change slowly')}>
+                  {t('▶ Replay')}
                 </button>
               )}
             </div>

@@ -1,4 +1,6 @@
+import ReactMarkdown from 'react-markdown';
 import { GameShell } from '../../../games/kit';
+import { t } from '../../../shared/i18n';
 import { MissionRounds } from './MissionRounds';
 import { STAGE_MANAGER } from './missions';
 
@@ -8,8 +10,8 @@ export default function StageManager() {
       gameId="stagemanager"
       intro={
         <>
-          <p>You're the stage manager: only the right changes go on stage (the staging area), and each commit tells one story.</p>
-          <p>Each mission says what belongs in the history. Get exactly that into commits before the clock runs out. Looking (<code>git status</code>, <code>git diff</code>, <code>git log</code>) and editing files is free; other git commands count against par.</p>
+          <ReactMarkdown>{t("You're the stage manager: only the right changes go on stage (the staging area), and each commit tells one story.")}</ReactMarkdown>
+          <ReactMarkdown>{t('Each mission says what belongs in the history. Get exactly that into commits before the clock runs out. Looking (`git status`, `git diff`, `git log`) and editing files is free; other git commands count against par.')}</ReactMarkdown>
         </>
       }
     >

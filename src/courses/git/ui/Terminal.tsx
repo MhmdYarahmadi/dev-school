@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { GitMachine, Line } from '../engine';
+import { t } from '../../../shared/i18n';
 
 const GIT = ['init', 'status', 'add', 'commit', 'log', 'diff', 'show', 'restore', 'rm', 'mv', 'branch', 'switch', 'checkout', 'merge', 'revert', 'clone', 'remote', 'fetch', 'pull', 'push', 'config', 'ls-files', 'help'];
 const GH = ['pr create', 'pr list', 'pr view', 'pr diff', 'pr checkout', 'pr comment', 'pr review', 'pr merge', 'pr close', 'repo clone', 'repo view'];
@@ -116,7 +117,7 @@ export function Terminal({ machine, entries, onRun, onClear, height = 340, place
   return (
     <div className="term" style={{ height }} onClick={() => !window.getSelection()?.toString() && inRef.current?.focus()}>
       <div className="term-screen" ref={outRef} aria-live="polite">
-        {entries.length === 0 && <div className="term-dim">{placeholder ?? 'Type a command and press Enter. Try: git status · Tab completes · ↑ recalls'}</div>}
+        {entries.length === 0 && <div className="term-dim">{placeholder ?? t('Type a command and press Enter. Try: git status · Tab completes · ↑ recalls')}</div>}
         {entries.map((e, i) => {
           const tones = tone(e.cmd, e.lines);
           return (

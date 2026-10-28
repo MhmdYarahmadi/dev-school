@@ -1,4 +1,5 @@
 import { commonBadges, type CourseContent } from '../../shared/course';
+import { mark } from '../../shared/i18n';
 import { GIT_MODULES } from './content/index';
 import { GIT_GAMES } from './games/registry';
 
@@ -25,7 +26,7 @@ export const gitContent: CourseContent = {
   ],
   badges: [
     ...commonBadges(GIT_MODULES),
-    { id: 'First Commit', icon: '🌱', name: 'First Commit', how: 'Solve your first Git exercise', earned: (p) => Object.entries(p.exercises).some(([id, e]) => e.done && id.startsWith('g01')) },
+    { id: 'First Commit', icon: '🌱', name: mark('First Commit'), how: mark('Solve your first Git exercise'), earned: (p) => Object.entries(p.exercises).some(([id, e]) => e.done && id.startsWith('g01')) },
   ],
   kindLabels: { write: 'In the terminal', fillBlank: 'Fill in the blanks', fixBug: 'Fix the commands', parsons: 'Put in order', readQuery: 'Read and decide' },
 };

@@ -1,5 +1,7 @@
 import { LayoutGroup, motion } from 'framer-motion';
 import { layout, type GraphData, type GraphLabel } from './graphLayout';
+import { t } from '../../../shared/i18n';
+import { T } from '../../../shared/T';
 
 const ROW = 30;
 const LANE = 20;
@@ -33,23 +35,23 @@ function Panel({ g, arrivals, slow }: { g: GraphData; arrivals?: Arrivals; slow?
   const height = Math.max(1, g.commits.length) * ROW + 4;
   const x = (lane: number) => PAD + lane * LANE + LANE / 2;
   const y = (row: number) => row * ROW + ROW / 2;
-  const t = { duration: slow ? 0.9 : 0.35, ease: 'easeOut' as const };
+  const anim = { duration: slow ? 0.9 : 0.35, ease: 'easeOut' as const };
   const from = (sha: string) => (arrivals?.[sha] === 'left' ? -120 : arrivals?.[sha] === 'right' ? 120 : 0);
   const unborn = g.head && !g.head.sha;
   return (
     <div className="gpanel">
       <div className="gpanel-head">
         <span>{g.title}</span>
-        {g.hidden > 0 && <span className="small muted">+{g.hidden} older</span>}
+        {g.hidden > 0 && <span className="small muted">{t('+{n} older', { n: g.hidden })}</span>}
       </div>
       {g.commits.length === 0 ? (
         <div className="gempty">
           {unborn ? (
             <>
-              No commits yet. <span className="gchip branch current">HEAD → {g.head!.branch}</span> is waiting for the first commit.
+              <T text={t('No commits yet. {head} is waiting for the first commit.')} vars={{ head: <span className="gchip branch current">HEAD → {g.head!.branch}</span> }} />
             </>
           ) : (
-            'No commits yet.'
+            t('No commits yet.')
           )}
         </div>
       ) : (
@@ -64,7 +66,7 @@ function Panel({ g, arrivals, slow }: { g: GraphData; arrivals?: Arrivals; slow?
                   key={`${e.from}-${e.to}`}
                   initial={{ d, opacity: 0 }}
                   animate={{ d, opacity: 1 }}
-                  transition={t}
+                  transition={anim}
                   fill="none"
                   stroke={COLORS[lane % COLORS.length]}
                   strokeWidth={2}
@@ -83,7 +85,7 @@ function Panel({ g, arrivals, slow }: { g: GraphData; arrivals?: Arrivals; slow?
                   key={n.sha}
                   initial={{ cx: x(n.lane) + from(n.sha), cy: y(n.row), r: 0 }}
                   animate={{ cx: x(n.lane), cy: y(n.row), r: merge ? 7 : 6 }}
-                  transition={t}
+                  transition={anim}
                   fill={merge ? 'var(--surface)' : COLORS[n.lane % COLORS.length]}
                   stroke={COLORS[n.lane % COLORS.length]}
                   strokeWidth={merge ? 3 : 2}
@@ -103,7 +105,7 @@ function Panel({ g, arrivals, slow }: { g: GraphData; arrivals?: Arrivals; slow?
                   className="grow-row"
                   initial={{ top: n.row * ROW, opacity: 0, x: from(n.sha) }}
                   animate={{ top: n.row * ROW, opacity: 1, x: 0 }}
-                  transition={t}
+                  transition={anim}
                   style={{ height: ROW }}
                   title={g.anonymous ? c.subject : `${c.sha}\n${c.author}\n${c.subject}`}
                 >
@@ -125,7 +127,7 @@ function Panel({ g, arrivals, slow }: { g: GraphData; arrivals?: Arrivals; slow?
 
 /** The live commit graph: one panel per repository (yours, and the hub's when you have a remote). */
 export function GraphView({ graphs, arrivals, slow }: { graphs: GraphData[]; arrivals?: Record<string, Arrivals>; slow?: boolean }) {
-  if (!graphs.length) return <div className="gempty">No repository here yet. Run <code>git init</code> (or <code>cd</code> into one) and the graph appears.</div>;
+  if (!graphs.length) return <div className="gempty"><T text={t('No repository here yet. Run {init} (or {cd} into one) and the graph appears.')} vars={{ init: <code>git init</code>, cd: <code>cd</code> }} /></div>;
   return (
     <LayoutGroup>
       <div className={`gview ${graphs.length > 1 ? 'two' : ''}`}>

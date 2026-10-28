@@ -7,6 +7,7 @@ import type { ComponentType, LazyExoticComponent } from 'react';
 import type { Concept, Exercise, Module, Project, SandboxEnv } from '../content/types';
 import type { Confidence } from '../pedagogy/review';
 import { setBadgeChecker, type Progress } from '../progress/store';
+import { mark, t } from './i18n';
 
 export interface GameMeta {
   id: string;
@@ -179,16 +180,16 @@ export function commonBadges(modules: Module[]): Badge[] {
   // a course with few games can't offer 30 stars: then every star is needed
   const master = Math.min(30, modules.reduce((s, m) => s + m.games.length * 3, 0));
   return [
-    { id: 'First Step', icon: '🌱', name: 'First Step', how: 'Solve your first exercise', earned: (p) => doneCount(p) >= 1 },
-    { id: 'Fifty Solved', icon: '📚', name: 'Fifty Solved', how: 'Solve 50 exercises', earned: (p) => doneCount(p) >= 50 },
-    { id: 'Hint-free ×5', icon: '🧘', name: 'Hint-free ×5', how: 'Solve 5 in a row without hints', earned: (p) => p.noHintStreak >= 5 },
-    { id: 'Fortune Teller', icon: '🔮', name: 'Fortune Teller', how: 'Make 10 correct predictions', earned: (p) => Object.values(p.predictions).filter(Boolean).length >= 10 },
-    { id: 'Perfect Test', icon: '💯', name: 'Perfect Test', how: 'Score 100% on a module test', earned: (p) => Object.values(p.tests).some((t) => t.best >= 1) },
-    { id: 'Skipper', icon: '⏭️', name: 'Skipper', how: 'Test out of a module', earned: (p) => Object.values(p.tests).some((t) => t.testedOut) },
-    { id: 'Star Collector', icon: '⭐', name: 'Star Collector', how: 'Earn 10 game stars', earned: (p) => totalStars(p) >= 10 },
-    { id: 'Game Master', icon: '🎮', name: 'Game Master', how: master < 30 ? `Earn all ${master} game stars` : 'Earn 30 game stars', earned: (p) => master > 0 && totalStars(p) >= master },
-    { id: 'On Fire', icon: '🔥', name: 'On Fire', how: 'Practise 7 days in a row', earned: (p) => p.streak.count >= 7 },
-    { id: 'Memory Palace', icon: '🧠', name: 'Memory Palace', how: 'Get 25 review cards to a 6+ day interval', earned: (p) => Object.values(p.review).filter((c) => c.intervalDays >= 6).length >= 25 },
-    { id: 'Graduate', icon: '🎓', name: 'Graduate', how: 'Pass every module test', earned: (p) => modules.every((m) => p.tests[m.id]?.passed) },
+    { id: 'First Step', icon: '🌱', name: mark('First Step'), how: mark('Solve your first exercise'), earned: (p) => doneCount(p) >= 1 },
+    { id: 'Fifty Solved', icon: '📚', name: mark('Fifty Solved'), how: mark('Solve 50 exercises'), earned: (p) => doneCount(p) >= 50 },
+    { id: 'Hint-free ×5', icon: '🧘', name: mark('Hint-free ×5'), how: mark('Solve 5 in a row without hints'), earned: (p) => p.noHintStreak >= 5 },
+    { id: 'Fortune Teller', icon: '🔮', name: mark('Fortune Teller'), how: mark('Make 10 correct predictions'), earned: (p) => Object.values(p.predictions).filter(Boolean).length >= 10 },
+    { id: 'Perfect Test', icon: '💯', name: mark('Perfect Test'), how: mark('Score 100% on a module test'), earned: (p) => Object.values(p.tests).some((t) => t.best >= 1) },
+    { id: 'Skipper', icon: '⏭️', name: mark('Skipper'), how: mark('Test out of a module'), earned: (p) => Object.values(p.tests).some((t) => t.testedOut) },
+    { id: 'Star Collector', icon: '⭐', name: mark('Star Collector'), how: mark('Earn 10 game stars'), earned: (p) => totalStars(p) >= 10 },
+    { id: 'Game Master', icon: '🎮', name: mark('Game Master'), how: master < 30 ? t('Earn all {n} game stars', { n: master }) : mark('Earn 30 game stars'), earned: (p) => master > 0 && totalStars(p) >= master },
+    { id: 'On Fire', icon: '🔥', name: mark('On Fire'), how: mark('Practise 7 days in a row'), earned: (p) => p.streak.count >= 7 },
+    { id: 'Memory Palace', icon: '🧠', name: mark('Memory Palace'), how: mark('Get 25 review cards to a 6+ day interval'), earned: (p) => Object.values(p.review).filter((c) => c.intervalDays >= 6).length >= 25 },
+    { id: 'Graduate', icon: '🎓', name: mark('Graduate'), how: mark('Pass every module test'), earned: (p) => modules.every((m) => p.tests[m.id]?.passed) },
   ];
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { course } from '../shared/course';
+import { t } from '../shared/i18n';
 import { login, refreshFromServer, signup, useSession } from './api';
 
 /** Everything except the admin page requires an account, so progress can be tracked. */
@@ -43,25 +44,25 @@ function AuthScreen() {
       <div className="card stack">
         <h1 style={{ margin: 0 }}>{c.brand[0]}<span style={{ color: 'var(--accent)' }}>{c.brand[1]}</span> {c.icon}</h1>
         <p className="muted" style={{ margin: 0 }}>
-          Log in with your <b>Dev School</b> account. One account works for every course.
+          {t('Log in with your Dev School account. One account works for every course.')}
         </p>
         <div className="tabs" style={{ marginBottom: 0 }}>
-          <button className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')} type="button">Log in</button>
-          <button className={mode === 'signup' ? 'active' : ''} onClick={() => setMode('signup')} type="button">Create account</button>
+          <button className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')} type="button">{t('Log in')}</button>
+          <button className={mode === 'signup' ? 'active' : ''} onClick={() => setMode('signup')} type="button">{t('Create account')}</button>
         </div>
         <form className="stack" onSubmit={submit}>
           <label className="stack" style={{ gap: 4 }}>
-            <span className="small">Username</span>
+            <span className="small">{t('Username')}</span>
             <input style={input} value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required minLength={3} maxLength={32} />
           </label>
           <label className="stack" style={{ gap: 4 }}>
-            <span className="small">Password</span>
+            <span className="small">{t('Password')}</span>
             <input style={input} type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} required minLength={6} />
           </label>
           {error && <div className="callout bad small">{error}</div>}
-          <button className="btn primary" type="submit" disabled={busy}>{busy ? '…' : mode === 'login' ? 'Log in' : 'Create account'}</button>
+          <button className="btn primary" type="submit" disabled={busy}>{busy ? '…' : mode === 'login' ? t('Log in') : t('Create account')}</button>
         </form>
-        <div className="small muted">Your progress is saved to your account, so you can continue on any device. <a href="/">All courses</a></div>
+        <div className="small muted">{t('Your progress is saved to your account, so you can continue on any device.')} <a href="/">{t('All courses')}</a></div>
       </div>
     </div>
   );

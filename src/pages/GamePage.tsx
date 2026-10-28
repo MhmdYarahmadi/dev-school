@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { course } from '../shared/course';
 import { setLast } from '../progress/store';
+import { t } from '../shared/i18n';
 
 export default function GamePage() {
   const { gameId = '' } = useParams();
@@ -10,10 +11,10 @@ export default function GamePage() {
   useEffect(() => {
     if (meta) setLast(`/game/${gameId}`, `${meta.icon} ${meta.title}`);
   }, [gameId, meta]);
-  if (!meta) return <p>Unknown game. <Link to="/">Back to the course</Link></p>;
-  if (!Game) return <p>{meta.icon} {meta.title} is coming soon. <Link to={`/module/${meta.moduleId}/play`}>Back</Link></p>;
+  if (!meta) return <p>{t('Unknown game.')} <Link to="/">{t('Back to the course')}</Link></p>;
+  if (!Game) return <p>{meta.icon} {t('{title} is coming soon.', { title: meta.title })} <Link to={`/module/${meta.moduleId}/play`}>{t('Back')}</Link></p>;
   return (
-    <Suspense key={gameId} fallback={<div className="loading">Loading game…</div>}>
+    <Suspense key={gameId} fallback={<div className="loading">{t('Loading game…')}</div>}>
       <Game />
     </Suspense>
   );

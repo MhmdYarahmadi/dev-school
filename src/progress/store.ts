@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { newCard, quality, schedule, type Confidence, type ReviewCard } from '../pedagogy/review';
+import { mark, t } from '../shared/i18n';
 
 export interface ExerciseProgress {
   done: boolean;
@@ -115,7 +116,7 @@ function update(fn: (draft: Progress) => void) {
     if (!next.badges[id]) {
       next.badges[id] = Date.now();
       next.xp += 25;
-      toast(`🏅 Badge unlocked: ${id}`);
+      toast(t('🏅 Badge unlocked: {name}', { name: t(id) }));
     }
   }
   state = next;
@@ -210,7 +211,7 @@ export function useProgress(): Progress {
 
 function addXp(p: Progress, n: number, why: string) {
   p.xp += n;
-  if (n > 0) toast(`+${n} XP · ${why}`);
+  if (n > 0) toast(`+${n} XP · ${t(why)}`);
 }
 
 export interface AttemptResult {
@@ -232,7 +233,7 @@ export function recordAttempt(itemId: string, r: AttemptResult) {
       ex.done = true;
       ex.completedAt = Date.now();
       const bonus = r.hintsUsed === 0 && !r.sawSolution ? 5 : 0;
-      addXp(p, (r.sawSolution ? 2 : 10) + bonus, bonus ? 'solved with no hints' : 'exercise solved');
+      addXp(p, (r.sawSolution ? 2 : 10) + bonus, bonus ? mark('solved with no hints') : mark('exercise solved'));
     }
     if (r.correct) p.noHintStreak = r.hintsUsed === 0 && !r.sawSolution ? p.noHintStreak + 1 : 0;
     else if (r.sawSolution) p.noHintStreak = 0;
@@ -263,7 +264,7 @@ export function recordReview(itemId: string, correct: boolean, confidence: Confi
   update((p) => {
     const card = p.review[itemId] ?? newCard(itemId);
     p.review[itemId] = schedule(card, quality(correct, confidence));
-    if (correct) addXp(p, 3, 'review');
+    if (correct) addXp(p, 3, mark('review'));
   });
 }
 
@@ -283,7 +284,7 @@ export function markConceptSeen(conceptId: string) {
   if (state.conceptsSeen[conceptId]) return;
   update((p) => {
     p.conceptsSeen[conceptId] = true;
-    addXp(p, 2, 'concept learned');
+    addXp(p, 2, mark('concept learned'));
   });
 }
 
@@ -291,7 +292,7 @@ export function recordPrediction(conceptId: string, correct: boolean) {
   if (conceptId in state.predictions) return;
   update((p) => {
     p.predictions[conceptId] = correct;
-    if (correct) addXp(p, 3, 'good prediction');
+    if (correct) addXp(p, 3, mark('good prediction'));
   });
 }
 
@@ -300,7 +301,7 @@ export function recordTest(moduleId: string, score: number, passMark: number, te
     const t = p.tests[moduleId] ?? { best: 0, passed: false, attempts: 0 };
     t.attempts += 1;
     const passedNow = score >= passMark;
-    if (passedNow && !t.passed) addXp(p, testedOut ? 80 : 50, testedOut ? 'tested out!' : 'module test passed');
+    if (passedNow && !t.passed) addXp(p, testedOut ? 80 : 50, testedOut ? mark('tested out!') : mark('module test passed'));
     t.best = Math.max(t.best, score);
     t.passed ||= passedNow;
     if (passedNow && testedOut) t.testedOut = true;
@@ -318,7 +319,7 @@ export function recordGame(gameId: string, stars: number, score: number) {
   update((p) => {
     const g = p.games[gameId] ?? { stars: 0, bestScore: 0, plays: 0 };
     g.plays += 1;
-    if (stars > g.stars) addXp(p, (stars - g.stars) * 20, `${stars}★ in a game`);
+    if (stars > g.stars) addXp(p, (stars - g.stars) * 20, t('{n}★ in a game', { n: stars }));
     g.stars = Math.max(g.stars, stars);
     g.bestScore = Math.max(g.bestScore, score);
     p.games[gameId] = g;
@@ -332,7 +333,7 @@ export function recordProjectCheck(taskId: string, answer: string, ok: boolean) 
     p.projectAnswers = { ...p.projectAnswers, [taskId]: { at: Date.now(), answer: answer.slice(0, 20000), ok, checks: (prev?.checks ?? 0) + 1 } };
     if (ok && !p.projects[taskId]) {
       p.projects[taskId] = true;
-      addXp(p, 30, 'project task complete');
+      addXp(p, 30, mark('project task complete'));
     }
   });
 }

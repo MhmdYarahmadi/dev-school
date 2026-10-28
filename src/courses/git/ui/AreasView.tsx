@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { computeStatus, type GitMachine } from '../engine';
 import { worktreeFiles } from '../engine/worktree';
+import { mark, t } from '../../../shared/i18n';
+import { T } from '../../../shared/T';
 
 type Mark = { path: string; mark: string; tone: 'new' | 'mod' | 'del' | 'conflict' | 'clean' | 'ignored' };
 
@@ -11,7 +13,7 @@ type Mark = { path: string; mark: string; tone: 'new' | 'mod' | 'del' | 'conflic
 export function AreasView({ machine, version }: { machine: GitMachine; version: number }) {
   void version; // re-render trigger
   const r = machine.repoAt(machine.learner);
-  if (!r) return <div className="gempty">Not inside a repository. The three areas appear after <code>git init</code> (or <code>cd</code> into a repository).</div>;
+  if (!r) return <div className="gempty"><T text={t('Not inside a repository. The three areas appear after {init} (or {cd} into a repository).')} vars={{ init: <code>git init</code>, cd: <code>cd</code> }} /></div>;
   const s = computeStatus(machine.learner.fs, r);
   const wt = worktreeFiles(machine.learner.fs, r);
   const head = r.headCommit();
@@ -36,8 +38,8 @@ export function AreasView({ machine, version }: { machine: GitMachine; version: 
   });
   const box = (title: string, hint: string, items: Mark[], empty: string) => (
     <div className="area">
-      <div className="area-head">{title}</div>
-      <div className="small muted area-hint">{hint}</div>
+      <div className="area-head">{t(title)}</div>
+      <div className="small muted area-hint">{t(hint)}</div>
       <div className="area-list">
         {items.length ? (
           items.map((i) => (
@@ -47,7 +49,7 @@ export function AreasView({ machine, version }: { machine: GitMachine; version: 
             </motion.div>
           ))
         ) : (
-          <div className="ev-empty">{empty}</div>
+          <div className="ev-empty">{t(empty)}</div>
         )}
       </div>
     </div>
@@ -55,30 +57,30 @@ export function AreasView({ machine, version }: { machine: GitMachine; version: 
   const c = head ? r.commit(head) : null;
   return (
     <div className="areas">
-      {box('📁 Working folder', 'your files, as they are now', work, 'empty folder')}
+      {box(mark('📁 Working folder'), mark('your files, as they are now'), work, mark('empty folder'))}
       <div className="area-arrow">
         git add
         <br />→
       </div>
-      {box('📋 Staging area', 'what the next commit will contain', stage, 'nothing staged')}
+      {box(mark('📋 Staging area'), mark('what the next commit will contain'), stage, mark('nothing staged'))}
       <div className="area-arrow">
         git commit
         <br />→
       </div>
       <div className="area">
-        <div className="area-head">🗄️ Repository</div>
-        <div className="small muted area-hint">saved history (the last commit)</div>
+        <div className="area-head">{t('🗄️ Repository')}</div>
+        <div className="small muted area-hint">{t('saved history (the last commit)')}</div>
         {c ? (
           <motion.div key={head} className="area-commit" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}>
             <div>
               <span className="gsha">{head!.slice(0, 7)}</span> <b>{c.message.split('\n')[0]}</b>
             </div>
             <div className="small muted">
-              {headFiles.size} file{headFiles.size === 1 ? '' : 's'} · {r.ancestors([head]).size} commit{r.ancestors([head]).size === 1 ? '' : 's'} in history
+              {headFiles.size === 1 ? t('1 file') : t('{n} files', { n: headFiles.size })} · {r.ancestors([head]).size === 1 ? t('1 commit in history') : t('{n} commits in history', { n: r.ancestors([head]).size })}
             </div>
           </motion.div>
         ) : (
-          <div className="ev-empty">no commits yet</div>
+          <div className="ev-empty">{t('no commits yet')}</div>
         )}
       </div>
     </div>

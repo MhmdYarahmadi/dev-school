@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import type { GameId } from '../content/types';
 import { recordGame, useProgress } from '../progress/store';
 import { course } from '../shared/course';
+import { t } from '../shared/i18n';
 
 export function starsFor(score: number, max: number): number {
   const r = max > 0 ? score / max : 0;
@@ -40,8 +41,8 @@ export function useCountdown(seconds: number, running: boolean, onExpire: () => 
 export function Hud({ round, rounds, score, timeLeft, timeTotal, extra }: { round: number; rounds: number; score: number; timeLeft?: number; timeTotal?: number; extra?: ReactNode }) {
   return (
     <div className="game-hud">
-      <span>Round {Math.min(round + 1, rounds)}/{rounds}</span>
-      <span>⭐ {score} pts</span>
+      <span>{t('Round {n}/{total}', { n: Math.min(round + 1, rounds), total: rounds })}</span>
+      <span>⭐ {t('{n} pts', { n: score })}</span>
       {extra}
       {timeLeft !== undefined && timeTotal !== undefined && (
         <>
@@ -74,7 +75,7 @@ export function GameShell({ gameId, intro, children }: { gameId: GameId; intro: 
   return (
     <div className="stack" style={{ maxWidth: 1100 }}>
       <div className="row">
-        <Link to={`/module/${meta.moduleId}/play`} className="small">← Back to module</Link>
+        <Link to={`/module/${meta.moduleId}/play`} className="small">{t('← Back to module')}</Link>
       </div>
       <div className="row">
         <span style={{ fontSize: '2rem' }}>{meta.icon}</span>
@@ -84,24 +85,24 @@ export function GameShell({ gameId, intro, children }: { gameId: GameId; intro: 
       {phase === 'intro' && (
         <div className="card stack" style={{ maxWidth: 760 }}>
           <div className="md">{intro}</div>
-          <div className="small muted">Scoring: ★★★ for 85%+ of the maximum score, ★★ for 60%+, ★ for 20%+. Hints cost points.</div>
-          <div><button className="btn primary" onClick={() => { setPlayKey((k) => k + 1); setPhase('play'); }}>Start ▶</button></div>
+          <div className="small muted">{t('Scoring: ★★★ for 85%+ of the maximum score, ★★ for 60%+, ★ for 20%+. Hints cost points.')}</div>
+          <div><button className="btn primary" onClick={() => { setPlayKey((k) => k + 1); setPhase('play'); }}>{t('Start ▶')}</button></div>
         </div>
       )}
       {phase === 'play' && children(finish, playKey)}
       {phase === 'done' && result && (
         <motion.div className="card stack" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ maxWidth: 760, textAlign: 'center', alignItems: 'center' }}>
-          <h2 style={{ margin: 0 }}>{result.stars === 3 ? 'Outstanding!' : result.stars === 2 ? 'Great job!' : result.stars === 1 ? 'Nice start!' : 'Keep practising!'}</h2>
+          <h2 style={{ margin: 0 }}>{result.stars === 3 ? t('Outstanding!') : result.stars === 2 ? t('Great job!') : result.stars === 1 ? t('Nice start!') : t('Keep practising!')}</h2>
           <div className="big-stars">
             {[0, 1, 2].map((i) => (
               <motion.span key={i} className={i < result.stars ? '' : 'off'} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 + i * 0.25, type: 'spring' }}>★</motion.span>
             ))}
           </div>
-          <div>{result.score} / {result.max} points{result.stars > result.prevBest && result.prevBest > 0 ? ' · new best!' : ''}</div>
-          {result.summary && <div style={{ width: '100%', textAlign: 'left' }}>{result.summary}</div>}
+          <div>{t('{n} / {max} points', { n: result.score, max: result.max })}{result.stars > result.prevBest && result.prevBest > 0 ? ` · ${t('new best!')}` : ''}</div>
+          {result.summary && <div style={{ width: '100%', textAlign: 'start' }}>{result.summary}</div>}
           <div className="row">
-            <button className="btn primary" onClick={() => { setPlayKey((k) => k + 1); setPhase('play'); }}>Play again</button>
-            <Link className="btn" to={`/module/${meta.moduleId}/test`}>Take the module test →</Link>
+            <button className="btn primary" onClick={() => { setPlayKey((k) => k + 1); setPhase('play'); }}>{t('Play again')}</button>
+            <Link className="btn" to={`/module/${meta.moduleId}/test`}>{t('Take the module test →')}</Link>
           </div>
         </motion.div>
       )}

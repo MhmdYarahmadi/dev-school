@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import type { Course } from '../../shared/course';
+import { mark } from '../../shared/i18n';
 import { gitContent } from './content';
 import { GitExampleRunner, GitPredictResult, GitPredictSetup } from './ui/GitExample';
 import { GitExerciseCard } from './ui/GitExerciseCard';
@@ -14,7 +15,7 @@ export const gitCourse: Course = {
     PredictResult: GitPredictResult,
     PredictSetup: GitPredictSetup,
     ProjectView: GitProjectView,
-    extraPages: [{ path: '/playground', label: 'Playground', Component: GitPlayground }],
+    extraPages: [{ path: '/playground', label: mark('Playground'), Component: GitPlayground }],
     games: {
       stagemanager: lazy(() => import('./games/StageManager')),
       branchrunner: lazy(() => import('./games/BranchRunner')),

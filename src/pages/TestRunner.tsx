@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { course, h, PASS_MARK } from '../shared/course';
 import type { Exercise, Module } from '../content/types';
 import { recordReview, recordTest, recordTestAnswers, useProgress } from '../progress/store';
+import { t } from '../shared/i18n';
 
 function answerText(e: Exercise): string {
   if (e.kind === 'readQuery') return e.choices[e.answer];
@@ -38,15 +39,15 @@ export function TestRunner({ m, testOut }: { m: Module; testOut: boolean }) {
     const earlier = items.filter((e) => !e.id.startsWith(m.id)).length;
     return (
       <div className="card stack" style={{ maxWidth: 720 }}>
-        <h2 style={{ margin: 0 }}>{testOut ? '⏭️ Test out of' : '📝 Test:'} {m.title}</h2>
+        <h2 style={{ margin: 0 }}>{testOut ? t('⏭️ Test out of {title}', { title: m.title }) : t('📝 Test: {title}', { title: m.title })}</h2>
         <ul>
-          <li><b>{items.length} questions</b>: {items.length - earlier} on this module{earlier > 0 && <>, {earlier} from earlier modules (to keep old skills fresh)</>}.</li>
-          <li><b>No hints</b> and no "Run" button. Think it through, then submit.</li>
-          <li>You need <b>{Math.round(PASS_MARK * 100)}%</b> to pass. You can retake it as often as you like, and the questions get shuffled.</li>
-          {testOut && <li>Passing marks this module complete and unlocks the next one, so you can skip material you already know.</li>}
+          <li>{earlier > 0 ? t('{n} questions: {own} on this module, {earlier} from earlier modules (to keep old skills fresh).', { n: items.length, own: items.length - earlier, earlier }) : t('{n} questions: {own} on this module.', { n: items.length, own: items.length - earlier })}</li>
+          <li>{t('No hints and no "Run" button. Think it through, then submit.')}</li>
+          <li>{t('You need {pct}% to pass. You can retake it as often as you like, and the questions get shuffled.', { pct: Math.round(PASS_MARK * 100) })}</li>
+          {testOut && <li>{t('Passing marks this module complete and unlocks the next one, so you can skip material you already know.')}</li>}
         </ul>
-        {record && <div className="small muted">Best so far: {Math.round(record.best * 100)}% · {record.attempts} attempt{record.attempts === 1 ? '' : 's'}{record.passed ? ' · ✓ passed' : ''}</div>}
-        <div><button className="btn primary" onClick={restart}>Start the test</button></div>
+        {record && <div className="small muted">{t('Best so far: {pct}%', { pct: Math.round(record.best * 100) })} · {record.attempts === 1 ? t('1 attempt') : t('{n} attempts', { n: record.attempts })}{record.passed ? ` · ${t('✓ passed')}` : ''}</div>}
+        <div><button className="btn primary" onClick={restart}>{t('Start the test')}</button></div>
       </div>
     );
   }
@@ -56,22 +57,22 @@ export function TestRunner({ m, testOut }: { m: Module; testOut: boolean }) {
     return (
       <div className="stack" style={{ maxWidth: 860 }}>
         <div className={`card callout ${passed ? 'good' : 'warn'}`}>
-          <h2 style={{ marginTop: 0 }}>{passed ? '🎉 Passed!' : 'Not quite yet'} · {Math.round(score * 100)}%</h2>
-          <p>{answers.filter(Boolean).length} of {items.length} correct. {passed ? (next ? `Module ${next.number} is unlocked.` : 'You\'ve completed the course!') : `You need ${Math.round(PASS_MARK * 100)}%. The questions you missed have been added to your review deck.`}</p>
+          <h2 style={{ marginTop: 0 }}>{passed ? t('🎉 Passed!') : t('Not quite yet')} · {Math.round(score * 100)}%</h2>
+          <p>{t('{n} of {total} correct.', { n: answers.filter(Boolean).length, total: items.length })} {passed ? (next ? t('Module {n} is unlocked.', { n: next.number }) : t("You've completed the course!")) : t('You need {pct}%. The questions you missed have been added to your review deck.', { pct: Math.round(PASS_MARK * 100) })}</p>
           <div className="row">
-            <button className="btn" onClick={restart}>Retake test</button>
-            {passed && next && <Link className="btn primary" to={`/module/${next.id}/learn`}>Start Module {next.number} →</Link>}
-            {!passed && <Link className="btn primary" to={`/module/${m.id}/practice`}>Back to practice</Link>}
+            <button className="btn" onClick={restart}>{t('Retake test')}</button>
+            {passed && next && <Link className="btn primary" to={`/module/${next.id}/learn`}>{t('Start Module {n} →', { n: next.number })}</Link>}
+            {!passed && <Link className="btn primary" to={`/module/${m.id}/practice`}>{t('Back to practice')}</Link>}
           </div>
         </div>
-        <h3>Review your answers</h3>
+        <h3>{t('Review your answers')}</h3>
         {items.map((e, i) => (
           <div key={e.id} className="card">
-            <div className="row"><span className={`tag ${answers[i] ? 'good' : 'bad'}`}>{answers[i] ? '✓ correct' : '✗ wrong'}</span><span className="small muted">Question {i + 1}</span></div>
+            <div className="row"><span className={`tag ${answers[i] ? 'good' : 'bad'}`}>{answers[i] ? t('✓ correct') : t('✗ wrong')}</span><span className="small muted">{t('Question {n}', { n: i + 1 })}</span></div>
             <p style={{ margin: '6px 0' }}>{e.prompt.replace(/\*\*/g, '')}</p>
             {!answers[i] && (
               <>
-                <div className="small muted">Answer:</div>
+                <div className="small muted">{t('Answer:')}</div>
                 <pre>{answerText(e)}</pre>
                 <div className="small">{e.explanation}</div>
               </>
@@ -86,9 +87,9 @@ export function TestRunner({ m, testOut }: { m: Module; testOut: boolean }) {
   return (
     <div className="stack" style={{ maxWidth: 860 }}>
       <div className="row">
-        <b>Question {idx + 1} of {items.length}</b>
+        <b>{t('Question {n} of {total}', { n: idx + 1, total: items.length })}</b>
         <div className="progressbar grow"><div style={{ width: `${(idx / items.length) * 100}%`, background: 'var(--accent)' }} /></div>
-        {!cur.id.startsWith(m.id) && <span className="tag">from an earlier module</span>}
+        {!cur.id.startsWith(m.id) && <span className="tag">{t('from an earlier module')}</span>}
       </div>
       <ExerciseCard
         key={`${attempt}-${cur.id}`}
@@ -111,7 +112,7 @@ export function TestRunner({ m, testOut }: { m: Module; testOut: boolean }) {
       />
       {submitted && answers.length < items.length && (
         <div className="row"><div className="grow" />
-          <button className="btn primary" onClick={() => { setIdx(idx + 1); setSubmitted(false); }}>Next question →</button>
+          <button className="btn primary" onClick={() => { setIdx(idx + 1); setSubmitted(false); }}>{t('Next question →')}</button>
         </div>
       )}
     </div>

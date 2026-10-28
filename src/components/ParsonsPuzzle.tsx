@@ -1,5 +1,6 @@
 import { Reorder } from 'framer-motion';
 import { useMemo } from 'react';
+import { t } from '../shared/i18n';
 
 interface Block {
   id: string;
@@ -37,13 +38,13 @@ interface Props {
  * Click a block to move it between the pool and your answer; drag to reorder
  * within the answer. Keyboard users can tab to blocks and press Enter.
  */
-export function ParsonsPuzzle({ pool, answer, onChange, disabled, noun = 'query' }: Props) {
+export function ParsonsPuzzle({ pool, answer, onChange, disabled, noun = t('query') }: Props) {
   const preview = useMemo(() => answer.map((b) => b.text).join('\n'), [answer]);
   return (
     <div className="stack">
       <div className="parsons">
         <div>
-          <div className="small muted" style={{ marginBottom: 4 }}>Blocks (click to add). Not every block belongs!</div>
+          <div className="small muted" style={{ marginBottom: 4 }}>{t('Blocks (click to add). Not every block belongs!')}</div>
           <ul className="parsons-zone">
             {pool.map((b) => (
               <li key={b.id}>
@@ -57,11 +58,11 @@ export function ParsonsPuzzle({ pool, answer, onChange, disabled, noun = 'query'
                 </button>
               </li>
             ))}
-            {pool.length === 0 && <li className="small muted">All blocks used.</li>}
+            {pool.length === 0 && <li className="small muted">{t('All blocks used.')}</li>}
           </ul>
         </div>
         <div>
-          <div className="small muted" style={{ marginBottom: 4 }}>Your {noun} (drag ⋮⋮ to reorder, click to remove)</div>
+          <div className="small muted" style={{ marginBottom: 4 }}>{t('Your {noun} (drag ⋮⋮ to reorder, click to remove)', { noun })}</div>
           <Reorder.Group axis="y" values={answer} onReorder={(a) => onChange(pool, a)} className="parsons-zone answer">
             {answer.map((b) => (
               <Reorder.Item key={b.id} value={b} className="block" dragListener={!disabled}>
@@ -77,7 +78,7 @@ export function ParsonsPuzzle({ pool, answer, onChange, disabled, noun = 'query'
                 </button>
               </Reorder.Item>
             ))}
-            {answer.length === 0 && <li className="small muted" style={{ listStyle: 'none' }}>Click blocks on the left to build your {noun}.</li>}
+            {answer.length === 0 && <li className="small muted" style={{ listStyle: 'none' }}>{t('Click blocks to build your {noun}.', { noun })}</li>}
           </Reorder.Group>
         </div>
       </div>

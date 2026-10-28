@@ -8,46 +8,47 @@ import { course, h } from '../shared/course';
 import { completeVariant, getProgress, markConceptSeen, recordPrediction, setLast, useProgress } from '../progress/store';
 import { Stars } from './Home';
 import { TestRunner } from './TestRunner';
+import { mark, t } from '../shared/i18n';
+import { T } from '../shared/T';
 
 const STAGES = [
-  { id: 'learn', label: '📖 Learn' },
-  { id: 'practice', label: '✍️ Practice' },
-  { id: 'play', label: '🎮 Play' },
-  { id: 'test', label: '📝 Test' },
+  { id: 'learn', label: mark('📖 Learn') },
+  { id: 'practice', label: mark('✍️ Practice') },
+  { id: 'play', label: mark('🎮 Play') },
+  { id: 'test', label: mark('📝 Test') },
 ] as const;
 
 export default function ModulePage() {
   const { moduleId = '', stage = 'learn' } = useParams();
   const m = h().getModule(moduleId);
   const p = useProgress();
-  if (!m) return <p>Module not found. <Link to="/">Back to the course</Link></p>;
+  if (!m) return <p>{t('Module not found.')} <Link to="/">{t('Back to the course')}</Link></p>;
   const unlocked = h().isUnlocked(m, p.tests);
   const { ProjectView } = course().ui;
   const base = m.games.length ? STAGES : STAGES.filter((s) => s.id !== 'play');
-  const stages = m.project ? [...base, { id: 'project', label: '🧪 Project' } as const] : base;
+  const stages = m.project ? [...base, { id: 'project', label: mark('🧪 Project') } as const] : base;
 
   return (
     <div>
       <div className="row" style={{ marginBottom: 4 }}>
-        <Link to="/" className="small">← Course</Link>
+        <Link to="/" className="small">{t('← Course')}</Link>
       </div>
       <div className="row">
-        <span className="module-num">Module {m.number}</span>
-        {p.tests[m.id]?.passed && <span className="tag good">✓ Complete</span>}
+        <span className="module-num">{t('Module {n}', { n: m.number })}</span>
+        {p.tests[m.id]?.passed && <span className="tag good">{t('✓ Complete')}</span>}
       </div>
       <h1 style={{ marginTop: 2 }}>{m.title}</h1>
       <nav className="tabs">
         {stages.map((s) => (
           <NavLink key={s.id} to={`/module/${m.id}/${s.id}`} className={() => (stage === s.id ? 'active' : '')}>
-            {s.label}
+            {t(s.label)}
           </NavLink>
         ))}
       </nav>
       {!unlocked && stage !== 'test' && (
         <div className="callout warn" style={{ marginBottom: 14 }}>
           <p>
-            🔒 This module unlocks when you pass the <b>Module {m.number - 1} test</b>. Already know this material?{' '}
-            <Link to={`/module/${m.id}/test`}>Test out</Link> to skip ahead. You can still look around.
+            <T text={t('🔒 This module unlocks when you pass the {test}. Already know this material? {testOut} to skip ahead. You can still look around.')} vars={{ test: <b>{t('Module {n} test', { n: m.number - 1 })}</b>, testOut: <Link to={`/module/${m.id}/test`}>{t('Test out')}</Link> }} />
           </p>
         </div>
       )}
@@ -118,14 +119,14 @@ function ConceptView({ concept, onNext, isLast }: { concept: Concept; onNext: ()
         />
       )}
       <div className="card stack" style={{ opacity: predicted ? 1 : 0.5 }}>
-        <div className="row"><span className="tag good">Worked example</span><span className="small muted">{concept.example.note}</span></div>
-        {!predicted && <span className="small muted">Make your prediction above first!</span>}
+        <div className="row"><span className="tag good">{t('Worked example')}</span><span className="small muted">{concept.example.note}</span></div>
+        {!predicted && <span className="small muted">{t('Make your prediction above first!')}</span>}
         <ExampleRunner code={concept.example.sql} disabled={!predicted} env={concept.env} />
       </div>
       <div className="row">
         <div className="grow" />
         <button className="btn primary" onClick={onNext} disabled={!predicted}>
-          {isLast ? 'Got it. On to practice →' : 'Got it. Next concept →'}
+          {isLast ? t('Got it. On to practice →') : t('Got it. Next concept →')}
         </button>
       </div>
     </div>
@@ -158,13 +159,13 @@ function PracticeTab({ m }: { m: Module }) {
   return (
     <div className="sidebar-layout">
       <aside className="card">
-        <div className="small muted" style={{ marginBottom: 6 }}>{done}/{m.practice.length} solved</div>
+        <div className="small muted" style={{ marginBottom: 6 }}>{t('{done}/{total} solved', { done, total: m.practice.length })}</div>
         <div className="progressbar" style={{ marginBottom: 10 }}><div style={{ width: `${(done / m.practice.length) * 100}%` }} /></div>
         <div className="navlist">
           {list.map((x, i) => (
             <button key={x.id} className={i === idx ? 'active' : ''} onClick={() => setIdx(i)}>
               <span className={`check ${p.exercises[x.id]?.done ? 'on' : ''}`}>{p.exercises[x.id]?.done ? '✓' : i + 1}</span>
-              <span className="small">{x.isVariant ? '🔁 Try again (variant)' : (course().itemLabel?.(x.item) ?? course().kindLabels?.[x.item.kind] ?? KIND_SHORT[x.item.kind])}</span>
+              <span className="small">{x.isVariant ? t('🔁 Try again (variant)') : (course().itemLabel?.(x.item) ?? course().kindLabels?.[x.item.kind] ?? t(KIND_SHORT[x.item.kind]))}</span>
             </button>
           ))}
         </div>
@@ -180,15 +181,15 @@ function PracticeTab({ m }: { m: Module }) {
           }}
         />
         <div className="row">
-          <button className="btn" disabled={idx === 0} onClick={() => setIdx(idx - 1)}>← Previous</button>
+          <button className="btn" disabled={idx === 0} onClick={() => setIdx(idx - 1)}>{t('← Previous')}</button>
           <div className="grow" />
           {idx < list.length - 1 ? (
-            <button className="btn primary" onClick={() => setIdx(idx + 1)}>Next exercise →</button>
+            <button className="btn primary" onClick={() => setIdx(idx + 1)}>{t('Next exercise →')}</button>
           ) : (
             m.games.length ? (
-              <button className="btn primary" onClick={() => navigate(`/module/${m.id}/play`)}>On to the game 🎮 →</button>
+              <button className="btn primary" onClick={() => navigate(`/module/${m.id}/play`)}>{t('On to the game 🎮 →')}</button>
             ) : (
-              <button className="btn primary" onClick={() => navigate(`/module/${m.id}/test`)}>On to the test 📝 →</button>
+              <button className="btn primary" onClick={() => navigate(`/module/${m.id}/test`)}>{t('On to the test 📝 →')}</button>
             )
           )}
         </div>
@@ -198,11 +199,11 @@ function PracticeTab({ m }: { m: Module }) {
 }
 
 const KIND_SHORT: Record<string, string> = {
-  write: 'Write a query',
-  fillBlank: 'Fill in the blanks',
-  fixBug: 'Fix the bug',
-  parsons: 'Build the query',
-  readQuery: 'Read the query',
+  write: mark('Write a query'),
+  fillBlank: mark('Fill in the blanks'),
+  fixBug: mark('Fix the bug'),
+  parsons: mark('Build the query'),
+  readQuery: mark('Read the query'),
 };
 
 function PlayTab({ m }: { m: Module }) {
@@ -212,7 +213,7 @@ function PlayTab({ m }: { m: Module }) {
     <div className="stack">
       {practiced < 0.5 && (
         <div className="callout info small">
-          Tip: the game is more fun once you've done some practice ({Math.round(practiced * 100)}% so far). It's open anyway, so jump in if you're curious!
+          {t("Tip: the game is more fun once you've done some practice ({n}% so far). It's open anyway, so jump in if you're curious!", { n: Math.round(practiced * 100) })}
         </div>
       )}
       <div className="game-grid">
@@ -224,9 +225,9 @@ function PlayTab({ m }: { m: Module }) {
               <div style={{ fontSize: '2.2rem' }}>{meta.icon}</div>
               <h3 style={{ margin: 0 }}>{meta.title}</h3>
               <div className="small">{meta.pitch}</div>
-              <div className="small muted">Skills: {meta.skills}</div>
-              <div className="row"><Stars n={gp?.stars ?? 0} />{gp && <span className="small muted">best {gp.bestScore} pts · played {gp.plays}×</span>}</div>
-              <span className="btn primary" style={{ alignSelf: 'start' }}>{gp ? 'Play again' : 'Play'} →</span>
+              <div className="small muted">{t('Skills: {skills}', { skills: meta.skills })}</div>
+              <div className="row"><Stars n={gp?.stars ?? 0} />{gp && <span className="small muted">{t('best {n} pts · played {plays}×', { n: gp.bestScore, plays: gp.plays })}</span>}</div>
+              <span className="btn primary" style={{ alignSelf: 'start' }}>{gp ? t('Play again') : t('Play')} →</span>
             </Link>
           );
         })}

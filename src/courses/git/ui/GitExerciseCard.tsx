@@ -15,20 +15,21 @@ import { machineGraphs } from './graphLayout';
 import { GraphView } from './GraphView';
 import { TranscriptView, type TermEntry } from './Terminal';
 import { Workspace, type View } from './Workspace';
+import { t } from '../../../shared/i18n';
 
 function kindLabel(ex: Exercise): string {
   const file = ex.git?.target === 'file';
   switch (ex.kind) {
     case 'write':
-      return file ? `✍️ Write ${ex.git?.file ?? 'the file'}` : '⌨️ Do it in the terminal';
+      return file ? t('✍️ Write {file}', { file: ex.git?.file ?? 'file.txt' }) : t('⌨️ Do it in the terminal');
     case 'fillBlank':
-      return '🧩 Fill in the blanks';
+      return t('🧩 Fill in the blanks');
     case 'fixBug':
-      return '🐛 Fix the commands';
+      return t('🐛 Fix the commands');
     case 'parsons':
-      return '🧱 Put the steps in order';
+      return t('🧱 Put the steps in order');
     case 'readQuery':
-      return '👀 Read and decide';
+      return t('👀 Read and decide');
   }
 }
 
@@ -155,8 +156,8 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
     <div className="card stack">
       <div className="row">
         <span className="tag accent">{kindLabel(ex)}</span>
-        {mode === 'review' && <span className="tag">Review</span>}
-        {saved?.done && mode === 'practice' && <span className="tag good">✓ solved before</span>}
+        {mode === 'review' && <span className="tag">{t('Review')}</span>}
+        {saved?.done && mode === 'practice' && <span className="tag good">{t('✓ solved before')}</span>}
       </div>
       <div className="md">
         <ReactMarkdown>{ex.prompt}</ReactMarkdown>
@@ -183,7 +184,7 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
           {choice !== null && !isTest && (
             <div className={`callout ${solved ? 'good' : 'bad'}`}>
               <p>
-                <b>{solved ? '✓ Correct!' : '✗ Not quite.'}</b> {ex.explanation}
+                <b>{solved ? t('✓ Correct!') : t('✗ Not quite.')}</b> {ex.explanation}
               </p>
             </div>
           )}
@@ -192,7 +193,7 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
 
       {startGraphs.length > 0 && !ran && !outcome && (
         <details open={ex.kind !== 'parsons'}>
-          <summary className="small muted">The repository before your answer</summary>
+          <summary className="small muted">{t('The repository before your answer')}</summary>
           <GraphView graphs={startGraphs} />
         </details>
       )}
@@ -201,7 +202,7 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
         <ParsonsPuzzle
           pool={pool}
           answer={answer}
-          noun="commands"
+          noun={t('commands')}
           disabled={locked || solved}
           onChange={(p, a) => {
             setPool(p);
@@ -213,16 +214,16 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
 
       {terminalMode && spec && (
         <>
-          <Workspace key={wsKey} machine={machine} views={views} disabled={locked || solved} onCommand={() => setTyped((n) => n + 1)} placeholder="Your terminal for this exercise. Type the commands; the graph and panels follow along. Then press Check." />
+          <Workspace key={wsKey} machine={machine} views={views} disabled={locked || solved} onCommand={() => setTyped((n) => n + 1)} placeholder={t('Your terminal for this exercise. Type the commands; the graph and panels follow along. Then press Check.')} />
           {!locked && !solved && (
             <div className="row">
               <button className="btn primary" onClick={check} disabled={!typed}>
-                {isTest ? 'Submit answer' : '✓ Check answer'}
+                {isTest ? t('Submit answer') : t('✓ Check answer')}
               </button>
               <button className="btn ghost" onClick={restart} disabled={!typed}>
-                ↺ Start over
+                {t('↺ Start over')}
               </button>
-              <span className="small muted">{typed ? `${typed} command${typed === 1 ? '' : 's'} so far. Checking compares where you ended up with the goal.` : 'Nothing typed yet.'}</span>
+              <span className="small muted">{typed === 0 ? t('Nothing typed yet.') : typed === 1 ? t('1 command so far. Checking compares where you ended up with the goal.') : t('{n} commands so far. Checking compares where you ended up with the goal.', { n: typed })}</span>
             </div>
           )}
         </>
@@ -230,12 +231,12 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
 
       {!terminalMode && (ex.kind === 'write' || ex.kind === 'fillBlank' || ex.kind === 'fixBug') && (
         <>
-          {spec?.target === 'file' && <div className="small muted">Your {spec.file}:</div>}
+          {spec?.target === 'file' && <div className="small muted">{t('Your {file}:', { file: spec.file ?? 'file.txt' })}</div>}
           <CodeEditor
             value={text}
             lang={spec?.target === 'file' ? 'text' : 'shell'}
             minHeight="90px"
-            placeholder={spec?.target === 'file' ? undefined : 'git …   (one command per line)'}
+            placeholder={spec?.target === 'file' ? undefined : t('git …   (one command per line)')}
             onChange={(v) => {
               setText(v);
               if (mode === 'practice') saveDraft(id, v);
@@ -250,13 +251,13 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
         <div className="row">
           {!isTest && (
             <button className="btn" onClick={run}>
-              ▶ Run
+              {t('▶ Run')}
             </button>
           )}
           <button className="btn primary" onClick={check}>
-            {isTest ? 'Submit answer' : '✓ Check answer'}
+            {isTest ? t('Submit answer') : t('✓ Check answer')}
           </button>
-          {!isTest && <span className="small muted">Each Run starts from the same starting point · <span className="kbd">Ctrl</span>+<span className="kbd">Enter</span> runs</span>}
+          {!isTest && <span className="small muted">{t('Each Run starts from the same starting point')} · <span className="kbd">Ctrl</span>+<span className="kbd">Enter</span> {t('runs')}</span>}
         </div>
       )}
 
@@ -279,23 +280,23 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
           </div>
           {!terminalMode && (
             <details open>
-              <summary className="small muted">What happened when your answer ran</summary>
+              <summary className="small muted">{t('What happened when your answer ran')}</summary>
               <div className="playground-grid">
                 <TranscriptView entries={outcome.transcript} />
                 {outcome.machine && <GraphView graphs={machineGraphs(outcome.machine)} />}
               </div>
             </details>
           )}
-          {terminalMode && <div className="small muted">Keep going in the terminal above, or ↺ start over.</div>}
+          {terminalMode && <div className="small muted">{t('Keep going in the terminal above, or ↺ start over.')}</div>}
         </div>
       )}
-      {outcome && isTest && <div className="callout info small">Answer submitted. Results are shown at the end of the test.</div>}
+      {outcome && isTest && <div className="callout info small">{t('Answer submitted. Results are shown at the end of the test.')}</div>}
 
       {misconceptions.length > 0 && (
         <div className="stack" style={{ gap: 6 }}>
           {misconceptions.map((m) => (
             <div key={m.id} className="callout warn small">
-              <b>🧠 Common mix-up: {m.title}.</b> <ReactMarkdown components={{ p: 'span' }}>{m.explain}</ReactMarkdown>
+              <b>{t('🧠 Common mix-up: {title}.', { title: m.title })}</b> <ReactMarkdown components={{ p: 'span' }}>{m.explain}</ReactMarkdown>
             </div>
           ))}
         </div>
@@ -304,7 +305,7 @@ export function GitExerciseCard({ exercise: ex, mode = 'practice', progressId, o
       {solved && !isTest && ex.kind !== 'readQuery' && (
         <div className="callout good">
           <p>
-            <b>✓ Correct!</b> {ex.explanation}
+            <b>{t('✓ Correct!')}</b> {ex.explanation}
           </p>
         </div>
       )}

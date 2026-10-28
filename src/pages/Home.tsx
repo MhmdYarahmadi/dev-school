@@ -5,10 +5,11 @@ import { course, h } from '../shared/course';
 import { dueCards } from '../pedagogy/review';
 import { exportProgress, importProgress, levelFor, resetProgress, useProgress, type Progress } from '../progress/store';
 import type { Module } from '../content/types';
+import { t } from '../shared/i18n';
 
 export function Stars({ n, max = 3 }: { n: number; max?: number }) {
   return (
-    <span className="stars" aria-label={`${n} of ${max} stars`}>
+    <span className="stars" aria-label={t('{n} of {max} stars', { n, max })}>
       {Array.from({ length: max }, (_, i) => (
         <span key={i} className={i < n ? '' : 'off'}>★</span>
       ))}
@@ -49,24 +50,24 @@ export default function Home() {
           <div className="muted md"><ReactMarkdown>{c.heroText}</ReactMarkdown></div>
           <div className="row">
             {p.last ? (
-              <Link className="btn primary" to={p.last.path}>▶ Continue: {p.last.label}</Link>
+              <Link className="btn primary" to={p.last.path}>{t('▶ Continue: {label}', { label: p.last.label })}</Link>
             ) : (
-              <Link className="btn primary" to={`/module/${nextModule.id}/learn`}>▶ Start Module {nextModule.number}</Link>
+              <Link className="btn primary" to={`/module/${nextModule.id}/learn`}>{t('▶ Start Module {n}', { n: nextModule.number })}</Link>
             )}
-            {due > 0 && <Link className="btn" to="/review">🧠 {due} review item{due === 1 ? '' : 's'} due</Link>}
+            {due > 0 && <Link className="btn" to="/review">{due === 1 ? t('🧠 1 review item due') : t('🧠 {n} review items due', { n: due })}</Link>}
           </div>
         </div>
         <div className="card">
           <div className="row" style={{ justifyContent: 'space-between' }}>
-            <div><div className="muted small">Level {lvl.level}</div><div className="stat">{lvl.title}</div></div>
-            <div style={{ textAlign: 'right' }}><div className="muted small">XP</div><div className="stat">{p.xp}</div></div>
-            <div style={{ textAlign: 'right' }}><div className="muted small">Streak</div><div className="stat">🔥 {p.streak.count}</div></div>
+            <div><div className="muted small">{t('Level {n}', { n: lvl.level })}</div><div className="stat">{lvl.title}</div></div>
+            <div style={{ textAlign: 'end' }}><div className="muted small">XP</div><div className="stat">{p.xp}</div></div>
+            <div style={{ textAlign: 'end' }}><div className="muted small">{t('Streak')}</div><div className="stat">🔥 {p.streak.count}</div></div>
           </div>
           <div className="progressbar" style={{ margin: '10px 0 4px' }}><div style={{ width: `${lvl.progress * 100}%`, background: 'var(--accent)' }} /></div>
-          <div className="small muted">{lvl.next ? `${lvl.next.xp - p.xp} XP to ${lvl.next.title}` : 'Maximum level reached!'}</div>
+          <div className="small muted">{lvl.next ? t('{n} XP to {level}', { n: lvl.next.xp - p.xp, level: lvl.next.title }) : t('Maximum level reached!')}</div>
           <div className="row" style={{ marginTop: 10, gap: 6 }}>
             {c.badges.map((b) => (
-              <span key={b.id} title={`${b.name}: ${b.how}`} style={{ fontSize: '1.3rem', opacity: p.badges[b.id] ? 1 : 0.2, filter: p.badges[b.id] ? 'none' : 'grayscale(1)' }}>
+              <span key={b.id} title={`${t(b.name)}: ${t(b.how)}`} style={{ fontSize: '1.3rem', opacity: p.badges[b.id] ? 1 : 0.2, filter: p.badges[b.id] ? 'none' : 'grayscale(1)' }}>
                 {b.icon}
               </span>
             ))}
@@ -74,7 +75,7 @@ export default function Home() {
         </div>
       </div>
 
-      <h2>Course map</h2>
+      <h2>{t('Course map')}</h2>
       <div className="module-grid">
         {MODULES.map((m) => {
           const unlocked = isUnlocked(m, p.tests);
@@ -82,16 +83,16 @@ export default function Home() {
           return (
             <Link key={m.id} to={`/module/${m.id}/learn`} className={`card module-card ${unlocked ? '' : 'locked'}`}>
               <div className="row" style={{ justifyContent: 'space-between' }}>
-                <span className="module-num">Module {m.number}</span>
-                {p.tests[m.id]?.passed ? <span className="tag good">✓ Complete</span> : unlocked ? null : <span className="tag">🔒 Locked</span>}
+                <span className="module-num">{t('Module {n}', { n: m.number })}</span>
+                {p.tests[m.id]?.passed ? <span className="tag good">{t('✓ Complete')}</span> : unlocked ? null : <span className="tag">{t('🔒 Locked')}</span>}
               </div>
               <h3 style={{ margin: 0 }}>{m.title}</h3>
               <div className="small muted">{m.tagline}</div>
               <div className="stages">
-                <span className={`stage-pill ${mp.learn === 1 ? 'done' : ''}`}>Learn {Math.round(mp.learn * 100)}%</span>
-                <span className={`stage-pill ${mp.practice === 1 ? 'done' : ''}`}>Practice {Math.round(mp.practice * 100)}%</span>
-                {m.games.length > 0 && <span className="stage-pill">Play <Stars n={mp.stars} max={m.games.length * 3} /></span>}
-                <span className={`stage-pill ${mp.test ? 'done' : ''}`}>Test {p.tests[m.id] ? `${Math.round(p.tests[m.id].best * 100)}%` : '—'}</span>
+                <span className={`stage-pill ${mp.learn === 1 ? 'done' : ''}`}>{t('Learn {n}%', { n: Math.round(mp.learn * 100) })}</span>
+                <span className={`stage-pill ${mp.practice === 1 ? 'done' : ''}`}>{t('Practice {n}%', { n: Math.round(mp.practice * 100) })}</span>
+                {m.games.length > 0 && <span className="stage-pill">{t('Play')} <Stars n={mp.stars} max={m.games.length * 3} /></span>}
+                <span className={`stage-pill ${mp.test ? 'done' : ''}`}>{t('Test')} {p.tests[m.id] ? `${Math.round(p.tests[m.id].best * 100)}%` : '—'}</span>
               </div>
               <div className="progressbar"><div style={{ width: `${mp.overall * 100}%` }} /></div>
               {m.games.length > 0 && <div className="small muted">🎮 {m.games.map((g) => c.games[g]?.title ?? g).join(' + ')}</div>}
@@ -101,7 +102,7 @@ export default function Home() {
       </div>
 
       <details className="card" style={{ marginTop: 24 }}>
-        <summary><b>Your progress data</b> <span className="small muted">(saved in this browser only)</span></summary>
+        <summary><b>{t('Your progress data')}</b> <span className="small muted">{t('(saved in this browser only)')}</span></summary>
         <div className="stack" style={{ marginTop: 10 }}>
           <div className="row">
             <button
@@ -116,9 +117,9 @@ export default function Home() {
                 URL.revokeObjectURL(a.href);
               }}
             >
-              Export…
+              {t('Export…')}
             </button>
-            <button className="btn small" onClick={() => fileRef.current?.click()}>Import from file…</button>
+            <button className="btn small" onClick={() => fileRef.current?.click()}>{t('Import from file…')}</button>
             <input
               ref={fileRef}
               type="file"
@@ -129,26 +130,26 @@ export default function Home() {
                 if (!f) return;
                 try {
                   importProgress(await f.text());
-                  setIoMsg('Progress imported.');
+                  setIoMsg(t('Progress imported.'));
                 } catch (err) {
                   setIoMsg(String((err as Error).message));
                 }
               }}
             />
             {!confirmReset ? (
-              <button className="btn small ghost" onClick={() => setConfirmReset(true)}>Reset all progress…</button>
+              <button className="btn small ghost" onClick={() => setConfirmReset(true)}>{t('Reset all progress…')}</button>
             ) : (
               <span className="row small">
-                Really erase everything?
-                <button className="btn small" onClick={() => { resetProgress(); setConfirmReset(false); setIoMsg('Progress reset.'); }}>Yes, erase</button>
-                <button className="btn small ghost" onClick={() => setConfirmReset(false)}>Cancel</button>
+                {t('Really erase everything?')}
+                <button className="btn small" onClick={() => { resetProgress(); setConfirmReset(false); setIoMsg(t('Progress reset.')); }}>{t('Yes, erase')}</button>
+                <button className="btn small ghost" onClick={() => setConfirmReset(false)}>{t('Cancel')}</button>
               </span>
             )}
           </div>
           {ioMsg && <div className="small">{ioMsg}</div>}
           {exported && (
             <div className="stack" style={{ gap: 4 }}>
-              <div className="small muted">Copy this text and save it as a .json file to back up your progress:</div>
+              <div className="small muted">{t('Copy this text and save it as a .json file to back up your progress:')}</div>
               <textarea readOnly value={exported} rows={6} className="mono small" style={{ width: '100%' }} onFocus={(e) => e.target.select()} />
             </div>
           )}

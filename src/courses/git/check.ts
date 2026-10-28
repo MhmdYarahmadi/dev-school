@@ -9,6 +9,7 @@ import type { Exercise, GitSpec, ProjectTask, SandboxEnv } from '../../content/t
 import { computeStatus, GitMachine, type Line, type Repo } from './engine';
 import { sha1, utf8 } from './engine/sha1';
 import { worktreeFiles } from './engine/worktree';
+import { inEnglish, lang, t } from '../../shared/i18n';
 
 export const HOME = '/home/learner';
 
@@ -21,6 +22,8 @@ export interface TranscriptEntry {
 export interface GitOutcome {
   status: 'correct' | 'wrong';
   feedback: string[];
+  /** The same feedback in English: misconception rules match against it. */
+  feedbackEn: string[];
   transcript: TranscriptEntry[];
   /** The learner's machine after the answer (for showing the result). */
   machine?: GitMachine;
@@ -102,7 +105,6 @@ export function applyAnswer(m: GitMachine, spec: GitSpec, answer: string): { tra
 
 const q = (s: string) => `\`${s}\``;
 const list = (xs: string[]) => xs.map(q).join(', ');
-const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
 const where = (root: string) => (root.startsWith(HOME) ? `~${root.slice(HOME.length)}` : root);
 
 /** A commit's identity ignoring hashes, times and (unless asked) messages: its files and its parents'. */
@@ -119,15 +121,15 @@ function canonical(r: Repo, messages: boolean): (sha: string) => string {
   return key;
 }
 
-/** How two trees differ, in words: "is missing `a.txt`", "has a different `b.txt`". */
-function treeDiff(a: Map<string, string>, b: Map<string, string>): string[] {
+/** How a branch's newest commit differs from the expected one, one sentence per kind of difference. */
+function treeDiff(label: string, a: Map<string, string>, b: Map<string, string>): string[] {
   const out: string[] = [];
   const missing = [...b.keys()].filter((p) => !a.has(p));
   const extra = [...a.keys()].filter((p) => !b.has(p));
   const changed = [...b.keys()].filter((p) => a.has(p) && a.get(p) !== b.get(p));
-  if (missing.length) out.push(`is missing ${list(missing)}`);
-  if (extra.length) out.push(`has ${list(extra)}, which shouldn't be there`);
-  if (changed.length) out.push(`has a different version of ${list(changed)}`);
+  if (missing.length) out.push(t('The newest commit on {label} is missing {files}.', { label, files: list(missing) }));
+  if (extra.length) out.push(t("The newest commit on {label} has {files}, which shouldn't be there.", { label, files: list(extra) }));
+  if (changed.length) out.push(t('The newest commit on {label} has a different version of {files}.', { label, files: list(changed) }));
   return out;
 }
 
@@ -137,27 +139,27 @@ function compareBranch(label: string, mine: Repo, ref: Repo, a: string, b: strin
   const ca = mine.commit(a);
   const cb = ref.commit(b);
   if (na !== nb) {
-    out.push(`${label} has ${plural(na, 'commit')}, but it should have ${nb}.`);
+    out.push(na === 1 ? t('{label} has 1 commit, but it should have {nb}.', { label, nb }) : t('{label} has {na} commits, but it should have {nb}.', { label, na, nb }));
     if (na < nb) return;
   }
   if (cb.parents.length > 1 && ca.parents.length < 2) {
-    out.push(`The newest commit on ${label} should be a merge commit (one with two parents).`);
+    out.push(t('The newest commit on {label} should be a merge commit (one with two parents).', { label }));
     return;
   }
   if (cb.parents.length < 2 && ca.parents.length > 1) {
-    out.push(`The newest commit on ${label} is a merge commit, but it shouldn't be.`);
+    out.push(t("The newest commit on {label} is a merge commit, but it shouldn't be.", { label }));
     return;
   }
-  const d = treeDiff(mine.files(a), ref.files(b));
+  const d = treeDiff(label, mine.files(a), ref.files(b));
   if (d.length) {
-    out.push(`The newest commit on ${label} ${d.join(', and ')}.`);
+    out.push(...d);
     return;
   }
   if (messages && ca.message.split('\n')[0] !== cb.message.split('\n')[0]) {
-    out.push(`The newest commit on ${label} should have the message ${q(cb.message.split('\n')[0])}; yours says ${q(ca.message.split('\n')[0])}.`);
+    out.push(t('The newest commit on {label} should have the message {want}; yours says {got}.', { label, want: q(cb.message.split('\n')[0]), got: q(ca.message.split('\n')[0]) }));
     return;
   }
-  if (na === nb) out.push(`The history of ${label} isn't right: an earlier commit differs.`);
+  if (na === nb) out.push(t("The history of {label} isn't right: an earlier commit differs.", { label }));
 }
 
 /** Differences between two repositories' branches, HEAD and state. */
@@ -165,12 +167,11 @@ function compareRepo(mine: Repo, ref: Repo, messages: boolean, local: boolean): 
   const out: string[] = [];
   const ka = canonical(mine, messages);
   const kb = canonical(ref, messages);
-  const prefix = local ? '' : 'On the hub, ';
   const ba = mine.branches();
   const bb = ref.branches();
-  const sentence = (s: string) => (prefix ? prefix + s[0].toLowerCase() + s.slice(1) : s);
-  for (const b of bb) if (!ba.includes(b)) out.push(sentence(`There's no branch ${q(b)}.`));
-  for (const b of ba) if (!bb.includes(b)) out.push(sentence(`There's a branch ${q(b)} that shouldn't be there.`));
+  const sentence = (s: string) => (local ? s : t('On the hub, {s}', { s: s[0].toLowerCase() + s.slice(1) }));
+  for (const b of bb) if (!ba.includes(b)) out.push(sentence(t("There's no branch {b}.", { b: q(b) })));
+  for (const b of ba) if (!bb.includes(b)) out.push(sentence(t("There's a branch {b} that shouldn't be there.", { b: q(b) })));
   for (const b of bb) {
     if (!ba.includes(b)) continue;
     const a = mine.refs.get(`refs/heads/${b}`)!;
@@ -181,24 +182,24 @@ function compareRepo(mine: Repo, ref: Repo, messages: boolean, local: boolean): 
     out.push(...sub.map(sentence));
   }
   if (local) {
-    if (ref.branch && mine.branch !== ref.branch) out.push(mine.branch ? `You're on ${q(mine.branch)}, but you should end on ${q(ref.branch)}.` : `HEAD is detached (not on a branch); you should end on ${q(ref.branch)}.`);
-    else if (!ref.branch && mine.branch) out.push(`You should end with a detached HEAD (on a commit, not a branch), but you're on ${q(mine.branch)}.`);
-    else if (!ref.branch && !mine.branch && ka(mine.headCommit()!) !== kb(ref.headCommit()!)) out.push(`HEAD is on a different commit than it should be.`);
-    if (mine.op && !ref.op) out.push(mine.op.kind === 'merge' ? 'A merge is still in progress. Resolve the conflicts, `git add` the files, then `git commit` (or cancel with `git merge --abort`).' : 'A revert is still in progress. Resolve the conflicts, `git add` the files, then `git revert --continue` (or cancel with `git revert --abort`).');
-    if (!mine.op && ref.op) out.push(`A ${ref.op.kind} should still be in progress here (with its conflicts to resolve).`);
+    if (ref.branch && mine.branch !== ref.branch) out.push(mine.branch ? t("You're on {got}, but you should end on {want}.", { got: q(mine.branch), want: q(ref.branch) }) : t('HEAD is detached (not on a branch); you should end on {want}.', { want: q(ref.branch) }));
+    else if (!ref.branch && mine.branch) out.push(t("You should end with a detached HEAD (on a commit, not a branch), but you're on {got}.", { got: q(mine.branch) }));
+    else if (!ref.branch && !mine.branch && ka(mine.headCommit()!) !== kb(ref.headCommit()!)) out.push(t('HEAD is on a different commit than it should be.'));
+    if (mine.op && !ref.op) out.push(mine.op.kind === 'merge' ? t('A merge is still in progress. Resolve the conflicts, `git add` the files, then `git commit` (or cancel with `git merge --abort`).') : t('A revert is still in progress. Resolve the conflicts, `git add` the files, then `git revert --continue` (or cancel with `git revert --abort`).'));
+    if (!mine.op && ref.op) out.push(ref.op.kind === 'merge' ? t('A merge should still be in progress here (with its conflicts to resolve).') : t('A revert should still be in progress here (with its conflicts to resolve).'));
     // Remote-tracking branches: what the last fetch saw.
     for (const [r, s] of ref.refs) {
       if (!r.startsWith('refs/remotes/')) continue;
       const m = mine.refs.get(r);
-      if (!m) out.push(`There's no ${q(r.slice(13))} (remote-tracking branch). It appears after a \`git fetch\` (or \`git push\` of that branch).`);
-      else if (mine.objects.has(m) && ka(m) !== kb(s)) out.push(`${q(r.slice(13))} isn't where it should be: it shows what the hub had at your last \`git fetch\`, \`git pull\` or \`git push\`.`);
+      if (!m) out.push(t("There's no {b} (remote-tracking branch). It appears after a `git fetch` (or `git push` of that branch).", { b: q(r.slice(13)) }));
+      else if (mine.objects.has(m) && ka(m) !== kb(s)) out.push(t("{b} isn't where it should be: it shows what the hub had at your last `git fetch`, `git pull` or `git push`.", { b: q(r.slice(13)) }));
     }
     // Upstreams.
     for (const b of bb) {
       if (!ba.includes(b)) continue;
       const ua = mine.upstream(b)?.tracking;
       const ub = ref.upstream(b)?.tracking;
-      if (ub && ua !== ub) out.push(`${q(b)} should track ${q(ub)} (for example with \`git push -u\`)${ua ? `, not ${q(ua)}` : ''}.`);
+      if (ub && ua !== ub) out.push(ua ? t('{b} should track {want} (for example with `git push -u`), not {got}.', { b: q(b), want: q(ub), got: q(ua) }) : t('{b} should track {want} (for example with `git push -u`).', { b: q(b), want: q(ub) }));
     }
   }
   return out;
@@ -211,11 +212,11 @@ function compareStaging(mine: Repo, minefs: GitMachine, ref: Repo, reffs: GitMac
   const staged = (s: typeof sa) => new Map(s.staged.map((x) => [x.path, x.kind]));
   const a = staged(sa);
   const b = staged(sb);
-  for (const [p, k] of b) if (!a.has(p)) out.push(`${q(p)} should be staged (${k}) but isn't. Stage it with \`git ${k === 'deleted' ? 'rm' : 'add'} ${p}\`.`);
-  for (const [p] of a) if (!b.has(p)) out.push(`${q(p)} is staged, but it shouldn't be.`);
-  for (const [p] of b) if (a.has(p) && mine.index.get(p) !== ref.index.get(p)) out.push(`The staged version of ${q(p)} isn't the right one. Stage it again after your last change (\`git add ${p}\`).`);
+  for (const [p, k] of b) if (!a.has(p)) out.push(t("{file} should be staged ({kind}) but isn't. Stage it with {cmd}.", { file: q(p), kind: k, cmd: q(`git ${k === 'deleted' ? 'rm' : 'add'} ${p}`) }));
+  for (const [p] of a) if (!b.has(p)) out.push(t("{file} is staged, but it shouldn't be.", { file: q(p) }));
+  for (const [p] of b) if (a.has(p) && mine.index.get(p) !== ref.index.get(p)) out.push(t("The staged version of {file} isn't the right one. Stage it again after your last change ({cmd}).", { file: q(p), cmd: q(`git add ${p}`) }));
   const ua = sa.unmerged.map((x) => x.path);
-  for (const p of ua) if (!sb.unmerged.some((x) => x.path === p)) out.push(`${q(p)} still has an unresolved conflict. Fix the file, then \`git add ${p}\`.`);
+  for (const p of ua) if (!sb.unmerged.some((x) => x.path === p)) out.push(t('{file} still has an unresolved conflict. Fix the file, then {cmd}.', { file: q(p), cmd: q(`git add ${p}`) }));
   return out;
 }
 
@@ -224,29 +225,34 @@ function compareFiles(mine: Repo | null, minem: GitMachine, ref: Repo | null, re
   const read = (m: GitMachine, r: Repo | null) => (r ? worktreeFiles(m.learner.fs, r) : new Map<string, string>());
   const a = read(minem, mine);
   const b = read(refm, ref);
-  for (const [p, c] of a) if (/^<<<<<<< |^=======$|^>>>>>>> /m.test(c) && !/^<<<<<<< /m.test(b.get(p) ?? '')) out.push(`${q(p)} still contains conflict markers (\`<<<<<<<\`, \`=======\`, \`>>>>>>>\`). Edit the file so only the final text is left.`);
+  for (const [p, c] of a) if (/^<<<<<<< |^=======$|^>>>>>>> /m.test(c) && !/^<<<<<<< /m.test(b.get(p) ?? '')) out.push(t('{file} still contains conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`). Edit the file so only the final text is left.', { file: q(p) }));
   if (out.length) return out;
   const missing = [...b.keys()].filter((p) => !a.has(p));
   const extra = [...a.keys()].filter((p) => !b.has(p));
   const changed = [...b.keys()].filter((p) => a.has(p) && a.get(p) !== b.get(p));
-  if (missing.length) out.push(`Your folder is missing ${list(missing)}.`);
-  if (extra.length) out.push(`Your folder has ${list(extra)}, which shouldn't be there.`);
+  if (missing.length) out.push(t('Your folder is missing {files}.', { files: list(missing) }));
+  if (extra.length) out.push(t("Your folder has {files}, which shouldn't be there.", { files: list(extra) }));
   for (const p of changed) {
     const want = b.get(p)!.split('\n');
     const got = a.get(p)!.split('\n');
     let i = 0;
     while (i < want.length && i < got.length && want[i] === got[i]) i++;
-    out.push(`${q(p)} isn't right: line ${i + 1} is ${got[i] === undefined || got[i] === '' && i === got.length - 1 ? 'missing' : q(got[i])}${want[i] !== undefined && !(want[i] === '' && i === want.length - 1) ? `, but it should be ${q(want[i])}` : ', but the file should end before it'}.`);
+    const gone = got[i] === undefined || (got[i] === '' && i === got.length - 1);
+    const ends = want[i] === undefined || (want[i] === '' && i === want.length - 1);
+    const v = { file: q(p), n: i + 1, got: gone ? '' : q(got[i]), want: ends ? '' : q(want[i]) };
+    if (gone) out.push(ends ? t("{file} isn't right: line {n} is missing, but the file should end before it.", v) : t("{file} isn't right: line {n} is missing, but it should be {want}.", v));
+    else out.push(ends ? t("{file} isn't right: line {n} is {got}, but the file should end before it.", v) : t("{file} isn't right: line {n} is {got}, but it should be {want}.", v));
   }
   return out;
 }
 
 function compareHub(mine: GitMachine, ref: GitMachine, messages: boolean): string[] {
   const out: string[] = [];
+  const state = (s: string) => (s === 'OPEN' ? t('open') : s === 'MERGED' ? t('merged') : t('closed'));
   for (const [name, rr] of ref.hub.repos) {
     const mr = mine.hub.repos.get(name);
     if (!mr) {
-      out.push(`There's no ${q(name)} repository on the hub.`);
+      out.push(t("There's no {repo} repository on the hub.", { repo: q(name) }));
       continue;
     }
     out.push(...compareRepo(mr, rr, messages, false));
@@ -254,18 +260,19 @@ function compareHub(mine: GitMachine, ref: GitMachine, messages: boolean): strin
     const pb = ref.hub.prs.get(name) ?? [];
     for (const p of pb) {
       const m = pa.find((x) => x.head === p.head && x.base === p.base && x.state === p.state) ?? pa.find((x) => x.head === p.head && x.base === p.base);
-      const what = `a pull request from ${q(p.head)} into ${q(p.base)}`;
-      if (!m) out.push(`On the hub, there should be ${what}${p.state === 'OPEN' ? '' : ` (${p.state.toLowerCase()})`}. Create one with \`gh pr create\`.`);
-      else if (m.state !== p.state) out.push(`Pull request #${m.number} (${what}) is ${m.state.toLowerCase()}, but it should be ${p.state.toLowerCase()}.`);
+      const v = { head: q(p.head), base: q(p.base), want: state(p.state) };
+      if (!m) out.push(p.state === 'OPEN' ? t('On the hub, there should be a pull request from {head} into {base}. Create one with `gh pr create`.', v) : t('On the hub, there should be a pull request from {head} into {base} ({want}). Create one with `gh pr create`.', v));
+      else if (m.state !== p.state) out.push(t('Pull request #{n} (a pull request from {head} into {base}) is {got}, but it should be {want}.', { ...v, n: m.number, got: state(m.state) }));
     }
-    if (pa.length > pb.length) out.push(`On the hub, there ${pa.length - pb.length === 1 ? 'is an extra pull request' : `are ${pa.length - pb.length} extra pull requests`}.`);
+    const extra = pa.length - pb.length;
+    if (extra > 0) out.push(extra === 1 ? t('On the hub, there is an extra pull request.') : t('On the hub, there are {n} extra pull requests.', { n: extra }));
   }
   return out;
 }
 
 /** Lines the answer printed, with hashes and dates made comparable. */
-function printed(t: TranscriptEntry[]): string[] {
-  return t.flatMap((x) => x.lines.map((l) => l.text.replace(/\b[0-9a-f]{7,40}\b/g, '<hash>').replace(/\w{3} \w{3} \d+ \d\d:\d\d:\d\d \d{4} \+0000/g, '<date>')));
+function printed(tr: TranscriptEntry[]): string[] {
+  return tr.flatMap((x) => x.lines.map((l) => l.text.replace(/\b[0-9a-f]{7,40}\b/g, '<hash>').replace(/\w{3} \w{3} \d+ \d\d:\d\d:\d\d \d{4} \+0000/g, '<date>')));
 }
 
 /** Every difference between the learner's machine and the reference one, most important first. */
@@ -278,10 +285,10 @@ export function diffMachines(mine: GitMachine, ref: GitMachine, compare: NonNull
     for (const root of roots) {
       const rr = ref.learner.repos.get(root)!;
       const mr = mine.learner.repos.get(root);
-      if (!mr) out.push(`There's no Git repository in ${q(where(root))}.${root === ref.learner.cwd ? ' Create one with `git init`.' : ''}`);
+      if (!mr) out.push(root === ref.learner.cwd ? t("There's no Git repository in {dir}. Create one with `git init`.", { dir: q(where(root)) }) : t("There's no Git repository in {dir}.", { dir: q(where(root)) }));
       else out.push(...compareRepo(mr, rr, messages, true));
     }
-    for (const root of mine.learner.repos.keys()) if (!roots.has(root)) out.push(`There's an extra Git repository in ${q(where(root))}${root === mine.learner.home ? ' (your home folder: a `git init` in the wrong place?)' : ''}.`);
+    for (const root of mine.learner.repos.keys()) if (!roots.has(root)) out.push(root === mine.learner.home ? t("There's an extra Git repository in {dir} (your home folder: a `git init` in the wrong place?).", { dir: q(where(root)) }) : t("There's an extra Git repository in {dir}.", { dir: q(where(root)) }));
   }
   const rr = repoOf(ref);
   const mr = mine.learner.repos.get(rr?.root ?? '') ?? null;
@@ -297,32 +304,42 @@ function referenceOf(item: Exercise): string {
   return '';
 }
 
-export function evaluateGit(item: Exercise, answer: string): GitOutcome {
-  const spec = item.git;
-  if (!spec) throw new Error(`${item.id} has no git spec`);
-  if (/___/.test(answer)) return { status: 'wrong', feedback: ['Fill in every ___ blank first.'], transcript: [] };
-  if (!answer.trim()) return { status: 'wrong', feedback: ['Write your answer first!'], transcript: [] };
-  const mine = sandbox(spec);
-  const ref = sandbox(spec);
-  const r = applyAnswer(ref, spec, referenceOf(item));
-  const m = applyAnswer(mine, spec, answer);
+/** What's wrong with an answer, in the current language. */
+function feedbackFor(spec: GitSpec, mine: GitMachine, ref: GitMachine, r: ReturnType<typeof applyAnswer>, m: ReturnType<typeof applyAnswer>): string[] {
   const compare = spec.compare ?? ['repo', 'staging', 'files', 'hub'];
   const feedback = diffMachines(mine, ref, compare);
   if (compare.includes('stdout')) {
     const want = printed(r.transcript.slice(0, r.transcript.length - (spec.after?.length ?? 0)));
     const got = printed(m.transcript.slice(0, m.transcript.length - (spec.after?.length ?? 0)));
     const found = spec.exactOutput ? got.join('\n') === want.join('\n') : want.length === 0 || got.some((_, i) => want.every((w, k) => got[i + k] === w));
-    if (!found && spec.exactOutput && want.every((w) => got.includes(w))) feedback.push(`Your commands show more than was asked: the answer should print ${plural(want.length, 'line')}, yours printed ${got.length}.`);
+    if (!found && spec.exactOutput && want.every((w) => got.includes(w))) feedback.push(want.length === 1 ? t('Your commands show more than was asked: the answer should print 1 line, yours printed {got}.', { got: got.length }) : t('Your commands show more than was asked: the answer should print {want} lines, yours printed {got}.', { want: want.length, got: got.length }));
     else if (!found) {
-      const first = want.find((w) => !got.includes(w)) ?? want[0];
-      feedback.push(got.length ? `Your commands don't show what was asked: the answer should print ${q(first)}${want.length > 1 ? ' (and more)' : ''}.` : `Your commands don't print anything. The answer should show ${q(first)}${want.length > 1 ? ' (and more)' : ''}.`);
+      const first = q(want.find((w) => !got.includes(w)) ?? want[0]);
+      const more = want.length > 1;
+      if (got.length) feedback.push(more ? t("Your commands don't show what was asked: the answer should print {first} (and more).", { first }) : t("Your commands don't show what was asked: the answer should print {first}.", { first }));
+      else feedback.push(more ? t("Your commands don't print anything. The answer should show {first} (and more).", { first }) : t("Your commands don't print anything. The answer should show {first}.", { first }));
     }
   }
   if (feedback.length && m.failed) {
     const err = m.failed.lines.find((l) => l.kind === 'err' && l.text.trim())?.text ?? m.failed.lines.find((l) => l.text.trim())?.text ?? '';
-    feedback.unshift(`${q(m.failed.cmd.split('\n')[0])} failed${err ? `: ${err.slice(0, 180)}` : '.'}`);
+    const cmd = q(m.failed.cmd.split('\n')[0]);
+    feedback.unshift(err ? t('{cmd} failed: {err}', { cmd, err: err.slice(0, 180) }) : t('{cmd} failed.', { cmd }));
   }
-  return { status: feedback.length ? 'wrong' : 'correct', feedback, transcript: m.transcript, machine: mine };
+  return feedback;
+}
+
+export function evaluateGit(item: Exercise, answer: string): GitOutcome {
+  const spec = item.git;
+  if (!spec) throw new Error(`${item.id} has no git spec`);
+  if (/___/.test(answer)) return { status: 'wrong', feedback: [t('Fill in every ___ blank first.')], feedbackEn: [], transcript: [] };
+  if (!answer.trim()) return { status: 'wrong', feedback: [t('Write your answer first!')], feedbackEn: [], transcript: [] };
+  const mine = sandbox(spec);
+  const ref = sandbox(spec);
+  const r = applyAnswer(ref, spec, referenceOf(item));
+  const m = applyAnswer(mine, spec, answer);
+  const feedbackEn = inEnglish(() => feedbackFor(spec, mine, ref, r, m));
+  const feedback = lang() === 'en' ? feedbackEn : feedbackFor(spec, mine, ref, r, m);
+  return { status: feedback.length ? 'wrong' : 'correct', feedback, feedbackEn, transcript: m.transcript, machine: mine };
 }
 
 /** Runs an answer without checking it (the Run button). */

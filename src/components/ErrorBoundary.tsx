@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+import { t } from '../shared/i18n';
 
 /** Keeps one broken page from blanking the whole app. */
 export class ErrorBoundary extends Component<{ children: ReactNode; resetKey?: string }, { error: Error | null }> {
@@ -30,9 +31,9 @@ export class ErrorBoundary extends Component<{ children: ReactNode; resetKey?: s
     if (!this.state.error) return this.props.children;
     return (
       <div className="callout bad">
-        <p><b>Something went wrong on this page.</b> Your progress is safe.</p>
+        <p><b>{t('Something went wrong on this page.')}</b> {t('Your progress is safe.')}</p>
         <pre className="small">{this.state.error.message}</pre>
-        <button className="btn small" onClick={() => this.setState({ error: null })}>Try again</button>
+        <button className="btn small" onClick={() => this.setState({ error: null })}>{t('Try again')}</button>
       </div>
     );
   }

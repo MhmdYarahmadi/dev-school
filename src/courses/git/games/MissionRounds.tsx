@@ -4,9 +4,12 @@ import ReactMarkdown from 'react-markdown';
 import { Hud, useCountdown, type FinishFn } from '../../../games/kit';
 import { GraphView } from '../ui/GraphView';
 import { Workspace } from '../ui/Workspace';
+import { t } from '../../../shared/i18n';
 import { goalsMet, goalsOf, isFree, playTeammate, prepareMission, targetGraph, teammateDue, type GitMission } from './missions';
 
 export const MISSION_MAX = 100;
+
+const commandsVsPar = (n: number, par: number) => (n === 1 ? t('1 git command (par {par})', { par }) : t('{n} git commands (par {par})', { n, par }));
 
 /** Points for a solved mission: full marks at par, −15 per extra changing command, −25 for the hint. Never below 30. */
 export function missionScore(actions: number, par: number, hinted: boolean): number {
@@ -64,8 +67,8 @@ export function MissionRounds({ missions, finish, playKey }: { missions: GitMiss
             {all.map((r, i) => (
               <tr key={i}>
                 <td>{r.points > 0 ? '✅' : '⏱'} {r.title}</td>
-                <td className="muted">{r.points > 0 ? `${r.actions} git command${r.actions === 1 ? '' : 's'} (par ${r.par})` : 'not finished'}</td>
-                <td style={{ textAlign: 'right' }}>{r.points} pts</td>
+                <td className="muted">{r.points > 0 ? commandsVsPar(r.actions, r.par) : t('not finished')}</td>
+                <td style={{ textAlign: 'end' }}>{t('{n} pts', { n: r.points })}</td>
               </tr>
             ))}
           </tbody>
@@ -82,7 +85,7 @@ export function MissionRounds({ missions, finish, playKey }: { missions: GitMiss
 
   return (
     <div className="stack">
-      <Hud round={round} rounds={missions.length} score={score} timeLeft={left} timeTotal={m.seconds} extra={<span>🔧 {actions} / par {m.par}</span>} />
+      <Hud round={round} rounds={missions.length} score={score} timeLeft={left} timeTotal={m.seconds} extra={<span>🔧 {t('{n} / par {par}', { n: actions, par: m.par })}</span>} />
       <div className="card stack" style={{ gap: 8 }}>
         <h3 style={{ margin: 0 }}>{m.title}</h3>
         <div className="md">
@@ -98,7 +101,7 @@ export function MissionRounds({ missions, finish, playKey }: { missions: GitMiss
           </ul>
           {target && (
             <div>
-              <div className="small muted">Make your graph look like this (messages and hashes can differ):</div>
+              <div className="small muted">{t('Make your graph look like this (messages and hashes can differ):')}</div>
               <GraphView graphs={[target]} />
             </div>
           )}
@@ -111,7 +114,7 @@ export function MissionRounds({ missions, finish, playKey }: { missions: GitMiss
         {!hinted && solvedAt === null && (
           <div>
             <button className="btn ghost small" onClick={() => setHinted(true)}>
-              💡 Hint (−25 pts)
+              {t('💡 Hint (−25 pts)')}
             </button>
           </div>
         )}
@@ -122,13 +125,13 @@ export function MissionRounds({ missions, finish, playKey }: { missions: GitMiss
         )}
         {solvedAt !== null && (
           <motion.div className="callout good row" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-            <b>Mission complete!</b>
+            <b>{t('Mission complete!')}</b>
             <span>
-              {actions} git command{actions === 1 ? '' : 's'} (par {m.par}) → <b>{missionScore(actions, m.par, hinted)} pts</b>
+              {commandsVsPar(actions, m.par)} → <b>{t('{n} pts', { n: missionScore(actions, m.par, hinted) })}</b>
             </span>
             <div className="grow" />
             <button className="btn primary" onClick={() => next(missionScore(actions, m.par, hinted))} autoFocus>
-              {round + 1 >= missions.length ? 'Finish' : 'Next mission →'}
+              {round + 1 >= missions.length ? t('Finish') : t('Next mission →')}
             </button>
           </motion.div>
         )}
@@ -139,14 +142,14 @@ export function MissionRounds({ missions, finish, playKey }: { missions: GitMiss
         height={320}
         views={['graph', 'hub', 'areas', 'files']}
         disabled={solvedAt !== null}
-        placeholder="Your machine for this mission. Looking (status, log, diff) and editing files is free; other git commands count."
+        placeholder={t('Your machine for this mission. Looking (status, log, diff) and editing files is free; other git commands count.')}
         onCommand={(cmd) => {
           if (!isFree(cmd)) {
             setActions(actions + 1);
             // Sam acts right after the learner's n-th counted command.
             const due = teammateDue(m, actions + 1);
-            for (const t of due) playTeammate(prepared.machine, t);
-            if (due.length) setNews((x) => [...x, ...due.map((t) => t.say)]);
+            for (const move of due) playTeammate(prepared.machine, move);
+            if (due.length) setNews((x) => [...x, ...due.map((move) => move.say)]);
           }
           setVersion((v) => v + 1);
         }}
