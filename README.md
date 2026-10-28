@@ -1,6 +1,15 @@
-# pgschool 🐘
+# Zilber School
 
-An interactive course for learning **PostgreSQL** from scratch. Every query runs on a **real Postgres database inside your browser** ([PGlite](https://pglite.dev)). There's no server to install.
+Interactive courses at [school.zilber.tech](https://school.zilber.tech). Everything runs in the browser and works offline:
+
+| Course | Path | Size | Runs on |
+|---|---|---|---|
+| PostgreSQL | `/pg/` | 10 modules, 12 games, 2 projects | a real Postgres in the browser ([PGlite](https://pglite.dev)) |
+| Docker | `/docker/` | 9 modules, 10 games, 2 projects | a simulated Docker engine, calibrated against Docker 29 |
+| System Design | `/design/` | 10 modules, 7 games, 3 projects | a system simulator |
+| Git | `/git/` | 6 modules, 4 games, 1 project | a simulated Git with real hashes, calibrated against Git 2.53, plus a hub with pull requests |
+
+A small Node server (`server/`) stores accounts and progress and serves the admin dashboard at `/admin/`. See `deploy/` for hosting.
 
 ## Run it
 
@@ -12,11 +21,11 @@ npm run dev     # then open the printed URL (http://localhost:5173)
 | Command | What it does |
 |---|---|
 | `npm run dev` | Start the app with hot reload |
-| `npm test` | 334 tests: the engine, plus a check that every exercise, project and game level is correct and solvable |
+| `npm test` | 1,317 tests: the engines, plus a check that every exercise, project and game level is correct and solvable |
 | `npm run build` | Typecheck and build a static site into `dist/` (host it anywhere) |
 | `scripts/q.sh "SQL|||SQL"` | Run ad-hoc queries against the sample bookstore database |
 
-## What's inside
+## The PostgreSQL course
 
 - **10 modules**, each going **Learn → Practice → Play → Test**:
   1. SELECT
@@ -39,6 +48,7 @@ Progress is stored in your browser (localStorage + IndexedDB).
 ## Layout
 
 ```
+src/courses/     docker/, git/, sd/ (each: engine, content, games, ui) and pg/
 src/db/          PGlite engine, sandboxing, answer checker, friendly errors
 src/pedagogy/    row diff, misconception rules, execution visualiser, SM-2 review
 src/content/     course content (modules/m01…m10), projects, table-behaviour checks
