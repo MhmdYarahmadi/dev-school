@@ -948,3 +948,8 @@ After one online visit, all three courses open and work with no connection; prog
 - **On the site:** "Dev School" in the home page title, brand (`dev`**`school`**), offline note and footer, the PWA manifest (installed app name), the admin title, the login box and the offline error, and the maintenance page. The PostgreSQL page title is now "Postgres School: learn PostgreSQL", like the others. Comments, the README and ADMIN_GUIDE.txt are updated too (mode 600 kept).
 - **Kept:** the domain school.zilber.tech, the simulated `hub.zilber.tech` in the Git course, the Docker image tag `zilber-school:latest`, `~/.local/share/zilber-school`, the VPS `/opt/stacks/pgschool` and the `pgschool_data` volume. Older log entries keep the old names.
 - **Checks:** 1,317 tests pass and the build is OK. The live site changes on the next deploy.
+
+## 51. Deployed: Git course live, Dev School name (2026-10-28)
+- **Deploy:** the user ran `deploy/deploy.sh`; health `{"ok":true}`.
+- **Live check:** `/`, `/pg/`, `/docker/`, `/design/`, `/git/`, `/admin/` and `/api/health` all return 200. The home page title is "Dev School" and it links to `/git/` with the "New" badge. `/pg/` is titled "Postgres School". erp.zilber.tech is unaffected (303 to its login, as before).
+- **Still to do:** a browser walkthrough of the Git games on the live site, once the Chrome extension is connected.
