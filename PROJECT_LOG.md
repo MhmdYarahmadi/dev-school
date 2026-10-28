@@ -937,3 +937,7 @@ After one online visit, all three courses open and work with no connection; prog
 - **Kept out of git:** `ADMIN_GUIDE.txt` (has the admin password), `.env`, `data/`, `dist/`, `node_modules/`; added `*.log` and `.claude/` to `.gitignore`. Before the first commit, I checked that the admin password isn't in any staged file.
 - **Deploy is unchanged:** `deploy/deploy.sh` still rsyncs from this folder, so GitHub is a backup and history, not the deploy source.
 - **From now on:** commit and push after each step (`git add -A && git commit && git push`).
+
+## 49. Renamed to zilber-school (2026-10-28)
+- **Renamed:** the GitHub repo is now https://github.com/mohyarp/zilber-school (GitHub redirects the old URL), the git remote is updated, `package.json` is named `zilber-school`, and the README now covers all four courses (it was PostgreSQL-only).
+- **Kept as `pgschool` on purpose:** the local folder, `/opt/stacks/pgschool` on the VPS, the `pgschool_data` Docker volume and `pgschool.db` (live learner data), and `~/.config/pgschool`. Renaming these would mean migrating the live volume.
