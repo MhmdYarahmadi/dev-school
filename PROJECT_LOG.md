@@ -941,3 +941,10 @@ After one online visit, all three courses open and work with no connection; prog
 ## 49. Renamed to zilber-school (2026-10-28)
 - **Renamed:** the GitHub repo is now https://github.com/mohyarp/zilber-school (GitHub redirects the old URL), the git remote is updated, `package.json` is named `zilber-school`, and the README now covers all four courses (it was PostgreSQL-only).
 - **Kept as `pgschool` on purpose:** the local folder, `/opt/stacks/pgschool` on the VPS, the `pgschool_data` Docker volume and `pgschool.db` (live learner data), and `~/.config/pgschool`. Renaming these would mean migrating the live volume.
+
+## 50. Renamed to Dev School (2026-10-28)
+- **Why:** the user didn't like "Zilber School". The course pages were already "Docker School", "Git School" and "Design School", so the umbrella name is now **Dev School**.
+- **Repo:** private, https://github.com/mohyarp/dev-school (GitHub redirects the old names); `package.json` name `dev-school`.
+- **On the site:** "Dev School" in the home page title, brand (`dev`**`school`**), offline note and footer, the PWA manifest (installed app name), the admin title, the login box and the offline error, and the maintenance page. The PostgreSQL page title is now "Postgres School: learn PostgreSQL", like the others. Comments, the README and ADMIN_GUIDE.txt are updated too (mode 600 kept).
+- **Kept:** the domain school.zilber.tech, the simulated `hub.zilber.tech` in the Git course, the Docker image tag `zilber-school:latest`, `~/.local/share/zilber-school`, the VPS `/opt/stacks/pgschool` and the `pgschool_data` volume. Older log entries keep the old names.
+- **Checks:** 1,317 tests pass and the build is OK. The live site changes on the next deploy.

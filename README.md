@@ -1,4 +1,4 @@
-# Zilber School
+# Dev School
 
 Interactive courses at [school.zilber.tech](https://school.zilber.tech). Everything runs in the browser and works offline:
 

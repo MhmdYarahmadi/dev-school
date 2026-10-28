@@ -1,4 +1,4 @@
-# Zilber School: the whole school.zilber.tech site (home page, all courses, admin, API).
+# Dev School: the whole school.zilber.tech site (home page, all courses, admin, API).
 # Lives in /opt/stacks/pgschool on the VPS. Caddy (stack "proxy") reaches it as school-app:8787.
 services:
   school-app:

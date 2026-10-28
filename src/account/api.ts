@@ -69,7 +69,7 @@ export async function api<T>(path: string, init: RequestInit & { admin?: string 
   try {
     res = await fetch(API + path.replace(/^\/api/, ''), { ...init, headers });
   } catch {
-    throw new ApiError(0, 'Cannot reach the Zilber School server. Check your connection: logging in needs internet (after that, the courses also work offline on this device).');
+    throw new ApiError(0, 'Cannot reach the Dev School server. Check your connection: logging in needs internet (after that, the courses also work offline on this device).');
   }
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {

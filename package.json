@@ -1,5 +1,5 @@
 {
-  "name": "zilber-school",
+  "name": "dev-school",
   "version": "1.0.0",
   "description": "Learn PostgreSQL interactively: lessons, games and tests running real Postgres (PGlite) in the browser",
   "scripts": {

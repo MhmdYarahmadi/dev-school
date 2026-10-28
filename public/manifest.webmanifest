@@ -1,6 +1,6 @@
 {
-  "name": "Zilber School",
-  "short_name": "Zilber School",
+  "name": "Dev School",
+  "short_name": "Dev School",
   "description": "Hands-on PostgreSQL, Docker and System Design courses that run in your browser, online or offline.",
   "id": "/",
   "start_url": "/",

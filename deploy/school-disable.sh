@@ -18,7 +18,7 @@ open("school.caddy.enabled", "w").write(block)          # saved for school-enabl
 off = """school.zilber.tech {
 	# DISABLED - restore with deploy/school-enable.sh (original block saved in school.caddy.enabled)
 	header Content-Type "text/html; charset=utf-8"
-	respond "<!doctype html><title>Zilber School</title><body style=\\"font-family:system-ui;text-align:center;padding:4em\\"><h1>Zilber School</h1><p>The school is temporarily unavailable. Please check back later.</p></body>" 503
+	respond "<!doctype html><title>Dev School</title><body style=\\"font-family:system-ui;text-align:center;padding:4em\\"><h1>Dev School</h1><p>The school is temporarily unavailable. Please check back later.</p></body>" 503
 }
 """
 with open("Caddyfile", "r+") as f:

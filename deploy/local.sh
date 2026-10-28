@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run Zilber School on this computer at http://localhost:8787 (e.g. while the VPS is down).
+# Run Dev School on this computer at http://localhost:8787 (e.g. while the VPS is down).
 #   bash deploy/local.sh start | stop | status | rebuild
 # Accounts and progress live in ~/.local/share/zilber-school (separate from the VPS database).
 set -euo pipefail
@@ -22,7 +22,7 @@ case "${1:-start}" in
       nohup node server/index.mjs >>"$LOG" 2>&1 &
     echo $! >"$PIDFILE"
     for _ in $(seq 1 20); do curl -fs "http://localhost:$PORT/api/health" >/dev/null && break; sleep 0.25; done
-    curl -fs "http://localhost:$PORT/api/health" >/dev/null && echo "✓ Zilber School: http://localhost:$PORT  (admin: http://localhost:$PORT/admin/)" || { echo "✗ did not start, see $LOG"; exit 1; }
+    curl -fs "http://localhost:$PORT/api/health" >/dev/null && echo "✓ Dev School: http://localhost:$PORT  (admin: http://localhost:$PORT/admin/)" || { echo "✗ did not start, see $LOG"; exit 1; }
     ;;
   stop)
     if running; then kill "$(cat "$PIDFILE")"; rm -f "$PIDFILE"; echo "Stopped."; else echo "Not running."; fi

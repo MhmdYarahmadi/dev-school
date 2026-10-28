@@ -1,4 +1,4 @@
-/* Zilber School service worker: keeps a copy of the whole site so every course opens offline.
+/* Dev School service worker: keeps a copy of the whole site so every course opens offline.
  * Built by offline/plugin.ts, which fills in the version and the file list. */
 const VERSION = '__VERSION__';
 const FILES = __FILES__;

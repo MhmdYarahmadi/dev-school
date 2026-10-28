@@ -43,7 +43,7 @@ function AuthScreen() {
       <div className="card stack">
         <h1 style={{ margin: 0 }}>{c.brand[0]}<span style={{ color: 'var(--accent)' }}>{c.brand[1]}</span> {c.icon}</h1>
         <p className="muted" style={{ margin: 0 }}>
-          Log in with your <b>Zilber School</b> account. One account works for every course.
+          Log in with your <b>Dev School</b> account. One account works for every course.
         </p>
         <div className="tabs" style={{ marginBottom: 0 }}>
           <button className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')} type="button">Log in</button>
