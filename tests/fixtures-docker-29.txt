@@ -1,0 +1,652 @@
+### CMD: docker version --format '{{.Server.Version}}'
+29.7.2
+### EXIT: 0
+### CMD: docker compose version
+Docker Compose version v5.5.0
+### EXIT: 0
+### CMD: docker pull alpine
+Using default tag: latest
+latest: Pulling from library/alpine
+6d0606d1815c: Download complete
+797dd00a0fc7: Download complete
+Digest: sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+Status: Downloaded newer image for alpine:latest
+docker.io/library/alpine:latest
+### EXIT: 0
+### CMD: docker pull alpine
+Using default tag: latest
+latest: Pulling from library/alpine
+Digest: sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+Status: Image is up to date for alpine:latest
+docker.io/library/alpine:latest
+### EXIT: 0
+### CMD: docker images alpine
+IMAGE           ID             DISK USAGE   CONTENT SIZE   EXTRA
+alpine:latest   294b683cb724         13MB         3.94MB        
+### EXIT: 0
+### CMD: docker image ls alpine
+IMAGE           ID             DISK USAGE   CONTENT SIZE   EXTRA
+alpine:latest   294b683cb724         13MB         3.94MB        
+### EXIT: 0
+### CMD: docker pull busybox
+Using default tag: latest
+latest: Pulling from library/busybox
+37bb94b0940b: Pulling fs layer
+46500c34ad0c: Download complete
+37bb94b0940b: Download complete
+37bb94b0940b: Pull complete
+Digest: sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+### EXIT: 0
+### CMD: docker pull hello-world
+Using default tag: latest
+latest: Pulling from library/hello-world
+Digest: sha256:5e23090353324d887c48ad5e5c56d294eab81588df9605b07d1afe895f9cc8f8
+Status: Downloaded newer image for hello-world:latest
+docker.io/library/hello-world:latest
+### EXIT: 0
+### CMD: docker run --name zscal-a1 --label zscal=1 alpine
+### EXIT: 0
+### CMD: docker ps -a --filter label=zscal=1
+CONTAINER ID   IMAGE     COMMAND     CREATED                  STATUS                              PORTS     NAMES
+e57bc764e8d6   alpine    "/bin/sh"   Less than a second ago   Exited (0) Less than a second ago             zscal-a1
+### EXIT: 0
+### CMD: docker run --name zscal-a1 --label zscal=1 alpine
+docker: Error response from daemon: Conflict. The container name "/zscal-a1" is already in use by container "e57bc764e8d6c0ff7547017ad468176db2b41374eadbaf3fa2938a30534d43d3". You have to remove (or rename) that container to be able to reuse that name.
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker run -d --name zscal-a2 --label zscal=1 alpine
+c2bade33c84e790ea347b313d507d246b06cca383331dee3a21f50d440e1852d
+### EXIT: 0
+### CMD: docker run -dit --name zscal-a3 --label zscal=1 alpine
+1aa2336c9627fff17ee7b93be865eee01281825acf35d7219c154512b8c93d13
+### EXIT: 0
+### CMD: docker ps --filter label=zscal=1
+CONTAINER ID   IMAGE     COMMAND     CREATED                  STATUS                  PORTS     NAMES
+1aa2336c9627   alpine    "/bin/sh"   Less than a second ago   Up Less than a second             zscal-a3
+### EXIT: 0
+### CMD: docker ps -a --filter label=zscal=1
+CONTAINER ID   IMAGE     COMMAND     CREATED                  STATUS                              PORTS     NAMES
+1aa2336c9627   alpine    "/bin/sh"   Less than a second ago   Up Less than a second                         zscal-a3
+c2bade33c84e   alpine    "/bin/sh"   1 second ago             Exited (0) Less than a second ago             zscal-a2
+e57bc764e8d6   alpine    "/bin/sh"   1 second ago             Exited (0) Less than a second ago             zscal-a1
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 alpine echo hello from alpine
+hello from alpine
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 alpine sh -c 'exit 3'
+### EXIT: 3
+### CMD: docker run -d --name zscal-sleep --label zscal=1 alpine sleep 300
+03758fac1d4221f4fd57cc775857807c6bb7820b06c9c385e84630760f269e59
+### EXIT: 0
+### CMD: docker stop -t 1 zscal-sleep
+zscal-sleep
+### EXIT: 0
+### CMD: docker ps -a --filter name=zscal-sleep --format '{{.Status}}'
+Exited (137) Less than a second ago
+### EXIT: 0
+### CMD: docker kill zscal-a3
+zscal-a3
+### EXIT: 0
+### CMD: docker ps -a --filter name=zscal-a3 --format '{{.Status}}'
+Exited (137) Less than a second ago
+### EXIT: 0
+### CMD: docker rm zscal-a1 zscal-a2
+zscal-a1
+zscal-a2
+### EXIT: 0
+### CMD: docker ps -aq --filter label=zscal=1 | wc -l
+2
+### EXIT: 0
+### CMD: docker run -d --name zscal-web --label zscal=1 -p 127.0.0.1:18080:80 nginx
+Unable to find image 'nginx:latest' locally
+latest: Pulling from library/nginx
+46243d3234ed: Pulling fs layer
+3326c3817340: Pulling fs layer
+2056b40bae09: Pulling fs layer
+afa8dec48454: Pulling fs layer
+f802f27d954b: Pulling fs layer
+6b37362b3da7: Pulling fs layer
+f1169c633cbc: Pulling fs layer
+3326c3817340: Download complete
+2056b40bae09: Download complete
+afa8dec48454: Download complete
+46243d3234ed: Download complete
+f802f27d954b: Download complete
+f1169c633cbc: Download complete
+6b37362b3da7: Download complete
+37d8c7707e42: Download complete
+e40088050cb6: Download complete
+6b37362b3da7: Pull complete
+f1169c633cbc: Pull complete
+2056b40bae09: Pull complete
+afa8dec48454: Pull complete
+f802f27d954b: Pull complete
+3326c3817340: Pull complete
+46243d3234ed: Pull complete
+Digest: sha256:abe47724e466aeab9a345d8e46a221c2fa8953c7848bb4a3bd9976a7199f8cf2
+Status: Downloaded newer image for nginx:latest
+4b0dd4c340eb50c01d3f801f0726278f974acf1863a183fa86165f8263cb586f
+### EXIT: 0
+### CMD: sleep 2; docker ps --filter name=zscal-web
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                     NAMES
+4b0dd4c340eb   nginx     "/docker-entrypoint.…"   8 seconds ago   Up 7 seconds   127.0.0.1:18080->80/tcp   zscal-web
+### EXIT: 0
+### CMD: docker run -d --name zscal-web2 --label zscal=1 -p 127.0.0.1:18080:80 nginx
+c3c8708f9ab4053cc2344a6d85ea73124737d97c78d44f784179cf9071e20376
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint zscal-web2 (54bf9ec382d35cbc73f3c4c858394f067828147064a24485d72a483271021a0c): Bind for 127.0.0.1:18080 failed: port is already allocated
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker ps -a --filter name=zscal-web2 --format '{{.Status}}'
+Created
+### EXIT: 0
+### CMD: curl -s 127.0.0.1:18080 | grep -i '<title>'
+<title>Welcome to nginx!</title>
+### EXIT: 0
+### CMD: curl -s 127.0.0.1:18081
+### EXIT: 7
+### CMD: docker logs zscal-web
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2026/10/05 13:14:02 [notice] 1#1: using the "epoll" event method
+2026/10/05 13:14:02 [notice] 1#1: nginx/1.31.6
+2026/10/05 13:14:02 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19) 
+2026/10/05 13:14:02 [notice] 1#1: OS: Linux 7.0.0-30-generic
+2026/10/05 13:14:02 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1024:524288
+2026/10/05 13:14:02 [notice] 1#1: start worker processes
+2026/10/05 13:14:02 [notice] 1#1: start worker process 29
+2026/10/05 13:14:02 [notice] 1#1: start worker process 30
+2026/10/05 13:14:02 [notice] 1#1: start worker process 31
+2026/10/05 13:14:02 [notice] 1#1: start worker process 32
+172.17.0.1 - - [05/Oct/2026:13:14:05 +0000] "GET / HTTP/1.1" 200 896 "-" "curl/8.18.0" "-"
+### EXIT: 0
+### CMD: docker logs --tail 2 zscal-web
+2026/10/05 13:14:02 [notice] 1#1: start worker process 32
+172.17.0.1 - - [05/Oct/2026:13:14:05 +0000] "GET / HTTP/1.1" 200 896 "-" "curl/8.18.0" "-"
+### EXIT: 0
+### CMD: docker exec zscal-web ls /usr/share/nginx/html
+50x.html
+index.html
+### EXIT: 0
+### CMD: docker exec zscal-web cat /usr/share/nginx/html/index.html | head -4
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+### EXIT: 0
+### CMD: docker exec zscal-web hostname
+4b0dd4c340eb
+### EXIT: 0
+### CMD: docker port zscal-web
+80/tcp -> 127.0.0.1:18080
+### EXIT: 0
+### CMD: docker rm zscal-web
+Error response from daemon: cannot remove container "zscal-web": container is running: stop the container before removing or force remove
+### EXIT: 1
+### CMD: docker rmi nginx
+Error response from daemon: conflict: unable to delete nginx:latest (must be forced) - container c3c8708f9ab4 is using its referenced image abe47724e466
+### EXIT: 1
+### CMD: docker stop zscal-web
+zscal-web
+### EXIT: 0
+### CMD: docker ps -a --filter name=zscal-web$ --format '{{.Status}}'
+Exited (0) Less than a second ago
+### EXIT: 0
+### CMD: docker start zscal-web
+zscal-web
+### EXIT: 0
+### CMD: docker restart zscal-web
+zscal-web
+### EXIT: 0
+### CMD: docker rm -f zscal-web2
+zscal-web2
+### EXIT: 0
+### CMD: docker run -d --name zscal-pub --label zscal=1 -p 18099:80 alpine sleep 60
+e3e3bf2680aef19ecf83bc27e240dc2e853d807823e10c8c5711ad407ccfdab4
+### EXIT: 0
+### CMD: docker ps --filter name=zscal-pub --format '{{.Ports}}'
+0.0.0.0:18099->80/tcp, [::]:18099->80/tcp
+### EXIT: 0
+### CMD: docker rm -f zscal-pub
+zscal-pub
+### EXIT: 0
+### CMD: docker exec zscal-doesnotexist ls
+Error response from daemon: No such container: zscal-doesnotexist
+### EXIT: 1
+### CMD: docker stop zscal-doesnotexist
+Error response from daemon: No such container: zscal-doesnotexist
+### EXIT: 1
+### CMD: docker logs zscal-doesnotexist
+Error response from daemon: No such container: zscal-doesnotexist
+### EXIT: 1
+### CMD: docker rm zscal-doesnotexist
+Error response from daemon: No such container: zscal-doesnotexist
+### EXIT: 1
+### CMD: docker exec zscal-sleep ls
+Error response from daemon: container 03758fac1d4221f4fd57cc775857807c6bb7820b06c9c385e84630760f269e59 is not running
+### EXIT: 1
+### CMD: docker run -d --name zscal-pg0 --label zscal=1 postgres:16-alpine
+a1ed851a5ef69ae3374e5c790651e962265c358479421ff1f2b6d9513f0377e0
+### EXIT: 0
+### CMD: sleep 4; docker ps -a --filter name=zscal-pg0 --format '{{.Status}}'
+Exited (1) 3 seconds ago
+### EXIT: 0
+### CMD: docker logs zscal-pg0
+Error: Database is uninitialized and superuser password is not specified.
+       You must specify POSTGRES_PASSWORD to a non-empty value for the
+       superuser. For example, "-e POSTGRES_PASSWORD=password" on "docker run".
+
+       You may also use "POSTGRES_HOST_AUTH_METHOD=trust" to allow all
+       connections without a password. This is *not* recommended.
+
+       See PostgreSQL documentation about "trust":
+       https://www.postgresql.org/docs/current/auth-trust.html
+### EXIT: 0
+### CMD: docker volume create zscal-vol
+zscal-vol
+### EXIT: 0
+### CMD: docker volume ls --filter name=zscal
+DRIVER    VOLUME NAME
+local     zscal-vol
+### EXIT: 0
+### CMD: docker volume inspect zscal-vol
+[
+    {
+        "CreatedAt": "2026-10-05T13:14:12Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/zscal-vol/_data",
+        "Name": "zscal-vol",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+### EXIT: 0
+### CMD: docker run -d --name zscal-pg --label zscal=1 -e POSTGRES_PASSWORD=secret -v zscal-vol:/var/lib/postgresql/data postgres:16-alpine
+73d6786fa17b65cb54d5d57df7e77f3992a79f29563030f2ac4a7f90c22ecf28
+### EXIT: 0
+### CMD: sleep 6; docker logs --tail 2 zscal-pg
+2026-10-05 13:14:15.388 UTC [55] LOG:  database system was shut down at 2026-10-05 13:14:15 UTC
+2026-10-05 13:14:15.395 UTC [1] LOG:  database system is ready to accept connections
+### EXIT: 0
+### CMD: docker exec zscal-pg ls /var/lib/postgresql/data | head -5
+PG_VERSION
+base
+global
+pg_commit_ts
+pg_dynshmem
+### EXIT: 0
+### CMD: docker volume rm zscal-vol
+Error response from daemon: remove zscal-vol: volume is in use - [73d6786fa17b65cb54d5d57df7e77f3992a79f29563030f2ac4a7f90c22ecf28]
+### EXIT: 1
+### CMD: docker stop zscal-pg
+zscal-pg
+### EXIT: 0
+### CMD: docker ps -a --filter name=zscal-pg$ --format '{{.Status}}'
+Exited (0) Less than a second ago
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 -v zscal-vol:/data alpine sh -c 'echo hi > /data/note.txt; cat /data/note.txt'
+hi
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 -v zscal-vol:/data:ro alpine sh -c 'echo x > /data/x.txt'
+sh: can't create /data/x.txt: Read-only file system
+### EXIT: 1
+### CMD: docker run -d --name zscal-redis --label zscal=1 redis
+Unable to find image 'redis:latest' locally
+latest: Pulling from library/redis
+fd8e02d36414: Pulling fs layer
+341d1e251840: Pulling fs layer
+33116b6af770: Pulling fs layer
+5e47981ccb4d: Pulling fs layer
+ed337c33a273: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+4f4fb700ef54: Already exists
+e89c3d57c79b: Download complete
+589653494b37: Download complete
+fd8e02d36414: Download complete
+33116b6af770: Download complete
+33116b6af770: Pull complete
+ed337c33a273: Download complete
+341d1e251840: Download complete
+5e47981ccb4d: Download complete
+5e47981ccb4d: Pull complete
+4f4fb700ef54: Pull complete
+fd8e02d36414: Pull complete
+ed337c33a273: Pull complete
+341d1e251840: Pull complete
+Digest: sha256:6f81e8915c60b065a524e6967e0ad1c639ba6efa84d669f823683ea04d9150ee
+Status: Downloaded newer image for redis:latest
+1aa621dfcafd99624c02fae3073fc6892bcd69e3ff7fa52994c1d8315bf02888
+### EXIT: 0
+### CMD: sleep 2; docker stop zscal-redis; docker ps -a --filter name=zscal-redis --format '{{.Status}}'
+zscal-redis
+Exited (0) Less than a second ago
+### EXIT: 0
+### CMD: docker network create zscal-net
+69fb65e38907d40cd2a8a4a1aff54f0e85ac1993839300ea7c7805b2b7556acb
+### EXIT: 0
+### CMD: docker network ls --filter name=zscal
+NETWORK ID     NAME        DRIVER    SCOPE
+69fb65e38907   zscal-net   bridge    local
+### EXIT: 0
+### CMD: docker run -d --name zscal-n1 --label zscal=1 --network zscal-net alpine sleep 300
+9d0f6aa284baae2f3d13fc8ac477f886a2cf646bb2960e331ce5d2ba5f05e75f
+### EXIT: 0
+### CMD: docker run -d --name zscal-n2 --label zscal=1 --network zscal-net alpine sleep 300
+4bb3e5d2a4378cb3ecd9486bbff87970998f3b2ac361b06e6a797bce14250db0
+### EXIT: 0
+### CMD: docker exec zscal-n1 ping -c1 -W1 zscal-n2
+PING zscal-n2 (172.21.0.3): 56 data bytes
+64 bytes from 172.21.0.3: seq=0 ttl=64 time=0.136 ms
+
+--- zscal-n2 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.136/0.136/0.136 ms
+### EXIT: 0
+### CMD: docker run -d --name zscal-b1 --label zscal=1 alpine sleep 300
+4cf03431122e1a350c3b0a861c2d81cc8fe7e106a6ad1cfe3391c7f1eb95e5ce
+### EXIT: 0
+### CMD: docker run -d --name zscal-b2 --label zscal=1 alpine sleep 300
+fcdd9e5aec2a64ff5ade3a35be6241bb949196731ec57e62bc60c7f44b50014c
+### EXIT: 0
+### CMD: docker exec zscal-b1 ping -c1 -W1 zscal-b2
+ping: bad address 'zscal-b2'
+### EXIT: 1
+### CMD: docker exec zscal-b1 ping -c1 -W1 zscal-n1
+ping: bad address 'zscal-n1'
+### EXIT: 1
+### CMD: docker exec zscal-n1 ping -c1 -W1 localhost
+PING localhost (::1): 56 data bytes
+64 bytes from ::1: seq=0 ttl=64 time=0.398 ms
+
+--- localhost ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.398/0.398/0.398 ms
+### EXIT: 0
+### CMD: docker network connect zscal-net zscal-b1
+### EXIT: 0
+### CMD: docker exec zscal-b1 ping -c1 -W1 zscal-n2
+PING zscal-n2 (172.21.0.3): 56 data bytes
+64 bytes from 172.21.0.3: seq=0 ttl=64 time=1.938 ms
+
+--- zscal-n2 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 1.938/1.938/1.938 ms
+### EXIT: 0
+### CMD: docker network rm zscal-net
+Error response from daemon: error while removing network: network zscal-net has active endpoints (name:"zscal-n1" id:"cb233ac5dd8a", name:"zscal-n2" id:"21d4c7e9eec6", name:"zscal-b1" id:"2df4385aaff5")
+exit status 1
+### EXIT: 1
+### CMD: docker network create zscal-net
+Error response from daemon: network with name zscal-net already exists
+### EXIT: 1
+### CMD: docker run -d --name zscal-x --label zscal=1 --network nonexistent-net alpine sleep 1
+2bd377c9dfcfe742fb50d540f7d0f36095437e6ad67c6a0283bc1b420bbeb339
+docker: Error response from daemon: failed to set up container networking: network nonexistent-net not found
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker exec zscal-n1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=9d0f6aa284ba
+HOME=/root
+### EXIT: 0
+### CMD: docker inspect --format '{{.State.Status}} {{.State.ExitCode}} {{.HostConfig.RestartPolicy.Name}} {{.Config.Cmd}}' zscal-n1
+running 0 no [sleep 300]
+### EXIT: 0
+### CMD: docker run --label zscal=1 zscal-nonexistent-image-xyz
+Unable to find image 'zscal-nonexistent-image-xyz:latest' locally
+docker: Error response from daemon: pull access denied for zscal-nonexistent-image-xyz, repository does not exist or may require 'docker login'
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker run --label zscal=1 Alpine
+docker: invalid reference format: repository name (library/Alpine) must be lowercase
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker run --bogusflag alpine
+unknown flag: --bogusflag
+
+Usage:  docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker run
+docker: 'docker run' requires at least 1 argument
+
+Usage:  docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+See 'docker run --help' for more information
+### EXIT: 1
+### CMD: docker frobnicate
+docker: unknown command: docker frobnicate
+
+Run 'docker --help' for more information
+### EXIT: 1
+### CMD: docker run --label zscal=1 -p 99999:80 alpine
+docker: invalid hostPort: 99999
+
+Run 'docker run --help' for more information
+### EXIT: 125
+### CMD: docker run -d --name zscal-r --label zscal=1 --restart on-failure:2 alpine sh -c 'exit 1'
+73813d32145a8d810ce65ccfd288b42a243b2ab5d6c4843ddf0d7d920094071a
+### EXIT: 0
+### CMD: sleep 5; docker ps -a --filter name=zscal-r$ --format '{{.Status}}'; docker inspect --format '{{.RestartCount}}' zscal-r
+Exited (1) 4 seconds ago
+2
+### EXIT: 0
+### CMD: docker run -d --name zscal-ra --label zscal=1 --restart always alpine sh -c 'exit 2'
+44207e716dd377aae28316cb0615744b0f52147ee9728b9270828888803d0a6d
+### EXIT: 0
+### CMD: sleep 3; docker ps -a --filter name=zscal-ra --format '{{.Status}}'
+Restarting (2) Less than a second ago
+### EXIT: 0
+### CMD: cd /tmp/zscal-build && docker build --progress=plain -t zscal-app:1.0 . 2>&1 | grep -vE '^#[0-9]+ (sha256|resolve|extracting|transferring)' 
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:3.20
+#2 DONE 2.0s
+
+#3 [internal] load .dockerignore
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [1/4] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#5 DONE 0.8s
+
+#6 [2/4] WORKDIR /app
+#6 DONE 0.0s
+
+#7 [3/4] COPY hello.txt .
+#7 DONE 0.0s
+
+#8 [4/4] RUN echo built > built.txt
+#8 DONE 0.3s
+
+#9 exporting to image
+#9 exporting layers 0.1s done
+#9 exporting manifest sha256:a37888c7fe5180b6f986c8a3570232839ca484e9334a6a6cf63c88618413a816 done
+#9 exporting config sha256:095b655e45e8e8249ecabe7f784ecd4692f65e637d2c0c193da4676919c3a306 done
+#9 exporting attestation manifest sha256:933c4b1634449afe840917ae0f00bc989783724277604e1dfaca911ee25a20ff done
+#9 exporting manifest list sha256:cbb437eff7f93e47ac07ca84463d927b1740547e947658ad510eea3a7d56bd92 done
+#9 naming to docker.io/library/zscal-app:1.0 done
+#9 unpacking to docker.io/library/zscal-app:1.0 0.0s done
+#9 DONE 0.2s
+### EXIT: 0
+### CMD: cd /tmp/zscal-build && docker build --progress=plain -t zscal-app:1.0 . 2>&1 | grep -E 'CACHED|^#[0-9]+ \[' 
+#1 [internal] load build definition from Dockerfile
+#2 [internal] load metadata for docker.io/library/alpine:3.20
+#3 [internal] load .dockerignore
+#4 [1/4] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#5 [internal] load build context
+#6 [2/4] WORKDIR /app
+#6 CACHED
+#7 [3/4] COPY hello.txt .
+#7 CACHED
+#8 [4/4] RUN echo built > built.txt
+#8 CACHED
+### EXIT: 0
+### CMD: cd /tmp/zscal-build && echo changed > hello.txt && docker build --progress=plain -t zscal-app:1.0 . 2>&1 | grep -E 'CACHED|^#[0-9]+ \[' 
+#1 [internal] load build definition from Dockerfile
+#2 [internal] load metadata for docker.io/library/alpine:3.20
+#3 [internal] load .dockerignore
+#4 [1/4] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#5 [internal] load build context
+#6 [2/4] WORKDIR /app
+#6 CACHED
+#7 [3/4] COPY hello.txt .
+#8 [4/4] RUN echo built > built.txt
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 zscal-app:1.0
+changed
+### EXIT: 0
+### CMD: docker run --rm --label zscal=1 zscal-app:1.0 ls -a /app
+.
+..
+built.txt
+hello.txt
+### EXIT: 0
+### CMD: docker history zscal-app:1.0
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+46ff55a2e62e   1 second ago    CMD ["cat" "hello.txt"]                         0B        buildkit.dockerfile.v0
+<missing>      1 second ago    RUN /bin/sh -c echo built > built.txt # buil…   12.3kB    buildkit.dockerfile.v0
+<missing>      1 second ago    COPY hello.txt . # buildkit                     12.3kB    buildkit.dockerfile.v0
+<missing>      3 seconds ago   WORKDIR /app                                    8.19kB    buildkit.dockerfile.v0
+<missing>      5 months ago    CMD ["/bin/sh"]                                 0B        buildkit.dockerfile.v0
+<missing>      5 months ago    ADD alpine-minirootfs-3.20.10-x86_64.tar.gz …   8.47MB    buildkit.dockerfile.v0
+### EXIT: 0
+### CMD: docker images zscal-app
+IMAGE           ID             DISK USAGE   CONTENT SIZE   EXTRA
+zscal-app:1.0   46ff55a2e62e       12.1MB         3.64MB        
+### EXIT: 0
+### CMD: docker image inspect --format '{{json .Config.Cmd}} {{.Config.WorkingDir}}' zscal-app:1.0
+["cat","hello.txt"] /app
+### EXIT: 0
+### CMD: cd /tmp/zscal-broken && docker build --progress=plain -t zscal-broken:1.0 . 2>&1 | tail -6
+--------------------
+   1 |     FROM alpine:3.20
+   2 | >>> COPY missing.txt /
+   3 |     
+--------------------
+ERROR: failed to build: failed to solve: failed to compute cache key: failed to calculate checksum of ref m95gp9k3u5zxmbb9p4ia67s41::rb3l5b8h9ukvu82obcdu88o9v: "/missing.txt": not found
+### EXIT: 0
+### CMD: cd /tmp/zscal-broken && docker build --progress=plain -t zscal-broken:1.0 . 2>&1 | tail -6
+--------------------
+   1 |     FROM alpine:3.20
+   2 | >>> RUN exit 4
+   3 |     
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c exit 4" did not complete successfully: exit code: 4
+### EXIT: 0
+### CMD: cd /tmp/zscal-compose && docker compose -p zscal up -d 2>&1
+ Network zscal_default Creating 
+ Network zscal_default Creating 
+ Volume zscal_dbdata Creating 
+ Volume zscal_dbdata Creating 
+ Volume zscal_dbdata Created 
+ Volume zscal_dbdata Created 
+ Network zscal_default Created 
+ Network zscal_default Created 
+ Container zscal-db-1 Creating 
+ Container zscal-db-1 Created 
+ Container zscal-web-1 Creating 
+ Container zscal-web-1 Created 
+ Container zscal-db-1 Starting 
+ Container zscal-db-1 Started 
+ Container zscal-db-1 Waiting 
+ Container zscal-db-1 Healthy 
+ Container zscal-web-1 Starting 
+ Container zscal-web-1 Started 
+### EXIT: 0
+### CMD: cd /tmp/zscal-compose && docker compose -p zscal ps
+NAME          IMAGE                COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+zscal-db-1    postgres:16-alpine   "docker-entrypoint.s…"   db        5 seconds ago   Up 4 seconds (healthy)   5432/tcp
+zscal-web-1   nginx                "/docker-entrypoint.…"   web       5 seconds ago   Up Less than a second    127.0.0.1:18082->80/tcp
+### EXIT: 0
+### CMD: docker network ls --filter name=zscal
+NETWORK ID     NAME            DRIVER    SCOPE
+69fb65e38907   zscal-net       bridge    local
+56567af6f4e7   zscal_default   bridge    local
+### EXIT: 0
+### CMD: docker volume ls --filter name=zscal
+DRIVER    VOLUME NAME
+local     zscal-vol
+local     zscal_dbdata
+### EXIT: 0
+### CMD: cd /tmp/zscal-compose && docker compose -p zscal logs --tail 1 web
+web-1  | 2026/10/05 13:14:54 [notice] 1#1: start worker process 33
+### EXIT: 0
+### CMD: docker exec zscal-web-1 getent hosts db
+172.22.0.2      db
+### EXIT: 0
+### CMD: cd /tmp/zscal-compose && docker compose -p zscal down -v 2>&1
+ Container zscal-web-1 Stopping 
+ Container zscal-web-1 Stopped 
+ Container zscal-web-1 Removing 
+ Container zscal-web-1 Removed 
+ Container zscal-db-1 Stopping 
+ Container zscal-db-1 Stopped 
+ Container zscal-db-1 Removing 
+ Container zscal-db-1 Removed 
+ Network zscal_default Removing 
+ Volume zscal_dbdata Removing 
+ Volume zscal_dbdata Removed 
+ Network zscal_default Removed 
+### EXIT: 0
+### CMD: cd /tmp/zscal-compose && docker compose -p zscal config 2>&1
+failed to parse /tmp/zscal-compose/compose.yaml: go-yaml load error in parser (while parsing a block mapping) at L2.C3-L6.C4: did not find expected key
+### EXIT: 1
+### CMD: cd /tmp/zscal-compose && docker compose -p zscal config 2>&1
+service "web" depends on undefined service "api": invalid compose project
+### EXIT: 1
+### CMD: docker images nginx
+IMAGE               ID             DISK USAGE   CONTENT SIZE   EXTRA
+nginx:1.27-alpine   65645c7bb6a0       74.5MB         21.9MB        
+nginx:latest        abe47724e466        242MB         66.3MB   U    
+### EXIT: 0
+### CMD: docker images busybox
+IMAGE            ID             DISK USAGE   CONTENT SIZE   EXTRA
+busybox:latest   fd7dc98638c8       6.81MB         2.23MB        
+### EXIT: 0
+### CLEANUP: removed images: busybox:latest nginx:latest redis:latest 
+### LEFTOVERS: containers=0 nets=0 vols=0

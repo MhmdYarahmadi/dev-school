@@ -1,0 +1,15 @@
+import type { GameMeta } from '../../../shared/course';
+
+/** Docker course games. */
+export const DOCKER_GAMES: Record<string, GameMeta> = {
+  enginematch: { id: 'enginematch', title: 'Engine Match', icon: '🎯', moduleId: 'd01', pitch: 'A target machine state appears: images pulled, containers running or stopped. Reach it with as few commands as you can.', skills: 'pull, run, -d, --name, ps' },
+  lifecycle: { id: 'lifecycle', title: 'Lifecycle Rush', icon: '🚑', moduleId: 'd02', pitch: 'Containers crash, pile up and hog names. Keep the required services Up and the machine clean before the shift ends.', skills: 'start, stop, rm, logs, exec' },
+  ports: { id: 'ports', title: 'Port Traffic Control', icon: '🚦', moduleId: 'd03', pitch: 'Requests arrive on host ports. Publish the right ports to the right containers, and dodge the conflicts.', skills: '-p, -P, docker port, localhost' },
+  datarescue: { id: 'datarescue', title: 'Data Rescue', icon: '🛟', moduleId: 'd04', pitch: 'Containers are about to be destroyed. Get the data into volumes first, then prove it survived.', skills: 'volumes, bind mounts, :ro, rm -v' },
+  switchboard: { id: 'switchboard', title: 'Network Switchboard', icon: '🔌', moduleId: 'd05', pitch: 'Some containers must reach each other, others must never. Wire up networks until every required line connects and every forbidden one stays dead.', skills: 'network create, --network, connect, disconnect' },
+  kitchen: { id: 'kitchen', title: 'Dockerfile Kitchen', icon: '👩‍🍳', moduleId: 'd06', pitch: 'Image orders come in: base, files, settings, default command. Cook a Dockerfile that matches each order before the ticket times out.', skills: 'FROM, RUN, COPY, WORKDIR, ENV, EXPOSE, CMD, ENTRYPOINT' },
+  layerdiet: { id: 'layerdiet', title: 'Layer Diet', icon: '🥗', moduleId: 'd07', pitch: 'Working but bloated images: too big, slow to rebuild, carrying secrets, running as root. Slim each one down until every goal turns green, without breaking the app.', skills: 'cache order, .dockerignore, slim bases, multi-stage, USER' },
+  composer: { id: 'composer', title: 'Compose Architect', icon: '📐', moduleId: 'd08', pitch: 'Blueprints arrive: services, who talks to whom, what is published, what must survive. Write the compose.yaml, deploy it, and watch the topology take shape.', skills: 'services, ports, volumes, networks, depends_on, healthcheck, build' },
+  breakit: { id: 'breakit', title: 'Break It', icon: '🧯', moduleId: 'd09', pitch: 'You\'re on call. Eight broken servers: crash loops, killed jobs, stolen ports, lost data, a full disk. Diagnose with logs and inspect, then fix each one in as few moves as you can.', skills: 'logs, inspect, restart policies, limits, healthchecks, prune' },
+  incident: { id: 'incident', title: 'Production Incident (finale)', icon: '🚨', moduleId: 'd09', pitch: 'The finale: a night shift on a broken production stack. Six acts, one machine, every skill from the course. Each fix reveals the next problem.', skills: 'everything' },
+};

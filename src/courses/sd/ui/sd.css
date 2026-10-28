@@ -1,0 +1,78 @@
+/* System Design course: canvas, settings panel, run panel and charts. Uses the platform's theme tokens. */
+
+.sd-editor { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sd-editor-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.seg button { border: 0; background: var(--surface); color: var(--muted); font: inherit; font-size: 0.85rem; padding: 5px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sd-palette { display: flex; flex-wrap: wrap; gap: 4px; }
+.sd-palette .btn { padding: 3px 8px; font-size: 0.8rem; }
+
+.sd-editor-main { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 10px; align-items: start; }
+@media (max-width: 860px) { .sd-editor-main { grid-template-columns: 1fr; } }
+.sd-canvas { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--code-bg); min-width: 0; }
+.sd-canvas .react-flow { --xy-background-color: var(--code-bg); --xy-edge-stroke: var(--muted); --xy-edge-label-background-color: var(--surface); --xy-edge-label-color: var(--text); --xy-controls-button-background-color: var(--surface); --xy-controls-button-color: var(--text); --xy-controls-button-border-color: var(--border); }
+.sd-canvas .react-flow__edge-text { font-size: 10px; font-family: var(--mono); }
+.sd-canvas .react-flow__edge.selected .react-flow__edge-path { stroke: var(--accent); stroke-width: 2; }
+
+.sd-node { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 7px 10px; min-width: 130px; max-width: 190px; font-size: 12px; box-shadow: var(--shadow); color: var(--text); }
+.sd-node.selected { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.sd-node.warm { border-color: var(--warn); }
+.sd-node.hot { border-color: var(--bad); background: color-mix(in srgb, var(--bad-soft) 60%, var(--surface)); }
+.sd-node-head { display: flex; gap: 6px; align-items: center; }
+.sd-node-icon { font-size: 16px; }
+.sd-node-name { font-weight: 700; font-family: var(--mono); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sd-node-kind { color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.sd-node-sum { margin-top: 2px; font-size: 11px; }
+.sd-node-stat { margin-top: 3px; font-size: 10.5px; color: var(--muted); }
+.sd-util { position: relative; height: 14px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-top: 4px; }
+.sd-util > div { position: absolute; inset: 0 auto 0 0; background: var(--good); opacity: 0.55; }
+.sd-node.warm .sd-util > div { background: var(--warn); }
+.sd-node.hot .sd-util > div { background: var(--bad); }
+.sd-util > span { position: relative; font-size: 10px; padding-left: 4px; line-height: 14px; font-weight: 600; }
+
+.sd-inspector { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; max-height: 520px; overflow: auto; font-size: 0.9rem; }
+.sd-field { display: flex; flex-direction: column; gap: 2px; }
+.sd-field > span { font-size: 0.82rem; }
+.sd-field .input { padding: 4px 8px; font-size: 0.85rem; }
+.sd-field small, .sd-group small { font-size: 0.75rem; line-height: 1.3; }
+.sd-field.sub { padding-left: 8px; }
+.sd-group { border: 1px dashed var(--border); border-radius: 8px; padding: 6px 8px; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.sd-group legend { font-size: 0.82rem; padding: 0 4px; }
+
+/* run panel */
+.sd-run { display: flex; flex-direction: column; gap: 10px; }
+.sd-reqs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.sd-reqs li { display: flex; gap: 8px; align-items: baseline; font-size: 0.9rem; }
+.sd-reqs li.ok { color: var(--good); }
+.sd-reqs li.no { color: var(--bad); }
+.sd-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.sd-kpi { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; background: var(--surface); }
+.sd-kpi b { display: block; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.sd-kpi span { font-size: 0.75rem; color: var(--muted); }
+.sd-kpi.bad b { color: var(--bad); }
+.sd-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.sd-chart { border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px 2px; background: var(--surface); min-width: 0; }
+.sd-chart-title { font-size: 0.8rem; font-weight: 600; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.sd-chart-title .key { font-weight: 400; color: var(--muted); display: inline-flex; gap: 4px; align-items: center; }
+.sd-chart-title .key i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; }
+.sd-chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.sd-chart text { fill: var(--muted); font-size: 9px; font-family: var(--sans); }
+.sd-chart .grid { stroke: var(--border); stroke-width: 0.5; }
+.sd-chart .ev { stroke: var(--bad); stroke-dasharray: 3 3; stroke-width: 1; }
+.sd-chart .phase { fill: var(--warn-soft); }
+.sd-nodes-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.sd-nodes-table th, .sd-nodes-table td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.sd-nodes-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.sd-scroll { overflow-x: auto; }
+
+.sd-run-settings { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.sd-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: sd-spin 0.8s linear infinite; vertical-align: -2px; }
+@keyframes sd-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .sd-spinner { animation: none; } }
+.sd-estimate { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.sd-estimate .input { max-width: 220px; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.sd-runsum { display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem; }
+.sd-runsum ul { margin: 0; padding-left: 18px; }

@@ -1,0 +1,22 @@
+# Zilber School: the whole school.zilber.tech site (home page, all courses, admin, API).
+# Lives in /opt/stacks/pgschool on the VPS. Caddy (stack "proxy") reaches it as school-app:8787.
+services:
+  school-app:
+    build: .
+    image: zilber-school:latest
+    container_name: school-app
+    restart: unless-stopped
+    env_file: .env          # ADMIN_PASSWORD=...
+    volumes:
+      - pgschool_data:/data # SQLite database (accounts + progress for every course)
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: proxy
+    external: true
+
+volumes:
+  pgschool_data:
+    name: pgschool_data

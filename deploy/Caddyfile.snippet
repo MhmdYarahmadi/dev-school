@@ -1,0 +1,5 @@
+school.zilber.tech {
+	encode zstd gzip
+	# The whole site (home page, /pg/, /docker/, /admin/, /api/) is served by one container.
+	reverse_proxy school-app:8787
+}

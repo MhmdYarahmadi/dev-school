@@ -1,0 +1,368 @@
+Sessions recorded on real Git for tests/git-golden.test.ts.
+Regenerate the fixture after editing (see scripts/record-git-golden.mjs):
+  TMPDIR=<a folder on a normal disk> node scripts/record-git-golden.mjs tests/git-golden-sessions.txt > tests/fixtures-git.txt
+
+### SESSION first-repository
+$ git status
+$ mkdir shop
+$ cd shop
+$ git init
+$ git init
+$ git status
+$ git commit -m "Nothing yet"
+$ echo "<h1>Shop</h1>" > index.html
+$ git status
+$ git add index.html
+$ git status
+$ git diff --staged
+$ git commit -m "Add home page"
+$ git status
+$ git log
+$ git log --oneline
+$ echo "<p>Welcome</p>" >> index.html
+$ git status
+$ git diff
+$ git commit -m "Not staged"
+$ git commit -am "Welcome text"
+$ touch empty.txt
+$ mkdir -p css/themes
+$ echo "body {}" > css/site.css
+$ echo "dark {}" > css/themes/dark.css
+$ git status
+$ git add css/site.css empty.txt
+$ git status
+$ git status -s
+$ git diff --staged
+$ git commit -m "Styles and an empty file"
+$ cd css
+$ echo "a {}" >> site.css
+$ echo "x" > new.css
+$ git status
+$ cd ..
+$ git add .
+$ git commit -m "More styles"
+$ git log --oneline
+$ git show --stat HEAD
+$ git show HEAD~1
+$ git log -2 --stat
+$ git ls-files
+$ git show HEAD:index.html
+$ git add nothing.txt
+$ git frobnicate
+$ git --version
+
+### SESSION ignore-and-undo
+$ git init notes
+$ cd notes
+$ printf 'one\ntwo\nthree\n' > a.txt
+$ echo "secret" > .env
+$ echo "debug" > app.log
+$ printf '.env\n*.log\n' > .gitignore
+$ git status
+$ git add app.log
+$ git add .
+$ git status
+$ git restore --staged a.txt
+$ git commit -m "Start notes"
+$ echo "four" >> a.txt
+$ git diff
+$ git add a.txt
+$ git diff
+$ git diff --staged
+$ echo "five" >> a.txt
+$ git status
+$ git restore a.txt
+$ cat a.txt
+$ git restore --staged a.txt
+$ git status
+$ git restore a.txt
+$ git status
+$ echo "four" >> a.txt
+$ git commit -am "Add four"
+$ git revert HEAD
+$ cat a.txt
+$ git log --oneline
+$ git log
+$ git restore nope.txt
+$ rm a.txt
+$ git status
+$ git restore a.txt
+$ git rm a.txt
+$ git status
+$ git commit -m "Remove a"
+$ echo hi > b.txt
+$ git add b.txt
+$ git mv b.txt c.txt
+$ git status
+$ git commit -m "Add c"
+$ git mv c.txt d.txt
+$ git status
+$ git commit -m "Rename c to d"
+$ echo zz >> d.txt
+$ git rm d.txt
+$ git rm --cached d.txt
+$ git status
+$ git checkout HEAD~2
+$ git status
+$ git branch
+$ git switch main
+$ git status
+
+### SESSION branches-and-merging
+$ git init shop
+$ cd shop
+$ echo "<h1>Shop</h1>" > index.html
+$ git add index.html
+$ git commit -m "Add home page"
+$ git branch
+$ git branch feature
+$ git branch
+$ git switch feature
+$ echo "body { color: red; }" > style.css
+$ git add style.css
+$ git commit -m "Add styles"
+$ git log --oneline --all
+$ git switch main
+$ git log --oneline --all --graph
+$ git merge feature
+$ git log --oneline --graph
+$ git branch -d feature
+$ git switch -c about
+$ echo "<h1>About</h1>" > about.html
+$ git add about.html
+$ git commit -m "Add about page"
+$ git switch main
+$ echo "<p>Welcome</p>" >> index.html
+$ git commit -am "Welcome text"
+$ git log --oneline --graph --all
+$ git branch -d about
+$ git merge about
+$ git log --oneline --graph --all
+$ git log --graph -3
+$ git show HEAD
+$ git branch -d about
+$ git branch -v
+$ git switch -c topic
+$ git switch -c topic
+$ git switch nope
+$ git branch "bad name"
+$ git switch main
+$ git switch main
+$ git switch -
+$ git switch -
+$ echo "<p>sale</p>" >> index.html
+$ git switch topic
+$ git switch main
+$ git restore index.html
+$ git switch -c side
+$ echo "side" > side.txt
+$ git add side.txt
+$ git commit -m "Side file"
+$ git switch main
+$ echo "mine" > side.txt
+$ git switch side
+$ git merge side
+$ rm side.txt
+$ git merge side
+$ git merge nothing-here
+$ git merge side
+
+### SESSION conflicts
+$ git init recipes
+$ cd recipes
+$ printf 'Pancakes\n2 eggs\n1 cup milk\n1 cup flour\n' > pancakes.txt
+$ git add pancakes.txt
+$ git commit -m "Pancake recipe"
+$ git switch -c vegan
+$ printf 'Pancakes\n1 banana\n1 cup oat milk\n1 cup flour\n' > pancakes.txt
+$ git commit -am "Vegan version"
+$ git switch main
+$ printf 'Pancakes\n3 eggs\n1 cup milk\n1 cup flour\n' > pancakes.txt
+$ git commit -am "More eggs"
+$ git merge vegan
+$ git status
+$ git status -s
+$ cat pancakes.txt
+$ git diff
+$ git commit -m "Try to commit"
+$ git merge vegan
+$ git switch vegan
+$ git merge --abort
+$ git status
+$ git merge vegan
+$ printf 'Pancakes\n1 banana\n1 cup oat milk\n1 cup flour\n' > pancakes.txt
+$ git status
+$ git add pancakes.txt
+$ git status
+$ git merge vegan
+$ git commit
+$ git log --oneline --graph
+$ git merge --abort
+$ git switch -c a
+$ printf 'Title\nline from a\n' > notes.txt
+$ git add notes.txt
+$ git commit -m "notes on a"
+$ git switch main
+$ printf 'Title\nline from main\n' > notes.txt
+$ git add notes.txt
+$ git commit -m "notes on main"
+$ git merge a
+$ git status
+$ cat notes.txt
+$ git merge --abort
+$ git switch -c del
+$ git rm -q pancakes.txt
+$ git commit -m "Remove pancakes"
+$ git switch main
+$ echo "Serve warm" >> pancakes.txt
+$ git commit -am "Serving tip"
+$ git merge del
+$ git status
+$ git rm pancakes.txt
+$ git status
+$ git commit -m "Merge del, pancakes go"
+$ git log --oneline -3
+
+### SESSION revert-conflict
+$ git init r
+$ cd r
+$ printf 'one\ntwo\n' > r.txt
+$ git add r.txt
+$ git commit -qm "r1"
+$ printf 'one\nTWO\n' > r.txt
+$ git commit -qam "r2"
+$ printf 'one\nThree\n' > r.txt
+$ git commit -qam "r3"
+$ git revert HEAD~1
+$ git status
+$ cat r.txt
+$ git revert --abort
+$ git status
+$ git revert HEAD~1
+$ printf 'one\ntwo\n' > r.txt
+$ git add r.txt
+$ git status
+$ git revert --continue
+$ git log --oneline
+
+### SESSION team
+@hub init team/shop
+@sam git clone https://hub.zilber.tech/team/shop.git
+@sam cd shop
+@sam echo "<h1>Shop</h1>" > index.html
+@sam git add index.html
+@sam git commit -m "Add home page"
+@sam git push
+@sam git push -u origin main
+$ git clone https://hub.zilber.tech/team/shop.git
+$ git clone https://hub.zilber.tech/team/shop.git
+$ cd shop
+$ git status
+$ git remote
+$ git remote -v
+$ git branch -a
+$ git branch -r
+$ git log --oneline
+$ echo "a" > about.html
+$ git add about.html
+$ git commit -m "Add about page"
+$ git status
+@sam echo "<p>sale</p>" >> index.html
+@sam git commit -am "Announce sale"
+@sam git push
+$ git push
+$ git status
+$ git fetch
+$ git status
+$ git log --oneline --graph --all
+$ git branch -vv
+$ git pull
+$ git log --oneline --graph --all
+$ git status
+$ git push
+$ git status
+$ git switch -c feature
+$ echo "x" > x.txt
+$ git add x.txt
+$ git commit -m "Add x"
+$ git push
+$ git push -u origin feature
+$ git branch -vv
+$ git status
+@sam git pull
+@sam git switch feature
+@sam echo "y" >> x.txt
+@sam git commit -am "More x"
+@sam git push
+$ git pull
+$ git log --oneline -3
+$ git fetch
+$ git pull
+$ git switch main
+$ git merge origin/feature
+$ git push
+$ git push origin --delete feature
+$ git branch -a
+$ git remote add upstream https://hub.zilber.tech/team/shop.git
+$ git remote add upstream https://hub.zilber.tech/team/shop.git
+$ git remote -v
+$ git remote remove upstream
+$ git remote -v
+$ git switch -c nowhere
+$ git pull
+
+### SESSION pull-conflict
+@hub init team/notes
+@sam git clone -q https://hub.zilber.tech/team/notes.git
+@sam cd notes
+@sam echo "base" > a.txt
+@sam git add a.txt
+@sam git commit -qm "base"
+@sam git push -q
+$ git clone https://hub.zilber.tech/team/notes.git
+$ cd notes
+@sam echo "sam" > a.txt
+@sam git commit -qam "sam"
+@sam git push -q
+$ echo "me" > a.txt
+$ git commit -qam "me"
+$ git push
+$ git pull
+$ cat a.txt
+$ git status
+$ git pull
+$ echo "resolved" > a.txt
+$ git add a.txt
+$ git status
+$ git commit
+$ git log --oneline --graph
+$ git push
+$ git log -1
+@sam git pull
+@sam git log --oneline --graph
+
+### SESSION here-documents
+$ git init docs
+$ cd docs
+$ cat > readme.md <<'EOF'
+> # Docs
+>
+> Hello $USER
+> EOF
+$ cat readme.md
+$ git add readme.md
+$ git commit -m "Readme"
+$ echo -n "no newline" > n.txt
+$ git add n.txt
+$ git commit -m "No newline"
+$ printf 'no newline\nnow two\n' > n.txt
+$ git diff
+$ git config user.name
+$ git config --global user.name "Alex L"
+$ git config user.name
+$ git config user.name "Repo Name"
+$ git config user.name
+$ git commit -am "Two lines"
+$ git log -1
+$ cd ..
+$ git log

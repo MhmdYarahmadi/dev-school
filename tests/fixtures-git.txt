@@ -1,0 +1,1709 @@
+### SESSION first-repository
+### $ git status
+### STDERR
+fatal: not a git repository (or any of the parent directories): .git
+### EXIT 128
+### $ mkdir shop
+### EXIT 0
+### $ cd shop
+### EXIT 0
+### $ git init
+Initialized empty Git repository in /home/learner/shop/.git/
+### EXIT 0
+### $ git init
+Reinitialized existing Git repository in /home/learner/shop/.git/
+### EXIT 0
+### $ git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+### EXIT 0
+### $ git commit -m "Nothing yet"
+On branch main
+
+Initial commit
+
+nothing to commit (create/copy files and use "git add" to track)
+### EXIT 1
+### $ echo "<h1>Shop</h1>" > index.html
+### EXIT 0
+### $ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	index.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+### EXIT 0
+### $ git add index.html
+### EXIT 0
+### $ git status
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   index.html
+
+### EXIT 0
+### $ git diff --staged
+diff --git a/index.html b/index.html
+new file mode 100644
+index 0000000..10849c0
+--- /dev/null
++++ b/index.html
+@@ -0,0 +1 @@
++<h1>Shop</h1>
+### EXIT 0
+### $ git commit -m "Add home page"
+[main (root-commit) b46390f] Add home page
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.html
+### EXIT 0
+### $ git status
+On branch main
+nothing to commit, working tree clean
+### EXIT 0
+### $ git log
+commit b46390f6b89bf0cedbcd304a22327fad4616e756 (HEAD -> main)
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:13:00 2026 +0000
+
+    Add home page
+### EXIT 0
+### $ git log --oneline
+b46390f (HEAD -> main) Add home page
+### EXIT 0
+### $ echo "<p>Welcome</p>" >> index.html
+### EXIT 0
+### $ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git diff
+diff --git a/index.html b/index.html
+index 10849c0..d1dd789 100644
+--- a/index.html
++++ b/index.html
+@@ -1 +1,2 @@
+ <h1>Shop</h1>
++<p>Welcome</p>
+### EXIT 0
+### $ git commit -m "Not staged"
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 1
+### $ git commit -am "Welcome text"
+[main 871882a] Welcome text
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### $ touch empty.txt
+### EXIT 0
+### $ mkdir -p css/themes
+### EXIT 0
+### $ echo "body {}" > css/site.css
+### EXIT 0
+### $ echo "dark {}" > css/themes/dark.css
+### EXIT 0
+### $ git status
+On branch main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	css/
+	empty.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+### EXIT 0
+### $ git add css/site.css empty.txt
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   css/site.css
+	new file:   empty.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	css/themes/
+
+### EXIT 0
+### $ git status -s
+A  css/site.css
+A  empty.txt
+?? css/themes/
+### EXIT 0
+### $ git diff --staged
+diff --git a/css/site.css b/css/site.css
+new file mode 100644
+index 0000000..208d16d
+--- /dev/null
++++ b/css/site.css
+@@ -0,0 +1 @@
++body {}
+diff --git a/empty.txt b/empty.txt
+new file mode 100644
+index 0000000..e69de29
+### EXIT 0
+### $ git commit -m "Styles and an empty file"
+[main 32a7b04] Styles and an empty file
+ 2 files changed, 1 insertion(+)
+ create mode 100644 css/site.css
+ create mode 100644 empty.txt
+### EXIT 0
+### $ cd css
+### EXIT 0
+### $ echo "a {}" >> site.css
+### EXIT 0
+### $ echo "x" > new.css
+### EXIT 0
+### $ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   site.css
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	new.css
+	themes/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ cd ..
+### EXIT 0
+### $ git add .
+### EXIT 0
+### $ git commit -m "More styles"
+[main 089c93f] More styles
+ 3 files changed, 3 insertions(+)
+ create mode 100644 css/new.css
+ create mode 100644 css/themes/dark.css
+### EXIT 0
+### $ git log --oneline
+089c93f (HEAD -> main) More styles
+32a7b04 Styles and an empty file
+871882a Welcome text
+b46390f Add home page
+### EXIT 0
+### $ git show --stat HEAD
+commit 089c93f094e59d29fda8aad7724ca6faee8297e9 (HEAD -> main)
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:38:00 2026 +0000
+
+    More styles
+
+ css/new.css         | 1 +
+ css/site.css        | 1 +
+ css/themes/dark.css | 1 +
+ 3 files changed, 3 insertions(+)
+### EXIT 0
+### $ git show HEAD~1
+commit 32a7b040bb6a1bd0d4dbefe2aae2436ea33aa8ab
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:31:00 2026 +0000
+
+    Styles and an empty file
+
+diff --git a/css/site.css b/css/site.css
+new file mode 100644
+index 0000000..208d16d
+--- /dev/null
++++ b/css/site.css
+@@ -0,0 +1 @@
++body {}
+diff --git a/empty.txt b/empty.txt
+new file mode 100644
+index 0000000..e69de29
+### EXIT 0
+### $ git log -2 --stat
+commit 089c93f094e59d29fda8aad7724ca6faee8297e9 (HEAD -> main)
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:38:00 2026 +0000
+
+    More styles
+
+ css/new.css         | 1 +
+ css/site.css        | 1 +
+ css/themes/dark.css | 1 +
+ 3 files changed, 3 insertions(+)
+
+commit 32a7b040bb6a1bd0d4dbefe2aae2436ea33aa8ab
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:31:00 2026 +0000
+
+    Styles and an empty file
+
+ css/site.css | 1 +
+ empty.txt    | 0
+ 2 files changed, 1 insertion(+)
+### EXIT 0
+### $ git ls-files
+css/new.css
+css/site.css
+css/themes/dark.css
+empty.txt
+index.html
+### EXIT 0
+### $ git show HEAD:index.html
+<h1>Shop</h1>
+<p>Welcome</p>
+### EXIT 0
+### $ git add nothing.txt
+### STDERR
+fatal: pathspec 'nothing.txt' did not match any files
+### EXIT 128
+### $ git frobnicate
+### STDERR
+git: 'frobnicate' is not a git command. See 'git --help'.
+### EXIT 1
+### $ git --version
+git version 2.53.0
+### EXIT 0
+### SESSION ignore-and-undo
+### $ git init notes
+Initialized empty Git repository in /home/learner/notes/.git/
+### EXIT 0
+### $ cd notes
+### EXIT 0
+### $ printf 'one\ntwo\nthree\n' > a.txt
+### EXIT 0
+### $ echo "secret" > .env
+### EXIT 0
+### $ echo "debug" > app.log
+### EXIT 0
+### $ printf '.env\n*.log\n' > .gitignore
+### EXIT 0
+### $ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitignore
+	a.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+### EXIT 0
+### $ git add app.log
+### STDERR
+The following paths are ignored by one of your .gitignore files:
+app.log
+hint: Use -f if you really want to add them.
+hint: Disable this message with "git config set advice.addIgnoredFile false"
+### EXIT 1
+### $ git add .
+### EXIT 0
+### $ git status
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   .gitignore
+	new file:   a.txt
+
+### EXIT 0
+### $ git restore --staged a.txt
+### STDERR
+fatal: could not resolve 'HEAD'
+### EXIT 128
+### $ git commit -m "Start notes"
+[main (root-commit) 695ac87] Start notes
+ 2 files changed, 5 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 a.txt
+### EXIT 0
+### $ echo "four" >> a.txt
+### EXIT 0
+### $ git diff
+diff --git a/a.txt b/a.txt
+index 4cb29ea..f384549 100644
+--- a/a.txt
++++ b/a.txt
+@@ -1,3 +1,4 @@
+ one
+ two
+ three
++four
+### EXIT 0
+### $ git add a.txt
+### EXIT 0
+### $ git diff
+### EXIT 0
+### $ git diff --staged
+diff --git a/a.txt b/a.txt
+index 4cb29ea..f384549 100644
+--- a/a.txt
++++ b/a.txt
+@@ -1,3 +1,4 @@
+ one
+ two
+ three
++four
+### EXIT 0
+### $ echo "five" >> a.txt
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   a.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   a.txt
+
+### EXIT 0
+### $ git restore a.txt
+### EXIT 0
+### $ cat a.txt
+one
+two
+three
+four
+### EXIT 0
+### $ git restore --staged a.txt
+### EXIT 0
+### $ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   a.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git restore a.txt
+### EXIT 0
+### $ git status
+On branch main
+nothing to commit, working tree clean
+### EXIT 0
+### $ echo "four" >> a.txt
+### EXIT 0
+### $ git commit -am "Add four"
+[main 3fa8dbd] Add four
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### $ git revert HEAD
+[main 0aeb906] Revert "Add four"
+ Date: Mon Jan 5 09:28:00 2026 +0000
+ 1 file changed, 1 deletion(-)
+### EXIT 0
+### $ cat a.txt
+one
+two
+three
+### EXIT 0
+### $ git log --oneline
+0aeb906 (HEAD -> main) Revert "Add four"
+3fa8dbd Add four
+695ac87 Start notes
+### EXIT 0
+### $ git log
+commit 0aeb906c23935f15ea043610a074bcb765fece96 (HEAD -> main)
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:28:00 2026 +0000
+
+    Revert "Add four"
+    
+    This reverts commit 3fa8dbd125db7813c9dc746709287c27bc75c647.
+
+commit 3fa8dbd125db7813c9dc746709287c27bc75c647
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:27:00 2026 +0000
+
+    Add four
+
+commit 695ac8739c8cb65babad74c556d3f958811d3fa2
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:12:00 2026 +0000
+
+    Start notes
+### EXIT 0
+### $ git restore nope.txt
+### STDERR
+error: pathspec 'nope.txt' did not match any file(s) known to git
+### EXIT 1
+### $ rm a.txt
+### EXIT 0
+### $ git status
+On branch main
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	deleted:    a.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git restore a.txt
+### EXIT 0
+### $ git rm a.txt
+rm 'a.txt'
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	deleted:    a.txt
+
+### EXIT 0
+### $ git commit -m "Remove a"
+[main b8a945c] Remove a
+ 1 file changed, 3 deletions(-)
+ delete mode 100644 a.txt
+### EXIT 0
+### $ echo hi > b.txt
+### EXIT 0
+### $ git add b.txt
+### EXIT 0
+### $ git mv b.txt c.txt
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   c.txt
+
+### EXIT 0
+### $ git commit -m "Add c"
+[main e7d75ac] Add c
+ 1 file changed, 1 insertion(+)
+ create mode 100644 c.txt
+### EXIT 0
+### $ git mv c.txt d.txt
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	renamed:    c.txt -> d.txt
+
+### EXIT 0
+### $ git commit -m "Rename c to d"
+[main 8a93e9e] Rename c to d
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename c.txt => d.txt (100%)
+### EXIT 0
+### $ echo zz >> d.txt
+### EXIT 0
+### $ git rm d.txt
+### STDERR
+error: the following file has local modifications:
+    d.txt
+(use --cached to keep the file, or -f to force removal)
+### EXIT 1
+### $ git rm --cached d.txt
+rm 'd.txt'
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	deleted:    d.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	d.txt
+
+### EXIT 0
+### $ git checkout HEAD~2
+### STDERR
+error: The following untracked working tree files would be removed by checkout:
+	d.txt
+Please move or remove them before you switch branches.
+Aborting
+### EXIT 1
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	deleted:    d.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	d.txt
+
+### EXIT 0
+### $ git branch
+* main
+### EXIT 0
+### $ git switch main
+D	d.txt
+### STDERR
+Already on 'main'
+### EXIT 0
+### $ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	deleted:    d.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	d.txt
+
+### EXIT 0
+### SESSION branches-and-merging
+### $ git init shop
+Initialized empty Git repository in /home/learner/shop/.git/
+### EXIT 0
+### $ cd shop
+### EXIT 0
+### $ echo "<h1>Shop</h1>" > index.html
+### EXIT 0
+### $ git add index.html
+### EXIT 0
+### $ git commit -m "Add home page"
+[main (root-commit) 0654a75] Add home page
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.html
+### EXIT 0
+### $ git branch
+* main
+### EXIT 0
+### $ git branch feature
+### EXIT 0
+### $ git branch
+  feature
+* main
+### EXIT 0
+### $ git switch feature
+### STDERR
+Switched to branch 'feature'
+### EXIT 0
+### $ echo "body { color: red; }" > style.css
+### EXIT 0
+### $ git add style.css
+### EXIT 0
+### $ git commit -m "Add styles"
+[feature b95b191] Add styles
+ 1 file changed, 1 insertion(+)
+ create mode 100644 style.css
+### EXIT 0
+### $ git log --oneline --all
+b95b191 (HEAD -> feature) Add styles
+0654a75 (main) Add home page
+### EXIT 0
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ git log --oneline --all --graph
+* b95b191 (feature) Add styles
+* 0654a75 (HEAD -> main) Add home page
+### EXIT 0
+### $ git merge feature
+Updating 0654a75..b95b191
+Fast-forward
+ style.css | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 style.css
+### EXIT 0
+### $ git log --oneline --graph
+* b95b191 (HEAD -> main, feature) Add styles
+* 0654a75 Add home page
+### EXIT 0
+### $ git branch -d feature
+Deleted branch feature (was b95b191).
+### EXIT 0
+### $ git switch -c about
+### STDERR
+Switched to a new branch 'about'
+### EXIT 0
+### $ echo "<h1>About</h1>" > about.html
+### EXIT 0
+### $ git add about.html
+### EXIT 0
+### $ git commit -m "Add about page"
+[about 224cd2f] Add about page
+ 1 file changed, 1 insertion(+)
+ create mode 100644 about.html
+### EXIT 0
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ echo "<p>Welcome</p>" >> index.html
+### EXIT 0
+### $ git commit -am "Welcome text"
+[main 0951d7a] Welcome text
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### $ git log --oneline --graph --all
+* 0951d7a (HEAD -> main) Welcome text
+| * 224cd2f (about) Add about page
+|/  
+* b95b191 Add styles
+* 0654a75 Add home page
+### EXIT 0
+### $ git branch -d about
+### STDERR
+error: the branch 'about' is not fully merged
+hint: If you are sure you want to delete it, run 'git branch -D about'
+hint: Disable this message with "git config set advice.forceDeleteBranch false"
+### EXIT 1
+### $ git merge about
+Merge made by the 'ort' strategy.
+ about.html | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 about.html
+### EXIT 0
+### $ git log --oneline --graph --all
+*   fb2ca6e (HEAD -> main) Merge branch 'about'
+|\  
+| * 224cd2f (about) Add about page
+* | 0951d7a Welcome text
+|/  
+* b95b191 Add styles
+* 0654a75 Add home page
+### EXIT 0
+### $ git log --graph -3
+*   commit fb2ca6e14618b7d7db67a55a60c47370afb417aa (HEAD -> main)
+|\  Merge: 0951d7a 224cd2f
+| | Author: Alex Learner <alex@example.com>
+| | Date:   Mon Jan 5 09:28:00 2026 +0000
+| | 
+| |     Merge branch 'about'
+| | 
+| * commit 224cd2f3de1dde342bd3fd263fea0bdcc1015fc4 (about)
+| | Author: Alex Learner <alex@example.com>
+| | Date:   Mon Jan 5 09:22:00 2026 +0000
+| | 
+| |     Add about page
+| | 
+* | commit 0951d7a888931013add6e0b7ffcfc02467978c4f
+|/  Author: Alex Learner <alex@example.com>
+|   Date:   Mon Jan 5 09:25:00 2026 +0000
+|   
+|       Welcome text
+### EXIT 0
+### $ git show HEAD
+commit fb2ca6e14618b7d7db67a55a60c47370afb417aa (HEAD -> main)
+Merge: 0951d7a 224cd2f
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:28:00 2026 +0000
+
+    Merge branch 'about'
+
+### EXIT 0
+### $ git branch -d about
+Deleted branch about (was 224cd2f).
+### EXIT 0
+### $ git branch -v
+* main fb2ca6e Merge branch 'about'
+### EXIT 0
+### $ git switch -c topic
+### STDERR
+Switched to a new branch 'topic'
+### EXIT 0
+### $ git switch -c topic
+### STDERR
+fatal: a branch named 'topic' already exists
+### EXIT 128
+### $ git switch nope
+### STDERR
+fatal: invalid reference: nope
+### EXIT 128
+### $ git branch "bad name"
+### STDERR
+fatal: 'bad name' is not a valid branch name
+hint: See 'git help check-ref-format'
+hint: Disable this message with "git config set advice.refSyntax false"
+### EXIT 128
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ git switch main
+### STDERR
+Already on 'main'
+### EXIT 0
+### $ git switch -
+### STDERR
+Already on 'main'
+### EXIT 0
+### $ git switch -
+### STDERR
+Already on 'main'
+### EXIT 0
+### $ echo "<p>sale</p>" >> index.html
+### EXIT 0
+### $ git switch topic
+M	index.html
+### STDERR
+Switched to branch 'topic'
+### EXIT 0
+### $ git switch main
+M	index.html
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ git restore index.html
+### EXIT 0
+### $ git switch -c side
+### STDERR
+Switched to a new branch 'side'
+### EXIT 0
+### $ echo "side" > side.txt
+### EXIT 0
+### $ git add side.txt
+### EXIT 0
+### $ git commit -m "Side file"
+[side ea9a6b6] Side file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 side.txt
+### EXIT 0
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ echo "mine" > side.txt
+### EXIT 0
+### $ git switch side
+### STDERR
+error: The following untracked working tree files would be overwritten by checkout:
+	side.txt
+Please move or remove them before you switch branches.
+Aborting
+### EXIT 1
+### $ git merge side
+Updating fb2ca6e..ea9a6b6
+### STDERR
+error: The following untracked working tree files would be overwritten by merge:
+	side.txt
+Please move or remove them before you merge.
+Aborting
+### EXIT 1
+### $ rm side.txt
+### EXIT 0
+### $ git merge side
+Updating fb2ca6e..ea9a6b6
+Fast-forward
+ side.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 side.txt
+### EXIT 0
+### $ git merge nothing-here
+### STDERR
+merge: nothing-here - not something we can merge
+### EXIT 1
+### $ git merge side
+Already up to date.
+### EXIT 0
+### SESSION conflicts
+### $ git init recipes
+Initialized empty Git repository in /home/learner/recipes/.git/
+### EXIT 0
+### $ cd recipes
+### EXIT 0
+### $ printf 'Pancakes\n2 eggs\n1 cup milk\n1 cup flour\n' > pancakes.txt
+### EXIT 0
+### $ git add pancakes.txt
+### EXIT 0
+### $ git commit -m "Pancake recipe"
+[main (root-commit) ee2dd69] Pancake recipe
+ 1 file changed, 4 insertions(+)
+ create mode 100644 pancakes.txt
+### EXIT 0
+### $ git switch -c vegan
+### STDERR
+Switched to a new branch 'vegan'
+### EXIT 0
+### $ printf 'Pancakes\n1 banana\n1 cup oat milk\n1 cup flour\n' > pancakes.txt
+### EXIT 0
+### $ git commit -am "Vegan version"
+[vegan 6b35b2f] Vegan version
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+### EXIT 0
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ printf 'Pancakes\n3 eggs\n1 cup milk\n1 cup flour\n' > pancakes.txt
+### EXIT 0
+### $ git commit -am "More eggs"
+[main c42af85] More eggs
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+### EXIT 0
+### $ git merge vegan
+Auto-merging pancakes.txt
+CONFLICT (content): Merge conflict in pancakes.txt
+Automatic merge failed; fix conflicts and then commit the result.
+### EXIT 1
+### $ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   pancakes.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git status -s
+UU pancakes.txt
+### EXIT 0
+### $ cat pancakes.txt
+Pancakes
+<<<<<<< HEAD
+3 eggs
+1 cup milk
+=======
+1 banana
+1 cup oat milk
+>>>>>>> vegan
+1 cup flour
+### EXIT 0
+### $ git diff
+diff --cc pancakes.txt
+index f9ae66f,4c7b495..0000000
+--- a/pancakes.txt
++++ b/pancakes.txt
+@@@ -1,4 -1,4 +1,9 @@@
+  Pancakes
+++<<<<<<< HEAD
+ +3 eggs
+ +1 cup milk
+++=======
++ 1 banana
++ 1 cup oat milk
+++>>>>>>> vegan
+  1 cup flour
+### EXIT 0
+### $ git commit -m "Try to commit"
+U	pancakes.txt
+### STDERR
+error: Committing is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+### EXIT 128
+### $ git merge vegan
+### STDERR
+error: Merging is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+### EXIT 128
+### $ git switch vegan
+### STDERR
+fatal: cannot switch branch while merging
+Consider "git merge --quit" or "git worktree add".
+### EXIT 128
+### $ git merge --abort
+### EXIT 0
+### $ git status
+On branch main
+nothing to commit, working tree clean
+### EXIT 0
+### $ git merge vegan
+Auto-merging pancakes.txt
+CONFLICT (content): Merge conflict in pancakes.txt
+Automatic merge failed; fix conflicts and then commit the result.
+### EXIT 1
+### $ printf 'Pancakes\n1 banana\n1 cup oat milk\n1 cup flour\n' > pancakes.txt
+### EXIT 0
+### $ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   pancakes.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git add pancakes.txt
+### EXIT 0
+### $ git status
+On branch main
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+	modified:   pancakes.txt
+
+### EXIT 0
+### $ git merge vegan
+### STDERR
+fatal: You have not concluded your merge (MERGE_HEAD exists).
+Please, commit your changes before you merge.
+### EXIT 128
+### $ git commit
+[main 8871abc] Merge branch 'vegan'
+### EXIT 0
+### $ git log --oneline --graph
+*   8871abc (HEAD -> main) Merge branch 'vegan'
+|\  
+| * 6b35b2f (vegan) Vegan version
+* | c42af85 More eggs
+|/  
+* ee2dd69 Pancake recipe
+### EXIT 0
+### $ git merge --abort
+### STDERR
+fatal: There is no merge to abort (MERGE_HEAD missing).
+### EXIT 128
+### $ git switch -c a
+### STDERR
+Switched to a new branch 'a'
+### EXIT 0
+### $ printf 'Title\nline from a\n' > notes.txt
+### EXIT 0
+### $ git add notes.txt
+### EXIT 0
+### $ git commit -m "notes on a"
+[a 51e2f4c] notes on a
+ 1 file changed, 2 insertions(+)
+ create mode 100644 notes.txt
+### EXIT 0
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ printf 'Title\nline from main\n' > notes.txt
+### EXIT 0
+### $ git add notes.txt
+### EXIT 0
+### $ git commit -m "notes on main"
+[main ec9e3e4] notes on main
+ 1 file changed, 2 insertions(+)
+ create mode 100644 notes.txt
+### EXIT 0
+### $ git merge a
+Auto-merging notes.txt
+CONFLICT (add/add): Merge conflict in notes.txt
+Automatic merge failed; fix conflicts and then commit the result.
+### EXIT 1
+### $ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both added:      notes.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ cat notes.txt
+Title
+<<<<<<< HEAD
+line from main
+=======
+line from a
+>>>>>>> a
+### EXIT 0
+### $ git merge --abort
+### EXIT 0
+### $ git switch -c del
+### STDERR
+Switched to a new branch 'del'
+### EXIT 0
+### $ git rm -q pancakes.txt
+### EXIT 0
+### $ git commit -m "Remove pancakes"
+[del 9fde4c6] Remove pancakes
+ 1 file changed, 4 deletions(-)
+ delete mode 100644 pancakes.txt
+### EXIT 0
+### $ git switch main
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ echo "Serve warm" >> pancakes.txt
+### EXIT 0
+### $ git commit -am "Serving tip"
+[main 47b8271] Serving tip
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### $ git merge del
+CONFLICT (modify/delete): pancakes.txt deleted in del and modified in HEAD.  Version HEAD of pancakes.txt left in tree.
+Automatic merge failed; fix conflicts and then commit the result.
+### EXIT 1
+### $ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add/rm <file>..." as appropriate to mark resolution)
+	deleted by them: pancakes.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git rm pancakes.txt
+rm 'pancakes.txt'
+### EXIT 0
+### $ git status
+On branch main
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+	deleted:    pancakes.txt
+
+### EXIT 0
+### $ git commit -m "Merge del, pancakes go"
+[main 0f3b8d9] Merge del, pancakes go
+### EXIT 0
+### $ git log --oneline -3
+0f3b8d9 (HEAD -> main) Merge del, pancakes go
+47b8271 Serving tip
+9fde4c6 (del) Remove pancakes
+### EXIT 0
+### SESSION revert-conflict
+### $ git init r
+Initialized empty Git repository in /home/learner/r/.git/
+### EXIT 0
+### $ cd r
+### EXIT 0
+### $ printf 'one\ntwo\n' > r.txt
+### EXIT 0
+### $ git add r.txt
+### EXIT 0
+### $ git commit -qm "r1"
+### EXIT 0
+### $ printf 'one\nTWO\n' > r.txt
+### EXIT 0
+### $ git commit -qam "r2"
+### EXIT 0
+### $ printf 'one\nThree\n' > r.txt
+### EXIT 0
+### $ git commit -qam "r3"
+### EXIT 0
+### $ git revert HEAD~1
+Auto-merging r.txt
+CONFLICT (content): Merge conflict in r.txt
+### STDERR
+error: could not revert 37aeb7c... r2
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git revert --continue".
+hint: You can instead skip this commit with "git revert --skip".
+hint: To abort and get back to the state before "git revert",
+hint: run "git revert --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+### EXIT 1
+### $ git status
+On branch main
+You are currently reverting commit 37aeb7c.
+  (fix conflicts and run "git revert --continue")
+  (use "git revert --skip" to skip this patch)
+  (use "git revert --abort" to cancel the revert operation)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+	both modified:   r.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ cat r.txt
+one
+<<<<<<< HEAD
+Three
+=======
+two
+>>>>>>> parent of 37aeb7c (r2)
+### EXIT 0
+### $ git revert --abort
+### EXIT 0
+### $ git status
+On branch main
+nothing to commit, working tree clean
+### EXIT 0
+### $ git revert HEAD~1
+Auto-merging r.txt
+CONFLICT (content): Merge conflict in r.txt
+### STDERR
+error: could not revert 37aeb7c... r2
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git revert --continue".
+hint: You can instead skip this commit with "git revert --skip".
+hint: To abort and get back to the state before "git revert",
+hint: run "git revert --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+### EXIT 1
+### $ printf 'one\ntwo\n' > r.txt
+### EXIT 0
+### $ git add r.txt
+### EXIT 0
+### $ git status
+On branch main
+You are currently reverting commit 37aeb7c.
+  (all conflicts fixed: run "git revert --continue")
+  (use "git revert --skip" to skip this patch)
+  (use "git revert --abort" to cancel the revert operation)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   r.txt
+
+### EXIT 0
+### $ git revert --continue
+[main f0d6938] Revert "r2"
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+### EXIT 0
+### $ git log --oneline
+f0d6938 (HEAD -> main) Revert "r2"
+17a4c22 r3
+37aeb7c r2
+dce6c93 r1
+### EXIT 0
+### SESSION team
+### @hub init team/shop
+### EXIT 0
+### @sam git clone https://hub.zilber.tech/team/shop.git
+### STDERR
+Cloning into 'shop'...
+warning: You appear to have cloned an empty repository.
+### EXIT 0
+### @sam cd shop
+### EXIT 0
+### @sam echo "<h1>Shop</h1>" > index.html
+### EXIT 0
+### @sam git add index.html
+### EXIT 0
+### @sam git commit -m "Add home page"
+[main (root-commit) 325ba28] Add home page
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.html
+### EXIT 0
+### @sam git push
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+ * [new branch]      main -> main
+### EXIT 0
+### @sam git push -u origin main
+branch 'main' set up to track 'origin/main'.
+### STDERR
+Everything up-to-date
+### EXIT 0
+### $ git clone https://hub.zilber.tech/team/shop.git
+### STDERR
+Cloning into 'shop'...
+### EXIT 0
+### $ git clone https://hub.zilber.tech/team/shop.git
+### STDERR
+fatal: destination path 'shop' already exists and is not an empty directory.
+### EXIT 128
+### $ cd shop
+### EXIT 0
+### $ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+### EXIT 0
+### $ git remote
+origin
+### EXIT 0
+### $ git remote -v
+origin	https://hub.zilber.tech/team/shop.git (fetch)
+origin	https://hub.zilber.tech/team/shop.git (push)
+### EXIT 0
+### $ git branch -a
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+### EXIT 0
+### $ git branch -r
+  origin/HEAD -> origin/main
+  origin/main
+### EXIT 0
+### $ git log --oneline
+325ba28 (HEAD -> main, origin/main, origin/HEAD) Add home page
+### EXIT 0
+### $ echo "a" > about.html
+### EXIT 0
+### $ git add about.html
+### EXIT 0
+### $ git commit -m "Add about page"
+[main 6a5e4df] Add about page
+ 1 file changed, 1 insertion(+)
+ create mode 100644 about.html
+### EXIT 0
+### $ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+### EXIT 0
+### @sam echo "<p>sale</p>" >> index.html
+### EXIT 0
+### @sam git commit -am "Announce sale"
+[main 43b10ee] Announce sale
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### @sam git push
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+   325ba28..43b10ee  main -> main
+### EXIT 0
+### $ git push
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://hub.zilber.tech/team/shop.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+### EXIT 1
+### $ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+### EXIT 0
+### $ git fetch
+### STDERR
+From https://hub.zilber.tech/team/shop
+   325ba28..43b10ee  main       -> origin/main
+### EXIT 0
+### $ git status
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+nothing to commit, working tree clean
+### EXIT 0
+### $ git log --oneline --graph --all
+* 43b10ee (origin/main, origin/HEAD) Announce sale
+| * 6a5e4df (HEAD -> main) Add about page
+|/  
+* 325ba28 Add home page
+### EXIT 0
+### $ git branch -vv
+* main 6a5e4df [origin/main: ahead 1, behind 1] Add about page
+### EXIT 0
+### $ git pull
+Merge made by the 'ort' strategy.
+ index.html | 1 +
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### $ git log --oneline --graph --all
+*   f81a05b (HEAD -> main) Merge branch 'main' of https://hub.zilber.tech/team/shop
+|\  
+| * 43b10ee (origin/main, origin/HEAD) Announce sale
+* | 6a5e4df Add about page
+|/  
+* 325ba28 Add home page
+### EXIT 0
+### $ git status
+On branch main
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+### EXIT 0
+### $ git push
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+   43b10ee..f81a05b  main -> main
+### EXIT 0
+### $ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+### EXIT 0
+### $ git switch -c feature
+### STDERR
+Switched to a new branch 'feature'
+### EXIT 0
+### $ echo "x" > x.txt
+### EXIT 0
+### $ git add x.txt
+### EXIT 0
+### $ git commit -m "Add x"
+[feature ee93908] Add x
+ 1 file changed, 1 insertion(+)
+ create mode 100644 x.txt
+### EXIT 0
+### $ git push
+### STDERR
+fatal: The current branch feature has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin feature
+
+To have this happen automatically for branches without a tracking
+upstream, see 'push.autoSetupRemote' in 'git help config'.
+
+### EXIT 128
+### $ git push -u origin feature
+branch 'feature' set up to track 'origin/feature'.
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+ * [new branch]      feature -> feature
+### EXIT 0
+### $ git branch -vv
+* feature ee93908 [origin/feature] Add x
+  main    f81a05b [origin/main] Merge branch 'main' of https://hub.zilber.tech/team/shop
+### EXIT 0
+### $ git status
+On branch feature
+Your branch is up to date with 'origin/feature'.
+
+nothing to commit, working tree clean
+### EXIT 0
+### @sam git pull
+Updating 43b10ee..f81a05b
+Fast-forward
+ about.html | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 about.html
+### STDERR
+From https://hub.zilber.tech/team/shop
+   43b10ee..f81a05b  main       -> origin/main
+ * [new branch]      feature    -> origin/feature
+### EXIT 0
+### @sam git switch feature
+branch 'feature' set up to track 'origin/feature'.
+### STDERR
+Switched to a new branch 'feature'
+### EXIT 0
+### @sam echo "y" >> x.txt
+### EXIT 0
+### @sam git commit -am "More x"
+[feature dce1ccb] More x
+ 1 file changed, 1 insertion(+)
+### EXIT 0
+### @sam git push
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+   ee93908..dce1ccb  feature -> feature
+### EXIT 0
+### $ git pull
+Updating ee93908..dce1ccb
+Fast-forward
+ x.txt | 1 +
+ 1 file changed, 1 insertion(+)
+### STDERR
+From https://hub.zilber.tech/team/shop
+   ee93908..dce1ccb  feature    -> origin/feature
+### EXIT 0
+### $ git log --oneline -3
+dce1ccb (HEAD -> feature, origin/feature) More x
+ee93908 Add x
+f81a05b (origin/main, origin/HEAD, main) Merge branch 'main' of https://hub.zilber.tech/team/shop
+### EXIT 0
+### $ git fetch
+### EXIT 0
+### $ git pull
+Already up to date.
+### EXIT 0
+### $ git switch main
+Your branch is up to date with 'origin/main'.
+### STDERR
+Switched to branch 'main'
+### EXIT 0
+### $ git merge origin/feature
+Updating f81a05b..dce1ccb
+Fast-forward
+ x.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 x.txt
+### EXIT 0
+### $ git push
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+   f81a05b..dce1ccb  main -> main
+### EXIT 0
+### $ git push origin --delete feature
+### STDERR
+To https://hub.zilber.tech/team/shop.git
+ - [deleted]         feature
+### EXIT 0
+### $ git branch -a
+  feature
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+### EXIT 0
+### $ git remote add upstream https://hub.zilber.tech/team/shop.git
+### EXIT 0
+### $ git remote add upstream https://hub.zilber.tech/team/shop.git
+### STDERR
+error: remote upstream already exists.
+### EXIT 3
+### $ git remote -v
+origin	https://hub.zilber.tech/team/shop.git (fetch)
+origin	https://hub.zilber.tech/team/shop.git (push)
+upstream	https://hub.zilber.tech/team/shop.git (fetch)
+upstream	https://hub.zilber.tech/team/shop.git (push)
+### EXIT 0
+### $ git remote remove upstream
+### EXIT 0
+### $ git remote -v
+origin	https://hub.zilber.tech/team/shop.git (fetch)
+origin	https://hub.zilber.tech/team/shop.git (push)
+### EXIT 0
+### $ git switch -c nowhere
+### STDERR
+Switched to a new branch 'nowhere'
+### EXIT 0
+### $ git pull
+### STDERR
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> nowhere
+
+### EXIT 1
+### SESSION pull-conflict
+### @hub init team/notes
+### EXIT 0
+### @sam git clone -q https://hub.zilber.tech/team/notes.git
+### STDERR
+warning: You appear to have cloned an empty repository.
+### EXIT 0
+### @sam cd notes
+### EXIT 0
+### @sam echo "base" > a.txt
+### EXIT 0
+### @sam git add a.txt
+### EXIT 0
+### @sam git commit -qm "base"
+### EXIT 0
+### @sam git push -q
+### EXIT 0
+### $ git clone https://hub.zilber.tech/team/notes.git
+### STDERR
+Cloning into 'notes'...
+### EXIT 0
+### $ cd notes
+### EXIT 0
+### @sam echo "sam" > a.txt
+### EXIT 0
+### @sam git commit -qam "sam"
+### EXIT 0
+### @sam git push -q
+### EXIT 0
+### $ echo "me" > a.txt
+### EXIT 0
+### $ git commit -qam "me"
+### EXIT 0
+### $ git push
+### STDERR
+To https://hub.zilber.tech/team/notes.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://hub.zilber.tech/team/notes.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+### EXIT 1
+### $ git pull
+Auto-merging a.txt
+CONFLICT (content): Merge conflict in a.txt
+Automatic merge failed; fix conflicts and then commit the result.
+### STDERR
+From https://hub.zilber.tech/team/notes
+   00bcd2e..248502c  main       -> origin/main
+### EXIT 1
+### $ cat a.txt
+<<<<<<< HEAD
+me
+=======
+sam
+>>>>>>> 248502c85d73484b79e80613dc1a273248caf6a9
+### EXIT 0
+### $ git status
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   a.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+### EXIT 0
+### $ git pull
+### STDERR
+error: Pulling is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+### EXIT 128
+### $ echo "resolved" > a.txt
+### EXIT 0
+### $ git add a.txt
+### EXIT 0
+### $ git status
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+	modified:   a.txt
+
+### EXIT 0
+### $ git commit
+[main 132c6b5] Merge branch 'main' of https://hub.zilber.tech/team/notes
+### EXIT 0
+### $ git log --oneline --graph
+*   132c6b5 (HEAD -> main) Merge branch 'main' of https://hub.zilber.tech/team/notes
+|\  
+| * 248502c (origin/main, origin/HEAD) sam
+* | 68828c7 me
+|/  
+* 00bcd2e base
+### EXIT 0
+### $ git push
+### STDERR
+To https://hub.zilber.tech/team/notes.git
+   248502c..132c6b5  main -> main
+### EXIT 0
+### $ git log -1
+commit 132c6b5887d87be1fa2f715211ffdbd7fa19fac4 (HEAD -> main, origin/main, origin/HEAD)
+Merge: 68828c7 248502c
+Author: Alex Learner <alex@example.com>
+Date:   Mon Jan 5 09:23:00 2026 +0000
+
+    Merge branch 'main' of https://hub.zilber.tech/team/notes
+### EXIT 0
+### @sam git pull
+Updating 248502c..132c6b5
+Fast-forward
+ a.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+### STDERR
+From https://hub.zilber.tech/team/notes
+   248502c..132c6b5  main       -> origin/main
+### EXIT 0
+### @sam git log --oneline --graph
+*   132c6b5 (HEAD -> main, origin/main, origin/HEAD) Merge branch 'main' of https://hub.zilber.tech/team/notes
+|\  
+| * 248502c sam
+* | 68828c7 me
+|/  
+* 00bcd2e base
+### EXIT 0
+### SESSION here-documents
+### $ git init docs
+Initialized empty Git repository in /home/learner/docs/.git/
+### EXIT 0
+### $ cd docs
+### EXIT 0
+### $ cat > readme.md <<'EOF'
+### > # Docs
+### > 
+### > Hello $USER
+### > EOF
+### EXIT 0
+### $ cat readme.md
+# Docs
+
+Hello $USER
+### EXIT 0
+### $ git add readme.md
+### EXIT 0
+### $ git commit -m "Readme"
+[main (root-commit) 78449cd] Readme
+ 1 file changed, 3 insertions(+)
+ create mode 100644 readme.md
+### EXIT 0
+### $ echo -n "no newline" > n.txt
+### EXIT 0
+### $ git add n.txt
+### EXIT 0
+### $ git commit -m "No newline"
+[main 45f23c7] No newline
+ 1 file changed, 1 insertion(+)
+ create mode 100644 n.txt
+### EXIT 0
+### $ printf 'no newline\nnow two\n' > n.txt
+### EXIT 0
+### $ git diff
+diff --git a/n.txt b/n.txt
+index 20cbb4d..a595686 100644
+--- a/n.txt
++++ b/n.txt
+@@ -1 +1,2 @@
+-no newline
+\ No newline at end of file
++no newline
++now two
+### EXIT 0
+### $ git config user.name
+Alex Learner
+### EXIT 0
+### $ git config --global user.name "Alex L"
+### EXIT 0
+### $ git config user.name
+Alex L
+### EXIT 0
+### $ git config user.name "Repo Name"
+### EXIT 0
+### $ git config user.name
+Repo Name
+### EXIT 0
+### $ git commit -am "Two lines"
+[main 3bcfa0a] Two lines
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+### EXIT 0
+### $ git log -1
+commit 3bcfa0ab19726c3df713f07a8098c06c6ce4de4f (HEAD -> main)
+Author: Repo Name <alex@example.com>
+Date:   Mon Jan 5 09:17:00 2026 +0000
+
+    Two lines
+### EXIT 0
+### $ cd ..
+### EXIT 0
+### $ git log
+### STDERR
+fatal: not a git repository (or any of the parent directories): .git
+### EXIT 128
