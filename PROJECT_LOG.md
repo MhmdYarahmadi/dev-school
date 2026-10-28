@@ -928,3 +928,12 @@ After one online visit, all three courses open and work with no connection; prog
 - **Checks:** 1,317 tests pass; `tsc` + build OK; `dist/sw.js` precaches `/git/`.
 - **Local server check** (throwaway server and account, deleted afterwards): `/`, `/git/`, `/pg/`, `/docker/`, `/design/`, `/admin/`, `/api/health` 200; home page links to `/git/`; both new game chunks built. **No browser walkthrough** this time (the Chrome extension wasn't connected).
 - **Not deployed yet:** run `bash deploy/deploy.sh`.
+- **Deploy attempt (2026-10-27):** tests and build passed, then SSH to the VPS was reset during upload (`Connection reset … port 22`). Nothing changed on the server; SSH works again, so re-run `bash deploy/deploy.sh`.
+
+## 48. Project on GitHub (2026-10-28)
+- **Repo:** private, https://github.com/mohyarp/pgschool, branch `main` tracking `origin/main`.
+- **Auth:** `gh` (apt) logged in by the user via the browser; `gh auth setup-git` lets git push over HTTPS. The token stays in gh's keyring.
+- **Identity (this repo only):** `mohyarp` with the GitHub no-reply email, so the Gmail address stays out of the history.
+- **Kept out of git:** `ADMIN_GUIDE.txt` (has the admin password), `.env`, `data/`, `dist/`, `node_modules/`; added `*.log` and `.claude/` to `.gitignore`. Before the first commit, I checked that the admin password isn't in any staged file.
+- **Deploy is unchanged:** `deploy/deploy.sh` still rsyncs from this folder, so GitHub is a backup and history, not the deploy source.
+- **From now on:** commit and push after each step (`git add -A && git commit && git push`).
