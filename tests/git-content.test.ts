@@ -84,7 +84,7 @@ describe('exercises: reference passes, wrong example and starter fail', () => {
       const reference = e.kind === 'parsons' ? e.blocks.join('\n') : e.solution;
       const ok = evaluateGit(e, reference);
       expect(ok.feedback, `${e.id}: the reference answer should pass`).toEqual([]);
-      const wrong = e.kind === 'parsons' ? e.wrongOrder.join('\n') : e.wrongExample;
+      const wrong = e.kind === 'parsons' ? e.wrongOrder.join('\n') : e.wrongExample ?? '';
       expect(evaluateGit(e, wrong).status, `${e.id}: the wrong example should fail`).toBe('wrong');
       const starter = starterOf(e);
       if (starter && !/___/.test(starter)) expect(evaluateGit(e, starter).status, `${e.id}: the starter should not already be correct`).toBe('wrong');

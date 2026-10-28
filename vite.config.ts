@@ -6,7 +6,7 @@ import { offline } from './offline/plugin';
 export default defineConfig({
   // offline(): writes dist/sw.js, which saves the site in the browser so the courses work offline.
   plugins: [react(), offline(resolve(__dirname, 'offline/sw.js'))],
-  // One site, several pages: / (course list), /pg/ (PostgreSQL), /docker/ (Docker), /design/ (System Design), /git/ (Git), /admin/ (dashboard).
+  // One site, several pages: / (course list), /pg/ (PostgreSQL), /docker/ (Docker), /design/ (System Design), /git/ (Git), /python/ (Python), /admin/ (dashboard).
   base: '/',
   build: {
     rollupOptions: {
@@ -16,6 +16,7 @@ export default defineConfig({
         docker: resolve(__dirname, 'docker/index.html'),
         design: resolve(__dirname, 'design/index.html'),
         git: resolve(__dirname, 'git/index.html'),
+        python: resolve(__dirname, 'python/index.html'),
         admin: resolve(__dirname, 'admin/index.html'),
       },
     },

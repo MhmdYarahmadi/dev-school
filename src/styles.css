@@ -380,3 +380,14 @@ table.results td.rownum { color: var(--muted); width: 1%; }
   .area-arrow { justify-self: center; }
   .area-arrow br { display: none; }
 }
+
+/* ---- Python course ---- */
+/* Program output blocks (stdout / errors). */
+.py-output { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin: 0; white-space: pre-wrap; word-break: break-word; max-width: 100%; overflow-x: auto; }
+.py-output.err { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }
+
+/* RTL is scoped to the Persian Python SPA (its <html> sets dir=rtl); these rules are
+   inert on the LTR English courses. Code and the editor stay left-to-right. */
+[dir='rtl'] pre, [dir='rtl'] code, [dir='rtl'] .mono, [dir='rtl'] .editor, [dir='rtl'] .cm-editor, [dir='rtl'] .py-output { direction: ltr; text-align: left; unicode-bidi: isolate; }
+[dir='rtl'] .md ul, [dir='rtl'] .md ol { padding-right: 1.3em; padding-left: 0; }
+[dir='rtl'] .md blockquote { border-left: none; border-right: 3px solid var(--accent); }

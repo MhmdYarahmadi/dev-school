@@ -8,6 +8,7 @@ Interactive courses at [school.zilber.tech](https://school.zilber.tech). Everyth
 | Docker | `/docker/` | 9 modules, 10 games, 2 projects | a simulated Docker engine, calibrated against Docker 29 |
 | System Design | `/design/` | 10 modules, 7 games, 3 projects | a system simulator |
 | Git | `/git/` | 6 modules, 4 games, 1 project | a simulated Git with real hashes, calibrated against Git 2.53, plus a hub with pull requests |
+| Python | `/python/` | 9 modules, 1 game | real CPython in the browser ([Pyodide](https://pyodide.org)); lessons in Persian (RTL) |
 
 A small Node server (`server/`) stores accounts and progress and serves the admin dashboard at `/admin/`. See `deploy/` for hosting.
 

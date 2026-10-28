@@ -54,7 +54,7 @@ describe('every exercise: solution passes, wrong answer fails', () => {
       }
       const good = await evaluateSql(item, item.solution);
       expect(good.status, good.error?.message ?? good.feedback.join(' ')).toBe('correct');
-      const bad = await evaluateSql(item, item.wrongExample);
+      const bad = await evaluateSql(item, item.wrongExample!);
       expect(bad.status, `wrongExample unexpectedly passed: ${item.wrongExample}`).not.toBe('correct');
       if (item.kind === 'fixBug' || item.kind === 'fillBlank') {
         const starter = await evaluateSql(item, item.starterSql);

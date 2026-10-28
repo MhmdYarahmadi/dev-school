@@ -67,7 +67,7 @@ describe('exercises', () => {
       const good = evaluateDocker(e, reference(e));
       expect(good.feedback, 'solution should pass').toEqual([]);
       expect(good.status).toBe('correct');
-      const wrong = e.kind === 'parsons' ? e.wrongOrder.join('\n') : 'wrongExample' in e ? e.wrongExample : '';
+      const wrong = e.kind === 'parsons' ? e.wrongOrder.join('\n') : 'wrongExample' in e ? e.wrongExample ?? '' : '';
       const w = evaluateDocker(e, wrong);
       expect(w.status, 'wrong example should fail').not.toBe('correct');
       expect(w.feedback.length).toBeGreaterThan(0);

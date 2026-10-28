@@ -86,6 +86,20 @@ export interface GitSpec extends SandboxEnv {
   exactOutput?: boolean;
 }
 
+/**
+ * Python course specifics of an exercise. The learner's code runs in real CPython
+ * (Pyodide). By default the reference `solution`'s stdout is the oracle; `tests`
+ * switches to hidden asserts (function tasks), `nonEmpty` to "prints something".
+ */
+export interface PythonSpec {
+  /** Pre-seeded stdin fed to input() (newline-separated lines). */
+  stdin?: string;
+  /** Hidden assert lines appended after the learner's code; passes iff none raise. */
+  tests?: string[];
+  /** Pass as long as the code runs and prints something (open-ended tasks). */
+  nonEmpty?: boolean;
+}
+
 export interface Concept {
   id: string;
   title: string;
@@ -113,12 +127,14 @@ interface ItemBase {
   sd?: SdSpec;
   /** Git course only. */
   git?: GitSpec;
+  /** Python course only. */
+  python?: PythonSpec;
 }
 
 export interface SqlCheck {
   solution: string;
-  /** A plausible wrong answer. Tests assert it does NOT pass. */
-  wrongExample: string;
+  /** A plausible wrong answer. Tests assert it does NOT pass. Optional (e.g. the Python course relies on its own checker). */
+  wrongExample?: string;
   orderMatters?: boolean;
   checkQuery?: string;
   setupSql?: string;
