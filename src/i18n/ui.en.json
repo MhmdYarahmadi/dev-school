@@ -411,6 +411,7 @@
  "📬 Pull request #{n} commented.",
  "📬 Pull request #{n} merged.",
  "📬 Pull request #{n} closed.",
+ "Git School: learn Git",
  "Round {n}/{total}",
  "← Back to module",
  "Scoring: ★★★ for 85%+ of the maximum score, ★★ for 60%+, ★ for 20%+. Hints cost points.",

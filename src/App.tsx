@@ -11,7 +11,7 @@ import ReviewPage from './pages/ReviewPage';
 import CheatSheetPage from './pages/CheatSheetPage';
 import { course } from './shared/course';
 import { applyUpdate, useUpdateReady } from './shared/offline';
-import { t } from './shared/i18n';
+import { hasLangSwitch, lang, setLang, t } from './shared/i18n';
 
 const GamePage = lazy(() => import('./pages/GamePage'));
 
@@ -74,6 +74,17 @@ function ThemeToggle() {
   );
 }
 
+/** EN / فا, on courses that have a translation (the Git course). */
+function LangSwitch() {
+  if (!hasLangSwitch()) return null;
+  const fa = lang() === 'fa';
+  return (
+    <button className="btn ghost small" onClick={() => setLang(fa ? 'en' : 'fa')} title={fa ? 'English' : 'فارسی'} lang={fa ? 'en' : 'fa'}>
+      {fa ? 'EN' : 'فا'}
+    </button>
+  );
+}
+
 export default function App() {
   const c = course();
   const p = useProgress();
@@ -98,6 +109,7 @@ export default function App() {
           <span>{p.xp} XP</span>
         </div>
         <AccountChip />
+        <LangSwitch />
         <ThemeToggle />
       </header>
       <main className="page">

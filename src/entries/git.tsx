@@ -10,6 +10,7 @@ import { configureSync } from '../account/api';
 import { gitCourse } from '../courses/git/course';
 import { registerOffline } from '../shared/offline';
 import App from '../App';
+import '@fontsource-variable/vazirmatn';
 import '../styles.css';
 
 // Must run before the app renders: selects the course (in the chosen language), its saved progress and its sync target.

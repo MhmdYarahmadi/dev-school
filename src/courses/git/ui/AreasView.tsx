@@ -60,12 +60,12 @@ export function AreasView({ machine, version }: { machine: GitMachine; version: 
       {box(mark('📁 Working folder'), mark('your files, as they are now'), work, mark('empty folder'))}
       <div className="area-arrow">
         git add
-        <br />→
+        <br /><span className="flip">→</span>
       </div>
       {box(mark('📋 Staging area'), mark('what the next commit will contain'), stage, mark('nothing staged'))}
       <div className="area-arrow">
         git commit
-        <br />→
+        <br /><span className="flip">→</span>
       </div>
       <div className="area">
         <div className="area-head">{t('🗄️ Repository')}</div>

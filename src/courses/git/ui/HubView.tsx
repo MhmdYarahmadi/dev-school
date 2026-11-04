@@ -91,7 +91,7 @@ export function HubView({ machine, version, run }: { machine: GitMachine; versio
         <b>{t('Branches:')}</b>{' '}
         {branches.length ? (
           branches.map((b) => (
-            <span key={b} className="tag mono" style={{ marginRight: 4 }}>
+            <span key={b} className="tag mono" style={{ marginInlineEnd: 4 }}>
               {b}
               {b === defaultBranch ? ` ${t('(default)')}` : ''}
               {machine.hub.isProtected(hub, b) ? ' 🔒' : ''}

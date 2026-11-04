@@ -68,7 +68,7 @@ function TaskCard({ task, n, done }: { task: ProjectTask; n: number; done: boole
             <li key={i} className={reqs?.[i]?.ok ? 'met' : ''}>
               <span>{reqs ? (reqs[i].ok ? '✅' : '❌') : '⬜'}</span> <ReactMarkdown components={{ p: 'span' }}>{r.label}</ReactMarkdown>
               {reqs && !reqs[i].ok && (
-                <button className="btn ghost small" style={{ marginLeft: 6 }} onClick={() => setWhy(why === i ? null : i)}>
+                <button className="btn ghost small" style={{ marginInlineStart: 6 }} onClick={() => setWhy(why === i ? null : i)}>
                   {why === i ? t('hide') : t('why?')}
                 </button>
               )}
