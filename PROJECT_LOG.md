@@ -971,3 +971,6 @@ After one online visit, all three courses open and work with no connection; prog
 - **Switch:** EN / فا button in the header, only on courses with a translation (the Git course). It's remembered per course and reloads the page; progress is shared.
 - **Tests:** `tests/git-i18n.test.ts` (8): the English source files are current, every translation passes the validator, no stale keys, the content overlay changes only prose, `t()` placeholders and fallback, and a Farsi session gives Farsi feedback while the misconception rules still fire. 1,325 tests pass; build OK.
 - **Not done:** a browser walkthrough of the Farsi pages (the Chrome extension isn't connected), and the deploy.
+
+## 54. GitHub repository moved (2026-11-04)
+- The repo now lives at `https://github.com/MhmdYarahmadi/dev-school` (GitHub redirected from `mohyarp/dev-school`). `origin` points there; fetch and push work. The remote also has a `course/python` branch that wasn't made here.
