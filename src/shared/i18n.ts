@@ -52,8 +52,26 @@ export const dir = (): 'rtl' | 'ltr' => (lang() === 'fa' ? 'rtl' : 'ltr');
 
 /** Translates English text and fills `{name}` placeholders. */
 export function t(en: string, vars?: Record<string, string | number>): string {
-  const s = (lang() !== 'en' && table[en]) || en;
-  return vars ? s.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m)) : s;
+  let s = (lang() !== 'en' && table[en]) || en;
+  // Right to left, "Next →" and "← Back" must point the other way (arrows mid-sentence, as in
+  // "{from} → {to}" between commit hashes, already read correctly).
+  if (dir() === 'rtl') s = s.replace(/^← /, '→ ').replace(/ →$/, ' ←');
+  if (vars) s = s.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m));
+  return dir() === 'rtl' ? isolateLtr(s) : s;
+}
+
+const ISO = (x: string) => `\u2068${x}\u2069`;
+
+/**
+ * Right to left, a path ("~/shop", "origin/main") or a “quoted” English title would be reordered
+ * by the words around it ("shop/~"). Those pieces are wrapped in Unicode isolates. Text in
+ * backticks is left alone (it's shown as code, already isolated, and may be copied).
+ */
+export function isolateLtr(s: string): string {
+  return s
+    .split(/(`[^`]*`)/)
+    .map((part, i) => (i % 2 ? part : part.replace(/“[^”]*”/g, ISO).replace(/(?<![\w\u2068])~?[\w.-]*\/[\w./-]*\w/g, ISO)))
+    .join('');
 }
 
 /** Runs `f` with English text, e.g. for checks that match feedback against English patterns. */
@@ -136,7 +154,7 @@ export function walkProse(course: object, visit: (path: string, value: string, s
 export function applyContentTable<T extends object>(content: T, tableByPath: Record<string, string>): T {
   walkProse(content, (path, _v, set) => {
     const tr = tableByPath[path];
-    if (tr) set(tr);
+    if (tr) set(isolateLtr(tr));
   });
   return content;
 }

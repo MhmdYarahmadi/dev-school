@@ -10,7 +10,7 @@ import gitFa from '../src/i18n/git.fa.json';
 import { extractContent, extractUi } from '../scripts/i18n/extract';
 // @ts-expect-error plain JavaScript module shared with the translation script
 import { problem } from '../scripts/i18n/validate.mjs';
-import { applyContentTable, initLang, inEnglish, lang, setTable, t, walkProse } from '../src/shared/i18n';
+import { applyContentTable, initLang, inEnglish, isolateLtr, lang, setTable, t, walkProse } from '../src/shared/i18n';
 import { gitContent } from '../src/courses/git/content';
 import { evaluateGit } from '../src/courses/git/check';
 import { detectGitMisconceptions } from '../src/courses/git/misconceptions';
@@ -40,6 +40,13 @@ describe('Farsi translations', () => {
     expect(Object.keys(ui).filter((k) => !(uiEn as string[]).includes(k))).toEqual([]);
     expect(Object.keys(content).filter((k) => !(k in gitEn))).toEqual([]);
   });
+  it('right-to-left isolates never land inside code, and only add invisible marks', () => {
+    for (const v of [...Object.values(ui), ...Object.values(content)]) {
+      const out = isolateLtr(v);
+      expect(out.replace(/[\u2068\u2069]/g, '')).toBe(v);
+      for (const code of out.match(/`[^`]*`/g) ?? []) expect(code).not.toMatch(/[\u2068\u2069]/);
+    }
+  });
   it('applying the content table changes only prose', () => {
     const fa = applyContentTable(structuredClone({ ...gitContent, badges: [] }), content);
     expect(fa.modules[0].title).toBe(content['g01/title']);
@@ -60,6 +67,13 @@ describe('running in Farsi', () => {
     expect(lang()).toBe('fa');
     expect(t('{n} pts', { n: 5 })).toBe('5 X');
     expect(t('Not in the table')).toBe('Not in the table');
+    // right to left, "Next →" / "← Back" point the other way; arrows between values don't change
+    expect(t('Next →')).toBe('Next ←');
+    expect(t('← Course')).toBe('→ Course');
+    expect(t('{a} → {b}', { a: 'x', b: 'y' })).toBe('x → y');
+    expect(t('Sam pushed “{m}”.', { m: 'Hours' })).toBe('Sam pushed \u2068“Hours”\u2069.');
+    expect(t('Clone into {d} from team/shop, then `cd ~/shop`.', { d: '~/shop' })).toBe('Clone into \u2068~/shop\u2069 from \u2068team/shop\u2069, then `cd ~/shop`.');
+    expect(t('{a} → {b}, round {n}/{m}', { a: '160e423', b: '3c5e943', n: 1, m: 5 })).toBe('160e423 → 3c5e943, round \u20681/5\u2069');
     expect(inEnglish(() => t('{n} pts', { n: 5 }))).toBe('5 pts');
     setTable(ui);
   });

@@ -974,3 +974,15 @@ After one online visit, all three courses open and work with no connection; prog
 
 ## 54. GitHub repository moved (2026-11-04)
 - The repo now lives at `https://github.com/MhmdYarahmadi/dev-school` (GitHub redirected from `mohyarp/dev-school`). `origin` points there; fetch and push work. The remote also has a `course/python` branch that wasn't made here.
+
+## 55. Farsi Git course: browser walkthrough and right-to-left fixes (2026-11-04)
+- **Walkthrough** (local dev server + local backend with a scratch database and a throwaway test account, deleted afterwards): home, module 1 lesson and predict, a practice exercise with wrong-answer feedback, Conflict Doctor round 1, Push/Pull rounds 1–3 with Sam's 📣 messages, the team project, phone width (375 px: no overflow), switching back to EN (left to right again, XP shared).
+- **Fixed (display code only; no translation changed, no Persian typed):**
+  - "Next →" / "← Back" arrows pointed the wrong way right to left: `t()` mirrors a leading "← " or trailing " →" on RTL pages; the module page's Play button arrow uses `.flip`.
+  - Plain-text paths ("~/shop" showed as "shop/~") and “quoted” English titles next to "Sam": `isolateLtr()` wraps them in Unicode isolates, in `t()` and in the content overlay, never inside backticks (test checks every string).
+  - Areas panel, stacked: the arrow now points down (↓ git add) in both languages; removed the old phone-width rotation that would have turned it twice.
+  - The terminal's intro text was Farsi in the monospace font, left aligned: now Vazirmatn, right to left.
+  - Example and cheat-sheet notes showed raw backticks (all courses, English too): rendered as code (`Ticks`).
+  - No letter-spacing on small uppercase headings in RTL (it breaks Persian joins).
+- Tried and dropped: isolating every filled-in value, which reversed "hash → hash" and "1/5".
+- Left as is: the terminal's accessibility label is still English. 1,326 tests pass; build OK. Not deployed yet.

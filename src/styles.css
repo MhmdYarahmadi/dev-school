@@ -351,7 +351,7 @@ table.results td.rownum { color: var(--muted); width: 1%; }
 .gchip.merge { background: transparent; border-color: var(--bad); color: var(--bad); }
 .gempty { color: var(--muted); font-size: 0.88rem; padding: 6px 2px; }
 .areas { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 6px; align-items: stretch; }
-@media (max-width: 640px) { .areas { grid-template-columns: 1fr; } .area-arrow { transform: rotate(90deg); justify-self: center; } }
+@media (max-width: 640px) { .areas { grid-template-columns: 1fr; } .area-arrow { justify-self: center; } .area-arrow br { display: none; } }
 .area { border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-width: 0; background: var(--bg); }
 .area-head { font-weight: 700; font-size: 0.85rem; }
 .area-hint { margin-bottom: 6px; }
@@ -379,6 +379,8 @@ table.results td.rownum { color: var(--muted); width: 1%; }
   .areas { grid-template-columns: 1fr; }
   .area-arrow { justify-self: center; }
   .area-arrow br { display: none; }
+  /* stacked: the arrow points down, in either direction */
+  .area-arrow .flip, [dir="rtl"] .area-arrow .flip { display: inline-block; transform: rotate(90deg); margin-inline-start: 4px; }
 }
 
 /* Right to left (the Farsi Git course). Code, terminals, editors and graphs stay left to right. */
@@ -386,3 +388,6 @@ html[lang="fa"] body { font-family: 'Vazirmatn Variable', var(--sans); }
 [dir="rtl"] pre, [dir="rtl"] .term, [dir="rtl"] .editor, [dir="rtl"] .block, [dir="rtl"] .gview, [dir="rtl"] table.results { direction: ltr; text-align: left; }
 [dir="rtl"] :not(pre) > code, [dir="rtl"] .mono { direction: ltr; unicode-bidi: isolate; }
 [dir="rtl"] .flip { display: inline-block; transform: scaleX(-1); }
+@container (max-width: 560px) { [dir="rtl"] .area-arrow .flip { transform: rotate(90deg); } }
+html[lang="fa"] .term-note { font-family: 'Vazirmatn Variable', var(--sans); text-align: start; }
+[dir="rtl"] .gpanel-head, [dir="rtl"] .ev-head, [dir="rtl"] .module-num { letter-spacing: 0; }

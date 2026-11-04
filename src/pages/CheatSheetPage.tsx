@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Ticks } from '../shared/T';
 import { h } from '../shared/course';
 import { useProgress } from '../progress/store';
 import { t } from '../shared/i18n';
@@ -39,7 +40,7 @@ export default function CheatSheetPage() {
               <span className="tag">M{module.number}</span>
             </div>
             <pre>{concept.cheat.syntax}</pre>
-            <div className="small">{concept.cheat.note}</div>
+            <div className="small"><Ticks text={concept.cheat.note} /></div>
           </div>
         ))}
         {!q && all.filter(({ concept }) => !mastered.has(concept.id)).slice(0, 6).map(({ concept, module }) => (

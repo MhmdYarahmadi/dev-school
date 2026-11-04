@@ -9,7 +9,7 @@ import { completeVariant, getProgress, markConceptSeen, recordPrediction, setLas
 import { Stars } from './Home';
 import { TestRunner } from './TestRunner';
 import { mark, t } from '../shared/i18n';
-import { T } from '../shared/T';
+import { T, Ticks } from '../shared/T';
 
 const STAGES = [
   { id: 'learn', label: mark('📖 Learn') },
@@ -119,7 +119,7 @@ function ConceptView({ concept, onNext, isLast }: { concept: Concept; onNext: ()
         />
       )}
       <div className="card stack" style={{ opacity: predicted ? 1 : 0.5 }}>
-        <div className="row"><span className="tag good">{t('Worked example')}</span><span className="small muted">{concept.example.note}</span></div>
+        <div className="row"><span className="tag good">{t('Worked example')}</span><span className="small muted"><Ticks text={concept.example.note} /></span></div>
         {!predicted && <span className="small muted">{t('Make your prediction above first!')}</span>}
         <ExampleRunner code={concept.example.sql} disabled={!predicted} env={concept.env} />
       </div>
@@ -227,7 +227,7 @@ function PlayTab({ m }: { m: Module }) {
               <div className="small">{meta.pitch}</div>
               <div className="small muted">{t('Skills: {skills}', { skills: meta.skills })}</div>
               <div className="row"><Stars n={gp?.stars ?? 0} />{gp && <span className="small muted">{t('best {n} pts · played {plays}×', { n: gp.bestScore, plays: gp.plays })}</span>}</div>
-              <span className="btn primary" style={{ alignSelf: 'start' }}>{gp ? t('Play again') : t('Play')} →</span>
+              <span className="btn primary" style={{ alignSelf: 'start' }}>{gp ? t('Play again') : t('Play')} <span className="flip">→</span></span>
             </Link>
           );
         })}

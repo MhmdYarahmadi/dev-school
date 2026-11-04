@@ -11,3 +11,12 @@ export function T({ text, vars }: { text: string; vars: Record<string, ReactNode
     </>
   );
 }
+
+/** Plain text with `backtick` spans shown as code (short notes that aren't full Markdown). */
+export function Ticks({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/`([^`]+)`/).map((p, i) => (i % 2 ? <code key={i}>{p}</code> : <Fragment key={i}>{p}</Fragment>))}
+    </>
+  );
+}
