@@ -1008,4 +1008,4 @@ After one online visit, all three courses open and work with no connection; prog
 - **Half-spaces:** Gemini's replies dropped the zero-width non-joiner (U+200C) everywhere ("می‌شود" → "میشود"). `scripts/i18n/restore-zwnj.mjs` puts the original spelling back word by word (same field first), so no Persian is written by Claude. After it, Gemini added no new Persian words; the half-space words that are gone were in code comments, now English.
 - **Right to left:** English inside Persian sentences (**Hello, world!**, «Hello <name>») and all-English choices are wrapped in Unicode isolates (`isolateContent`, course content only), so "!" stays at the end.
 - **Tests:** a predict/choice whose real output is one of the choices must be the marked answer; a guard that no Persian is inside any Python code. 1,473 tests pass; build OK. Checked in Chrome (local server, throwaway account deleted).
-- Not deployed yet.
+- Deployed 2026-11-12 (with the Python course and bundled Pyodide 0.26.4): live /python/ and /git/ match the local build, Pyodide served from /pyodide/0.26.4/, worker has no CDN.
