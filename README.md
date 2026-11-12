@@ -9,7 +9,6 @@ Interactive courses at [school.zilber.tech](https://school.zilber.tech). Everyth
 | System Design | `/design/` | 10 modules, 7 games, 3 projects | a system simulator |
 | Git | `/git/` | 6 modules, 4 games, 1 project | a simulated Git with real hashes, calibrated against Git 2.53, plus a hub with pull requests |
 | Python (in Persian) | `/python/` | 9 modules, 1 game | real CPython in the browser ([Pyodide](https://pyodide.org)), served by the site so it works offline |
-| Python | `/python/` | 9 modules, 1 game | real CPython in the browser ([Pyodide](https://pyodide.org)); lessons in Persian (RTL) |
 
 A small Node server (`server/`) stores accounts and progress and serves the admin dashboard at `/admin/`. See `deploy/` for hosting.
 
