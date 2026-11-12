@@ -5,8 +5,15 @@
  */
 import { describe, expect, it } from 'vitest';
 import { PYTHON_MODULES } from '../src/courses/python/content/index';
-import { evaluatePython } from '../src/courses/python/check';
+import { evaluatePython, norm } from '../src/courses/python/check';
 import { runPython } from '../src/courses/python/engine/run';
+
+/** When the real output is one of the choices, that choice must be the marked answer. */
+function answerMatchesOutput(choices: string[], answer: number, stdout: string) {
+  const out = norm(stdout);
+  const i = choices.findIndex((c) => norm(c.replace(/^`|`$/g, '')) === out);
+  if (i >= 0) expect(choices[answer], `the program prints ${JSON.stringify(out)}`).toBe(choices[i]);
+}
 
 describe.each(PYTHON_MODULES.map((m) => [m.id, m] as const))('module %s', (_id, m) => {
   it('has unique ids and sane structure', () => {
@@ -29,6 +36,7 @@ describe('every concept example and prediction runs cleanly', () => {
           const p = await runPython(c.predict.sql);
           expect(p.error, p.error).toBe('');
           expect(c.predict.answer).toBeLessThan(c.predict.choices.length);
+          answerMatchesOutput(c.predict.choices, c.predict.answer, p.stdout);
         }
       });
     }
@@ -44,6 +52,7 @@ describe('every exercise: solution passes, starter/wrong order does not', () => 
           if (item.sql) {
             const r = await runPython(item.sql);
             expect(r.error, r.error).toBe('');
+            answerMatchesOutput(item.choices, item.answer, r.stdout);
           }
           return;
         }
