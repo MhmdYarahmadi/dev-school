@@ -10,7 +10,7 @@ export const p07: Module = {
     {
       "id": "m07-make",
       "title": "ساخت لیست",
-      "card": "یک **لیست** چند مقدار را داخل `[]` و با کاما کنار هم نگه می‌دارد:\n\n```python\nfruits = [\"سیب\", \"موز\", \"پرتقال\"]\nprint(fruits)\n```\n\nعضوها می‌توانند عدد، متن یا هر چیز دیگر باشند. لیست می‌تواند خالی هم باشد: `[]`.",
+      "card": "یک **لیست** چند مقدار را داخل `[]` و با کاما کنار هم نگه می‌دارد:\n\n```python\nfruits = [\"apple\", \"banana\", \"orange\"]\nprint(fruits)\n```\n\nعضوها می‌توانند عدد، متن یا هر چیز دیگر باشند. لیست می‌تواند خالی هم باشد: `[]`.",
       "predict": {
         "sql": "nums = [10, 20, 30]\nprint(nums)",
         "question": "خروجی چیست؟",
@@ -23,7 +23,7 @@ export const p07: Module = {
         "why": "وقتی کل لیست را چاپ می‌کنی، پایتون آن را با `[]` و کاما نشان می‌دهد."
       },
       "example": {
-        "sql": "colors = [\"قرمز\", \"سبز\"]\nprint(colors)",
+        "sql": "colors = [\"red\", \"green\"]\nprint(colors)",
         "note": "یک لیست با دو عضو."
       },
       "cheat": {
@@ -34,7 +34,7 @@ export const p07: Module = {
     {
       "id": "m07-index",
       "title": "دسترسی با ایندکس",
-      "card": "مثل رشته‌ها، هر عضوِ لیست یک **ایندکس** دارد که از `0` شروع می‌شود:\n\n```python\nfruits = [\"سیب\", \"موز\", \"پرتقال\"]\nprint(fruits[0])   # سیب\nprint(fruits[2])   # پرتقال\n```\n\nبا ایندکس می‌توانی عضوی را هم **عوض** کنی: `fruits[1] = \"انگور\"`. ایندکسِ `-1` هم یعنی آخرین عضو.",
+      "card": "مثل رشته‌ها، هر عضوِ لیست یک **ایندکس** دارد که از `0` شروع می‌شود:\n\n```python\nfruits = [\"apple\", \"banana\", \"orange\"]\nprint(fruits[0])   # apple\nprint(fruits[2])   # orange\n```\n\nبا ایندکس می‌توانی عضوی را هم **عوض** کنی: `fruits[1] = \"grape\"`. ایندکسِ `-1` هم یعنی آخرین عضو.",
       "predict": {
         "sql": "a = [5, 6, 7]\nprint(a[1])",
         "question": "خروجی چیست؟",
@@ -48,7 +48,7 @@ export const p07: Module = {
       },
       "example": {
         "sql": "a = [5, 6, 7]\nprint(a[-1])",
-        "note": "ایندکسِ -1 آخرین عضو است: ۷."
+        "note": "ایندکسِ -1 آخرین عضو است: 7."
       },
       "cheat": {
         "syntax": "list[0] · list[-1]",
@@ -58,7 +58,7 @@ export const p07: Module = {
     {
       "id": "m07-methods",
       "title": "متدها و len",
-      "card": "لیست‌ها متدهای مفیدی دارند:\n\n```python\na = [1, 2]\na.append(3)     # اضافه به آخر → [1, 2, 3]\nprint(len(a))   # تعداد عضوها → 3\n```\n\n- `.append(x)` یک عضو به آخرِ لیست اضافه می‌کند.\n- `len(list)` تعداد عضوها را می‌دهد.",
+      "card": "لیست‌ها متدهای مفیدی دارند:\n\n```python\na = [1, 2]\na.append(3)     # add to end → [1, 2, 3]\nprint(len(a))   # number of items → 3\n```\n\n- `.append(x)` یک عضو به آخرِ لیست اضافه می‌کند.\n- `len(list)` تعداد عضوها را می‌دهد.",
       "predict": {
         "sql": "a = [1, 2, 3]\na.append(4)\nprint(len(a))",
         "question": "خروجی چیست؟",
@@ -82,7 +82,7 @@ export const p07: Module = {
     {
       "id": "m07-loop",
       "title": "پیمایش لیست با for",
-      "card": "با `for` می‌توانی روی **تک‌تکِ عضوهای** لیست حرکت کنی:\n\n```python\nfruits = [\"سیب\", \"موز\"]\nfor f in fruits:\n    print(f)\n```\n\nدر هر دور، متغیر `f` یک عضوِ لیست را می‌گیرد. این‌جا لازم نیست با ایندکس سروکار داشته باشی.",
+      "card": "با `for` می‌توانی روی **تک‌تکِ عضوهای** لیست حرکت کنی:\n\n```python\nfruits = [\"apple\", \"banana\"]\nfor f in fruits:\n    print(f)\n```\n\nدر هر دور، متغیر `f` یک عضوِ لیست را می‌گیرد. این‌جا لازم نیست با ایندکس سروکار داشته باشی.",
       "predict": {
         "sql": "for x in [1, 2, 3]:\n    print(x * 2)",
         "question": "چه چیزی چاپ می‌شود؟",
@@ -176,8 +176,8 @@ export const p07: Module = {
         "ایندکسِ اولین عضو ۰ است، نه ۱."
       ],
       "kind": "fixBug",
-      "starterSql": "a = [\"اول\", \"دوم\"]\nprint(a[1])",
-      "solution": "a = [\"اول\", \"دوم\"]\nprint(a[0])"
+      "starterSql": "a = [\"first\", \"second\"]\nprint(a[1])",
+      "solution": "a = [\"first\", \"second\"]\nprint(a[0])"
     },
     {
       "id": "m07-p6",
@@ -234,7 +234,7 @@ export const p07: Module = {
       "explanation": "`len(fruits)` تعداد عضوها یعنی `3` را می‌دهد.",
       "hints": [],
       "kind": "write",
-      "solution": "fruits = [\"سیب\", \"موز\", \"انگور\"]\nprint(len(fruits))"
+      "solution": "fruits = [\"apple\", \"banana\", \"orange\"]\nprint(len(fruits))"
     },
     {
       "id": "m07-t3",

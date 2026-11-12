@@ -10,24 +10,24 @@ export const p05: Module = {
     {
       "id": "m05-if",
       "title": "دستور if",
-      "card": "با `if` می‌توانی کاری را فقط **در صورت درست‌بودن یک شرط** انجام دهی. دقت کن به دو نکته: دو نقطه `:` در انتهای خط، و **تورفتگی** (چهار فاصله) در خط بعد:\n\n```python\nage = 20\nif age >= 18:\n    print(\"بزرگسال\")\n```\n\nاگر شرط درست باشد، خطِ تورفته اجرا می‌شود؛ اگر نه، نادیده گرفته می‌شود.",
+      "card": "با `if` می‌توانی کاری را فقط **در صورت درست‌بودن یک شرط** انجام دهی. دقت کن به دو نکته: دو نقطه `:` در انتهای خط، و **تورفتگی** (چهار فاصله) در خط بعد:\n\n```python\nage = 20\nif age >= 18:\n    print(\"Adult\")\n```\n\nاگر شرط درست باشد، خطِ تورفته اجرا می‌شود؛ اگر نه، نادیده گرفته می‌شود.",
       "predict": {
-        "sql": "x = 5\nif x > 3:\n    print(\"بزرگ\")",
+        "sql": "x = 5\nif x > 3:\n    print(\"Big\")",
         "question": "چه چیزی چاپ می‌شود؟",
         "choices": [
           "چیزی چاپ نمی‌شود",
-          "بزرگ",
+          "Big",
           "خطا"
         ],
         "answer": 1,
-        "why": "چون `5 > 3` درست است، خطِ تورفته اجرا می‌شود و «بزرگ» چاپ می‌شود."
+        "why": "چون `5 > 3` درست است، خطِ تورفته اجرا می‌شود و «Big» چاپ می‌شود."
       },
       "example": {
-        "sql": "n = 10\nif n > 0:\n    print(\"عددِ مثبت\")",
+        "sql": "n = 10\nif n > 0:\n    print(\"Positive number\")",
         "note": "شرط درست است، پس پیام چاپ می‌شود."
       },
       "cheat": {
-        "syntax": "if شرط:\n    کار",
+        "syntax": "if condition:\n    action",
         "note": "اگر شرط درست بود، بلوک تورفته اجرا می‌شود."
       }
     },
@@ -58,20 +58,20 @@ export const p05: Module = {
     {
       "id": "m05-else",
       "title": "else و elif",
-      "card": "با `else` کاری را برای وقتی شرط **غلط** است تعیین می‌کنی، و با `elif` می‌توانی چند شرط را پشت سر هم بررسی کنی:\n\n```python\nscore = 75\nif score >= 90:\n    print(\"عالی\")\nelif score >= 60:\n    print(\"قبول\")\nelse:\n    print(\"مردود\")\n```\n\nپایتون از بالا شرط‌ها را بررسی می‌کند و **اولین** شرطِ درست را اجرا می‌کند و بقیه را رد می‌کند.",
+      "card": "با `else` کاری را برای وقتی شرط **غلط** است تعیین می‌کنی، و با `elif` می‌توانی چند شرط را پشت سر هم بررسی کنی:\n\n```python\nscore = 75\nif score >= 90:\n    print(\"Great\")\nelif score >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")\n```\n\nپایتون از بالا شرط‌ها را بررسی می‌کند و **اولین** شرطِ درست را اجرا می‌کند و بقیه را رد می‌کند.",
       "predict": {
-        "sql": "n = 0\nif n > 0:\n    print(\"مثبت\")\nelse:\n    print(\"مثبت نیست\")",
+        "sql": "n = 0\nif n > 0:\n    print(\"Positive\")\nelse:\n    print(\"Not positive\")",
         "question": "چه چیزی چاپ می‌شود؟",
         "choices": [
-          "مثبت",
-          "مثبت نیست",
+          "Positive",
+          "Not positive",
           "هر دو"
         ],
         "answer": 1,
         "why": "`0 > 0` غلط است، پس بلوکِ `else` اجرا می‌شود."
       },
       "example": {
-        "sql": "x = 50\nif x >= 60:\n    print(\"قبول\")\nelse:\n    print(\"مردود\")",
+        "sql": "x = 50\nif x >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")",
         "note": "شرط غلط است، پس else اجرا می‌شود."
       },
       "cheat": {
@@ -82,7 +82,7 @@ export const p05: Module = {
     {
       "id": "m05-logic",
       "title": "and / or / not",
-      "card": "برای ترکیب چند شرط از این سه کلمه استفاده می‌کنیم:\n\n- `and` هر دو شرط باید درست باشند.\n- `or` کافی است یکی درست باشد.\n- `not` درست را غلط می‌کند و برعکس.\n\n```python\nage = 20\nif age >= 18 and age < 65:\n    print(\"بزرگسال\")\n```\n\nاین‌جا هر دو شرط درست‌اند، پس پیام چاپ می‌شود.",
+      "card": "برای ترکیب چند شرط از این سه کلمه استفاده می‌کنیم:\n\n- `and` هر دو شرط باید درست باشند.\n- `or` کافی است یکی درست باشد.\n- `not` درست را غلط می‌کند و برعکس.\n\n```python\nage = 20\nif age >= 18 and age < 65:\n    print(\"Adult\")\n```\n\nاین‌جا هر دو شرط درست‌اند، پس پیام چاپ می‌شود.",
       "predict": {
         "sql": "print(True and False)",
         "question": "خروجی چیست؟",
@@ -110,14 +110,14 @@ export const p05: Module = {
       "conceptIds": [
         "m05-if"
       ],
-      "prompt": "عددِ ۱۲ را در متغیری بگذار و اگر از ۱۰ بزرگ‌تر بود، متنِ «بزرگ» را چاپ کن.",
-      "explanation": "شرط `12 > 10` درست است، پس «بزرگ» چاپ می‌شود.",
+      "prompt": "عددِ ۱۲ را در متغیری بگذار و اگر از ۱۰ بزرگ‌تر بود، متنِ «Big» را چاپ کن.",
+      "explanation": "شرط `12 > 10` درست است، پس «Big» چاپ می‌شود.",
       "hints": [
         "ساختار: `if n > 10:` و خطِ بعد تورفته.",
         "یادت نرود `:` و چهار فاصله."
       ],
       "kind": "write",
-      "solution": "n = 12\nif n > 10:\n    print(\"بزرگ\")"
+      "solution": "n = 12\nif n > 10:\n    print(\"Big\")"
     },
     {
       "id": "m05-p2",
@@ -125,15 +125,15 @@ export const p05: Module = {
         "m05-compare"
       ],
       "prompt": "بدون اجرا حدس بزن خروجی چیست.",
-      "explanation": "`4 % 2` برابر ۰ است و `0 == 0` درست، پس «زوج» چاپ می‌شود.",
+      "explanation": "`4 % 2` برابر ۰ است و `0 == 0` درست، پس «Even» چاپ می‌شود.",
       "hints": [
         "`x % 2` برای عددِ زوج چند می‌شود؟"
       ],
       "kind": "readQuery",
-      "sql": "x = 4\nif x % 2 == 0:\n    print(\"زوج\")\nelse:\n    print(\"فرد\")",
+      "sql": "x = 4\nif x % 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")",
       "choices": [
-        "زوج",
-        "فرد",
+        "Even",
+        "Odd",
         "چیزی چاپ نمی‌شود"
       ],
       "answer": 0
@@ -143,50 +143,50 @@ export const p05: Module = {
       "conceptIds": [
         "m05-else"
       ],
-      "prompt": "جای خالی را پر کن تا فقط وقتی دو مقدار **برابر** بودند، «برابر» چاپ شود.",
+      "prompt": "جای خالی را پر کن تا فقط وقتی دو مقدار **برابر** بودند، «Equal» چاپ شود.",
       "explanation": "یک `=` برای ذخیره است؛ برای مقایسهٔ برابری `==` به کار می‌رود.",
       "hints": [
         "برای بررسی برابری از `==` استفاده کن (دوتا مساوی)."
       ],
       "kind": "fillBlank",
-      "starterSql": "a = 5\nb = 5\nif a ___ b:\n    print(\"برابر\")",
-      "solution": "a = 5\nb = 5\nif a == b:\n    print(\"برابر\")"
+      "starterSql": "a = 5\nb = 5\nif a ___ b:\n    print(\"Equal\")",
+      "solution": "a = 5\nb = 5\nif a == b:\n    print(\"Equal\")"
     },
     {
       "id": "m05-p4",
       "conceptIds": [
         "m05-logic"
       ],
-      "prompt": "این کد باید «مثبت» چاپ کند ولی خطا می‌دهد. اشکال تورفتگی/علامت را درست کن.",
+      "prompt": "این کد باید «Positive» چاپ کند ولی خطا می‌دهد. اشکال تورفتگی/علامت را درست کن.",
       "explanation": "دستور `if` به `:` و بلوکِ تورفته نیاز دارد.",
       "hints": [
         "انتهای خطِ if باید `:` داشته باشد.",
         "خطِ داخل if باید تورفته باشد (چهار فاصله)."
       ],
       "kind": "fixBug",
-      "starterSql": "n = 3\nif n > 0\nprint(\"مثبت\")",
-      "solution": "n = 3\nif n > 0:\n    print(\"مثبت\")"
+      "starterSql": "n = 3\nif n > 0\nprint(\"Positive\")",
+      "solution": "n = 3\nif n > 0:\n    print(\"Positive\")"
     },
     {
       "id": "m05-p5",
       "conceptIds": [
         "m05-if"
       ],
-      "prompt": "نمره‌ای را در متغیر `score` با مقدار ۵۵ بگذار؛ اگر ۶۰ یا بیشتر بود «قبول» و در غیر این‌صورت «مردود» چاپ کن.",
-      "explanation": "۵۵ کوچک‌تر از ۶۰ است، پس بلوکِ else یعنی «مردود» اجرا می‌شود.",
+      "prompt": "نمره‌ای را در متغیر `score` با مقدار ۵۵ بگذار؛ اگر ۶۰ یا بیشتر بود «Pass» و در غیر این‌صورت «Fail» چاپ کن.",
+      "explanation": "۵۵ کوچک‌تر از ۶۰ است، پس بلوکِ else یعنی «Fail» اجرا می‌شود.",
       "hints": [
         "از `if ... else` استفاده کن.",
         "`score >= 60` را بررسی کن."
       ],
       "kind": "write",
-      "solution": "score = 55\nif score >= 60:\n    print(\"قبول\")\nelse:\n    print(\"مردود\")"
+      "solution": "score = 55\nif score >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")"
     },
     {
       "id": "m05-p6",
       "conceptIds": [
         "m05-compare"
       ],
-      "prompt": "خطوط را مرتب کن تا اگر عدد منفی بود «منفی» و وگرنه «منفی نیست» چاپ شود.",
+      "prompt": "خطوط را مرتب کن تا اگر عدد منفی بود «Negative» و وگرنه «Not negative» چاپ شود.",
       "explanation": "ترتیب درست: ساختِ متغیر، سپس `if` با بلوک تورفته، سپس `else` با بلوک تورفته.",
       "hints": [
         "اول متغیر را بساز، بعد if و else؛ خطوط چاپ باید تورفته باشند."
@@ -195,19 +195,19 @@ export const p05: Module = {
       "blocks": [
         "n = -3",
         "if n < 0:",
-        "    print(\"منفی\")",
+        "    print(\"Negative\")",
         "else:",
-        "    print(\"منفی نیست\")"
+        "    print(\"Not negative\")"
       ],
       "wrongOrder": [
         "if n < 0:",
         "n = -3",
-        "    print(\"منفی\")",
+        "    print(\"Negative\")",
         "else:",
-        "    print(\"منفی نیست\")"
+        "    print(\"Not negative\")"
       ],
       "distractors": [
-        "print(\"منفی\")"
+        "print(\"Negative\")"
       ]
     }
   ],
@@ -234,11 +234,11 @@ export const p05: Module = {
       "conceptIds": [
         "m05-compare"
       ],
-      "prompt": "عددِ ۷ را در متغیری بگذار و اگر فرد بود «فرد» چاپ کن (راهنما: `% 2 == 1`).",
-      "explanation": "`7 % 2` برابر ۱ است، پس شرط درست و «فرد» چاپ می‌شود.",
+      "prompt": "عددِ ۷ را در متغیری بگذار و اگر فرد بود «odd» چاپ کن (راهنما: `% 2 == 1`).",
+      "explanation": "`7 % 2` برابر ۱ است، پس شرط درست و «odd» چاپ می‌شود.",
       "hints": [],
       "kind": "write",
-      "solution": "n = 7\nif n % 2 == 1:\n    print(\"فرد\")"
+      "solution": "n = 7\nif n % 2 == 1:\n    print(\"odd\")"
     },
     {
       "id": "m05-t3",
@@ -246,14 +246,14 @@ export const p05: Module = {
         "m05-else"
       ],
       "prompt": "خروجی این کد چیست؟",
-      "explanation": "`8 > 10` غلط ولی `8 > 5` درست است، پس اولین شرطِ درست یعنی «ب» اجرا می‌شود.",
+      "explanation": "`8 > 10` غلط ولی `8 > 5` درست است، پس اولین شرطِ درست یعنی «B» اجرا می‌شود.",
       "hints": [],
       "kind": "readQuery",
-      "sql": "x = 8\nif x > 10:\n    print(\"الف\")\nelif x > 5:\n    print(\"ب\")\nelse:\n    print(\"ج\")",
+      "sql": "x = 8\nif x > 10:\n    print(\"A\")\nelif x > 5:\n    print(\"B\")\nelse:\n    print(\"C\")",
       "choices": [
-        "الف",
-        "ب",
-        "ج"
+        "A",
+        "B",
+        "C"
       ],
       "answer": 1
     },
@@ -283,8 +283,8 @@ export const p05: Module = {
       "explanation": "`and` هر دو شرط را لازم می‌کند؛ هر دو درست‌اند پس پیام چاپ می‌شود.",
       "hints": [],
       "kind": "fillBlank",
-      "starterSql": "age = 20\nif age >= 18 ___ age < 65:\n    print(\"بزرگسال\")",
-      "solution": "age = 20\nif age >= 18 and age < 65:\n    print(\"بزرگسال\")"
+      "starterSql": "age = 20\nif age >= 18 ___ age < 65:\n    print(\"Adult\")",
+      "solution": "age = 20\nif age >= 18 and age < 65:\n    print(\"Adult\")"
     }
   ],
   "games": [

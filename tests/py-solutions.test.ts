@@ -73,3 +73,21 @@ describe('every exercise: solution passes, starter/wrong order does not', () => 
     }
   }
 });
+
+describe('Persian lessons, English code', () => {
+  const FA = /[\u0600-\u06FF]/;
+  const CODE = new Set(['sql', 'solution', 'starterSql', 'syntax', 'blocks', 'distractors', 'tests', 'stdin', 'wrongOrder']);
+  it('no Persian inside any code (code fields, ```blocks``` and `inline code`)', () => {
+    const bad: string[] = [];
+    const walk = (v: unknown, k: string, path: string) => {
+      if (typeof v === 'string') {
+        if (CODE.has(k) && FA.test(v)) bad.push(path);
+        for (const m of v.match(/```[\s\S]*?```/g) ?? []) if (FA.test(m)) bad.push(`${path} block`);
+        for (const m of v.replace(/```[\s\S]*?```/g, '').match(/`[^`]+`/g) ?? []) if (FA.test(m)) bad.push(`${path} ${m}`);
+      } else if (Array.isArray(v)) v.forEach((x, i) => walk(x, k, `${path}/${i}`));
+      else if (v && typeof v === 'object') for (const [kk, vv] of Object.entries(v)) walk(vv, kk, `${path}/${kk}`);
+    };
+    for (const m of PYTHON_MODULES) walk(m, '', m.id);
+    expect(bad).toEqual([]);
+  });
+});

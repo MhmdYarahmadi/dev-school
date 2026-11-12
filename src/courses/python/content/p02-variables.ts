@@ -10,7 +10,7 @@ export const p02: Module = {
     {
       "id": "m02-vars",
       "title": "متغیر چیست؟",
-      "card": "یک **متغیر** مثل یک جعبهٔ برچسب‌دار است که یک مقدار را در آن می‌گذاری. با علامت `=` مقدار را در متغیر ذخیره می‌کنیم:\n\n```python\nname = \"سارا\"\nage = 20\nprint(name)\nprint(age)\n```\n\nسمت چپِ `=` **نامِ** متغیر است و سمت راست **مقداری** که در آن ذخیره می‌شود. بعداً هر جا نام را بنویسی، پایتون مقدارش را جایش می‌گذارد.",
+      "card": "یک **متغیر** مثل یک جعبهٔ برچسب‌دار است که یک مقدار را در آن می‌گذاری. با علامت `=` مقدار را در متغیر ذخیره می‌کنیم:\n\n```python\nname = \"Sara\"\nage = 20\nprint(name)\nprint(age)\n```\n\nسمت چپِ `=` **نامِ** متغیر است و سمت راست **مقداری** که در آن ذخیره می‌شود. بعداً هر جا نام را بنویسی، پایتون مقدارش را جایش می‌گذارد.",
       "predict": {
         "sql": "x = 10\nprint(x)",
         "question": "چه چیزی چاپ می‌شود؟",
@@ -23,7 +23,7 @@ export const p02: Module = {
         "why": "وقتی `print(x)` می‌نویسی، پایتون نامِ `x` را با مقدارش یعنی `10` جایگزین می‌کند."
       },
       "example": {
-        "sql": "city = \"تهران\"\nprint(city)",
+        "sql": "city = \"Tehran\"\nprint(city)",
         "note": "مقدار داخل متغیر city چاپ می‌شود."
       },
       "cheat": {
@@ -34,7 +34,7 @@ export const p02: Module = {
     {
       "id": "m02-types",
       "title": "انواع داده",
-      "card": "هر مقدار در پایتون یک **نوع** دارد. چهار نوع پایه برای شروع:\n\n- **`int`** عدد صحیح: `7`\n- **`float`** عدد اعشاری: `3.5`\n- **`str`** متن (رشته): `\"سلام\"`\n- **`bool`** درست یا غلط: `True` یا `False`\n\nدقت کن که `7` (عدد) با `\"7\"` (متن) فرق دارد.",
+      "card": "هر مقدار در پایتون یک **نوع** دارد. چهار نوع پایه برای شروع:\n\n- **`int`** عدد صحیح: `7`\n- **`float`** عدد اعشاری: `3.5`\n- **`str`** متن (رشته): `\"Hello\"`\n- **`bool`** درست یا غلط: `True` یا `False`\n\nدقت کن که `7` (عدد) با `\"7\"` (متن) فرق دارد.",
       "predict": {
         "sql": "print(True)",
         "question": "خروجی چیست؟",
@@ -58,10 +58,10 @@ export const p02: Module = {
     {
       "id": "m02-type",
       "title": "نوع را با type ببین",
-      "card": "با دستور `type()` می‌توانی نوعِ یک مقدار را ببینی:\n\n```python\nprint(type(7))        # <class 'int'>\nprint(type(\"سلام\"))   # <class 'str'>\nprint(type(2.5))      # <class 'float'>\n```\n\nاین کار برای وقتی مفید است که مطمئن نیستی با عدد سروکار داری یا با متن.",
+      "card": "با دستور `type()` می‌توانی نوعِ یک مقدار را ببینی:\n\n```python\nprint(type(7))        # <class 'int'>\nprint(type(\"Hello\"))   # <class 'str'>\nprint(type(2.5))      # <class 'float'>\n```\n\nاین کار برای وقتی مفید است که مطمئن نیستی با عدد سروکار داری یا با متن.",
       "predict": {
-        "sql": "print(type(\"۵\"))",
-        "question": "نوعِ \"۵\" چیست؟",
+        "sql": "print(type(\"5\"))",
+        "question": "نوعِ \"5\" چیست؟",
         "choices": [
           "<class 'int'>",
           "<class 'str'>",
@@ -117,7 +117,7 @@ export const p02: Module = {
         "بعد `print(name)`"
       ],
       "kind": "write",
-      "solution": "name = \"سارا\"\nprint(name)",
+      "solution": "name = \"Sara\"\nprint(name)",
       "python": {
         "nonEmpty": true
       }
@@ -196,15 +196,15 @@ export const p02: Module = {
       ],
       "kind": "parsons",
       "blocks": [
-        "color = \"آبی\"",
+        "color = \"blue\"",
         "print(color)"
       ],
       "wrongOrder": [
         "print(color)",
-        "color = \"آبی\""
+        "color = \"blue\""
       ],
       "distractors": [
-        "print(color = \"آبی\")"
+        "print(color = \"blue\")"
       ]
     }
   ],

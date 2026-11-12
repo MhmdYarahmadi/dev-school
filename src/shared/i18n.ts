@@ -68,15 +68,30 @@ export function t(en: string, vars?: Record<string, string | number>): string {
 
 const ISO = (x: string) => `\u2068${x}\u2069`;
 
+const LETTERS = /[\u0621-\u064A\u066E-\u06D3\u06FA-\u06FF]/;
+
 /**
- * Right to left, a path ("~/shop", "origin/main") or a “quoted” English title would be reordered
- * by the words around it ("shop/~"). Those pieces are wrapped in Unicode isolates. Text in
- * backticks is left alone (it's shown as code, already isolated, and may be copied).
+ * Right to left, English inside Persian text gets reordered by the words around it: a path
+ * ("~/shop" shows as "shop/~"), a “quoted” title, or **Hello, world!** (its "!" jumps to the front).
+ * Those pieces are wrapped in Unicode isolates, and in course content, so is a one-line string that
+ * is all English (a choice showing program output). Text in backticks is left alone (it's shown as code, already
+ * isolated, and may be copied).
  */
-export function isolateLtr(s: string): string {
+/** `whole`: also wrap a one-line string that is all English (course content only, not interface strings). */
+export function isolateLtr(s: string, whole = false): string {
+  if (whole && !LETTERS.test(s) && !s.includes('\n') && /[A-Za-z]/.test(s) && !s.startsWith('\u2068')) return ISO(s);
+  const latin = (x: string) => !LETTERS.test(x) && /[A-Za-z]/.test(x) && !x.includes('\u2068');
   return s
     .split(/(`[^`]*`)/)
-    .map((part, i) => (i % 2 ? part : part.replace(/“[^”]*”/g, ISO).replace(/(?<![\w\u2068])~?[\w.-]*\/[\w./-]*\w/g, ISO)))
+    .map((part, i) =>
+      i % 2
+        ? part
+        : part
+            .replace(/“[^”]*”/g, (q) => (q.includes('\u2068') ? q : ISO(q)))
+            .replace(/«([^»]*)»/g, (m, x: string) => (latin(x) ? `«${ISO(x)}»` : m))
+            .replace(/\*\*([^*\n]+)\*\*/g, (m, x: string) => (latin(x) ? `**${ISO(x)}**` : m))
+            .replace(/(?<![\w\u2068])~?[\w.-]*\/[\w./-]*\w/g, ISO),
+    )
     .join('');
 }
 
@@ -160,8 +175,14 @@ export function walkProse(course: object, visit: (path: string, value: string, s
 export function applyContentTable<T extends object>(content: T, tableByPath: Record<string, string>): T {
   walkProse(content, (path, _v, set) => {
     const tr = tableByPath[path];
-    if (tr) set(isolateLtr(tr));
+    if (tr) set(isolateLtr(tr, true));
   });
+  return content;
+}
+
+/** Right to left: isolates the English inside a course's own text (a course written in Persian). */
+export function isolateContent<T extends object>(content: T): T {
+  walkProse(content, (_p, v, set) => set(isolateLtr(v, true)));
   return content;
 }
 

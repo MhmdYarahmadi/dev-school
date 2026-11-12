@@ -12,8 +12,8 @@ export const p06: Module = {
       "title": "حلقهٔ for و range",
       "card": "با حلقهٔ `for` یک کار را چند بار تکرار می‌کنیم. `range(n)` اعداد را از `0` تا قبل از `n` می‌سازد:\n\n```python\nfor i in range(3):\n    print(i)\n```\n\nاین کد `0`، `1` و `2` را چاپ می‌کند. متغیر `i` در هر دور مقدار بعدی را می‌گیرد. بلوکِ داخل حلقه باید **تورفته** باشد.",
       "predict": {
-        "sql": "for i in range(3):\n    print(\"سلام\")",
-        "question": "«سلام» چند بار چاپ می‌شود؟",
+        "sql": "for i in range(3):\n    print(\"Hello\")",
+        "question": "«Hello» چند بار چاپ می‌شود؟",
         "choices": [
           "۱ بار",
           "۳ بار",
@@ -34,7 +34,7 @@ export const p06: Module = {
     {
       "id": "m06-range2",
       "title": "range با شروع و گام",
-      "card": "`range` می‌تواند **شروع**، **پایان** و **گام** بگیرد: `range(شروع, پایان, گام)`:\n\n```python\nfor i in range(1, 6):\n    print(i)        # 1 2 3 4 5\n\nfor i in range(0, 10, 2):\n    print(i)        # 0 2 4 6 8\n```\n\nپایان همیشه **شامل نمی‌شود**. گام (عدد سوم) تعیین می‌کند چند تا چند تا جلو برود.",
+      "card": "`range` می‌تواند **شروع**، **پایان** و **گام** بگیرد: `range(start, stop, step)`:\n\n```python\nfor i in range(1, 6):\n    print(i)        # 1 2 3 4 5\n\nfor i in range(0, 10, 2):\n    print(i)        # 0 2 4 6 8\n```\n\nپایان همیشه **شامل نمی‌شود**. گام (عدد سوم) تعیین می‌کند چند تا چند تا جلو برود.",
       "predict": {
         "sql": "for i in range(2, 5):\n    print(i)",
         "question": "چه اعدادی چاپ می‌شوند؟",
@@ -68,14 +68,14 @@ export const p06: Module = {
           "1 2 3"
         ],
         "answer": 0,
-        "why": "تا وقتی `n > 0` است چاپ می‌کند: ۳، ۲، ۱؛ وقتی n به ۰ برسد شرط غلط می‌شود."
+        "why": "تا وقتی `n > 0` است چاپ می‌کند: 3، 2، 1؛ وقتی n به 0 برسد شرط غلط می‌شود."
       },
       "example": {
         "sql": "i = 1\nwhile i <= 3:\n    print(i)\n    i = i + 1",
         "note": "چاپ می‌کند 1 و 2 و 3."
       },
       "cheat": {
-        "syntax": "while شرط:",
+        "syntax": "while condition:",
         "note": "تا وقتی شرط درست است تکرار می‌شود."
       }
     },

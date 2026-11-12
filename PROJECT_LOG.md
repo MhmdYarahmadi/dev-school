@@ -1001,3 +1001,11 @@ After one online visit, all three courses open and work with no connection; prog
 - **Fixes found on the way:** program output reads in the direction of each line (Persian output right to left); Persian letters inside code and the editor no longer fall apart (a Persian-only `Vazirmatn Code` font with `unicode-range` comes first in the code font list, so Latin code stays monospace); exercise explanations render their `code`.
 - **Tests:** offline tests check Pyodide isn't precached, the service worker gets the version, and the worker loads the package's version from this site (no CDN). 1,472 tests pass; build OK. Deploys use rsync, so the 14 MB uploads once.
 - Not deployed yet.
+
+## 58. Python course: English inside code, Persian lessons (2026-11-12)
+- **Why:** the owner prefers the text students write in code to be English (`print("Hello, world!")`); lessons and explanations stay in Persian.
+- **How:** `scripts/i18n/python-english-code.mjs` sends Gemini (agy, gemini-3.8-flash-high) each concept or exercise that had Persian inside code (69 units): strings, comments, printed output, input prompts, stdin and test asserts become English, and the Persian sentences that quote them are updated to match. Every reply is checked: same structure (ids, kinds, answers, list lengths), no Persian left in code, Persian prose still Persian; rejected replies go back with the reason. Gemini sometimes tried to run a command (blocked in headless mode, empty reply): the prompt now says to answer without tools.
+- **Half-spaces:** Gemini's replies dropped the zero-width non-joiner (U+200C) everywhere ("می‌شود" → "میشود"). `scripts/i18n/restore-zwnj.mjs` puts the original spelling back word by word (same field first), so no Persian is written by Claude. After it, Gemini added no new Persian words; the half-space words that are gone were in code comments, now English.
+- **Right to left:** English inside Persian sentences (**Hello, world!**, «Hello <name>») and all-English choices are wrapped in Unicode isolates (`isolateContent`, course content only), so "!" stays at the end.
+- **Tests:** a predict/choice whose real output is one of the choices must be the marked answer; a guard that no Persian is inside any Python code. 1,473 tests pass; build OK. Checked in Chrome (local server, throwaway account deleted).
+- Not deployed yet.

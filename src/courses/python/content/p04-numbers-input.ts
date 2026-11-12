@@ -10,7 +10,7 @@ export const p04: Module = {
     {
       "id": "m04-ops",
       "title": "عملگرهای ریاضی",
-      "card": "پایتون یک ماشین‌حساب قوی است:\n\n```python\nprint(7 + 2)   # جمع → 9\nprint(7 - 2)   # تفریق → 5\nprint(7 * 2)   # ضرب → 14\nprint(7 / 2)   # تقسیم → 3.5\n```\n\nدقت کن که `/` همیشه یک عدد **اعشاری** (float) می‌دهد؛ حتی `4 / 2` می‌شود `2.0`.",
+      "card": "پایتون یک ماشین‌حساب قوی است:\n\n```python\nprint(7 + 2)   # addition → 9\nprint(7 - 2)   # subtraction → 5\nprint(7 * 2)   # multiplication → 14\nprint(7 / 2)   # division → 3.5\n```\n\nدقت کن که `/` همیشه یک عدد **اعشاری** (float) می‌دهد؛ حتی `4 / 2` می‌شود `2.0`.",
       "predict": {
         "sql": "print(10 / 2)",
         "question": "خروجی چیست؟",
@@ -24,7 +24,7 @@ export const p04: Module = {
       },
       "example": {
         "sql": "print(3 + 4 * 2)",
-        "note": "اول ضرب، بعد جمع: نتیجه ۱۱."
+        "note": "اول ضرب، بعد جمع: نتیجه 11."
       },
       "cheat": {
         "syntax": "+  -  *  /",
@@ -58,7 +58,7 @@ export const p04: Module = {
     {
       "id": "m04-input",
       "title": "خواندن ورودی با input",
-      "card": "با `input()` می‌توانی از کاربر چیزی بپرسی. متنی که کاربر می‌نویسد برمی‌گردد و معمولاً در یک متغیر ذخیره‌اش می‌کنیم:\n\n```python\nname = input(\"نامت چیست؟ \")\nprint(\"سلام \" + name)\n```\n\n**نکتهٔ مهم:** `input()` همیشه یک **رشته (متن)** برمی‌گرداند، حتی اگر کاربر عدد بنویسد.",
+      "card": "با `input()` می‌توانی از کاربر چیزی بپرسی. متنی که کاربر می‌نویسد برمی‌گردد و معمولاً در یک متغیر ذخیره‌اش می‌کنیم:\n\n```python\nname = input(\"What is your name? \")\nprint(\"Hello \" + name)\n```\n\n**نکتهٔ مهم:** `input()` همیشه یک **رشته (متن)** برمی‌گرداند، حتی اگر کاربر عدد بنویسد.",
       "predict": {
         "sql": "x = input()\nprint(type(x))",
         "question": "نوعِ چیزی که input می‌دهد چیست؟",
@@ -71,18 +71,18 @@ export const p04: Module = {
         "why": "`input()` همیشه متن (str) برمی‌گرداند، حتی وقتی کاربر عدد تایپ کند."
       },
       "example": {
-        "sql": "city = input(\"شهرت؟ \")\nprint(city)",
+        "sql": "city = input(\"Your city? \")\nprint(city)",
         "note": "هر چه بنویسی همان چاپ می‌شود."
       },
       "cheat": {
-        "syntax": "x = input(\"پیام\")",
+        "syntax": "x = input(\"message\")",
         "note": "یک متن از کاربر می‌گیرد."
       }
     },
     {
       "id": "m04-convert",
       "title": "تبدیل نوع",
-      "card": "چون `input()` متن می‌دهد، برای محاسبه باید آن را به عدد **تبدیل** کنی:\n\n```python\nage = int(input(\"سنت؟ \"))\nprint(age + 1)\n```\n\n- `int(...)` متن را به عدد صحیح تبدیل می‌کند.\n- `float(...)` به عدد اعشاری.\n- `str(...)` یک عدد را به متن.\n\nاگر `\"5\" + 1` بنویسی خطا می‌گیری، ولی `int(\"5\") + 1` می‌شود `6`.",
+      "card": "چون `input()` متن می‌دهد، برای محاسبه باید آن را به عدد **تبدیل** کنی:\n\n```python\nage = int(input(\"Your age? \"))\nprint(age + 1)\n```\n\n- `int(...)` متن را به عدد صحیح تبدیل می‌کند.\n- `float(...)` به عدد اعشاری.\n- `str(...)` یک عدد را به متن.\n\nاگر `\"5\" + 1` بنویسی خطا می‌گیری، ولی `int(\"5\") + 1` می‌شود `6`.",
       "predict": {
         "sql": "print(int(\"3\") + 2)",
         "question": "خروجی چیست؟",
@@ -156,16 +156,16 @@ export const p04: Module = {
       "conceptIds": [
         "m04-convert"
       ],
-      "prompt": "یک نام از کاربر بگیر و با `print` جملهٔ «سلام <نام>» را چاپ کن. (برای آزمایش، ورودی «نگار» داده می‌شود.)",
-      "explanation": "`input()` متن کاربر را می‌دهد و تو آن را به سلام چسباندی.",
+      "prompt": "یک نام از کاربر بگیر و با `print` جملهٔ «Hello <name>» را چاپ کن. (برای آزمایش، ورودی «Negar» داده می‌شود.)",
+      "explanation": "`input()` متن کاربر را می‌دهد و تو آن را به Hello چسباندی.",
       "hints": [
         "ورودی را در متغیر بگیر: `name = input()`",
-        "بعد با `+` به «سلام » بچسبان."
+        "بعد با `+` به «Hello » بچسبان."
       ],
       "kind": "write",
-      "solution": "name = input()\nprint(\"سلام \" + name)",
+      "solution": "name = input()\nprint(\"Hello \" + name)",
       "python": {
-        "stdin": "نگار"
+        "stdin": "Negar"
       }
     },
     {
@@ -206,7 +206,7 @@ export const p04: Module = {
         "n = int(input())"
       ],
       "distractors": [
-        "print(n * 2)  # قبل از گرفتن n"
+        "print(n * 2)  # before getting n"
       ],
       "python": {
         "stdin": "6"

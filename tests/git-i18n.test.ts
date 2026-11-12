@@ -13,6 +13,7 @@ import { problem } from '../scripts/i18n/validate.mjs';
 import { applyContentTable, initLang, inEnglish, isolateLtr, lang, setTable, t, walkProse } from '../src/shared/i18n';
 import { gitContent } from '../src/courses/git/content';
 import { evaluateGit } from '../src/courses/git/check';
+import { PYTHON_MODULES } from '../src/courses/python/content/index';
 import { detectGitMisconceptions } from '../src/courses/git/misconceptions';
 
 const ui = uiFa as Record<string, string>;
@@ -74,6 +75,16 @@ describe('running in Farsi', () => {
     expect(t('Sam pushed “{m}”.', { m: 'Hours' })).toBe('Sam pushed \u2068“Hours”\u2069.');
     expect(t('Clone into {d} from team/shop, then `cd ~/shop`.', { d: '~/shop' })).toBe('Clone into \u2068~/shop\u2069 from \u2068team/shop\u2069, then `cd ~/shop`.');
     expect(t('{a} → {b}, round {n}/{m}', { a: '160e423', b: '3c5e943', n: 1, m: 5 })).toBe('160e423 → 3c5e943, round \u20681/5\u2069');
+    // course content (not interface strings): English in «…» or **bold**, and all-English one-liners
+    // (real sentences from the Python course, so no Persian is written here)
+    const prose = PYTHON_MODULES.flatMap((m) => [...m.practice, ...m.test].map((e) => e.prompt));
+    const bold = prose.find((x) => /\*\*Hello, world!\*\*/.test(x))!;
+    expect(isolateLtr(bold, true)).toBe(bold.replace('**Hello, world!**', '**\u2068Hello, world!\u2069**'));
+    const quoted = prose.find((x) => x.includes('«Hello <name>»'))!;
+    expect(isolateLtr(quoted, true)).toContain('«\u2068Hello <name>\u2069»');
+    expect(isolateLtr('Hello, world!', true)).toBe('\u2068Hello, world!\u2069');
+    expect(isolateLtr('Hello, world!')).toBe('Hello, world!');
+    expect(isolateLtr(content['g01/title'], true)).toBe(content['g01/title']); // Persian stays as it is
     expect(inEnglish(() => t('{n} pts', { n: 5 }))).toBe('5 pts');
     setTable(ui);
   });

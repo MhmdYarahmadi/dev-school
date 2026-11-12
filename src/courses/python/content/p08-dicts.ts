@@ -10,7 +10,7 @@ export const p08: Module = {
     {
       "id": "m08-make",
       "title": "کلید و مقدار",
-      "card": "یک **دیکشنری** جفت‌های «کلید: مقدار» را داخل `{}` نگه می‌دارد. هر مقدار را با **کلیدش** پیدا می‌کنی، نه با شماره:\n\n```python\nperson = {\"name\": \"سارا\", \"age\": 20}\nprint(person[\"name\"])   # سارا\n```\n\nاین‌جا `\"name\"` و `\"age\"` کلید هستند و `\"سارا\"` و `20` مقدارها. برای گرفتن یک مقدار، کلیدش را داخل `[]` می‌نویسی.",
+      "card": "یک **دیکشنری** جفت‌های «کلید: مقدار» را داخل `{}` نگه می‌دارد. هر مقدار را با **کلیدش** پیدا می‌کنی، نه با شماره:\n\n```python\nperson = {\"name\": \"Sara\", \"age\": 20}\nprint(person[\"name\"])   # Sara\n```\n\nاین‌جا `\"name\"` و `\"age\"` کلید هستند و `\"Sara\"` و `20` مقدارها. برای گرفتن یک مقدار، کلیدش را داخل `[]` می‌نویسی.",
       "predict": {
         "sql": "d = {\"a\": 1, \"b\": 2}\nprint(d[\"b\"])",
         "question": "خروجی چیست؟",
@@ -23,7 +23,7 @@ export const p08: Module = {
         "why": "با کلیدِ `\"b\"` مقدارِ متناظرش یعنی `2` را می‌گیریم."
       },
       "example": {
-        "sql": "car = {\"brand\": \"پراید\", \"year\": 1400}\nprint(car[\"brand\"])",
+        "sql": "car = {\"brand\": \"Pride\", \"year\": 1400}\nprint(car[\"brand\"])",
         "note": "مقدارِ کلیدِ brand چاپ می‌شود."
       },
       "cheat": {
@@ -34,7 +34,7 @@ export const p08: Module = {
     {
       "id": "m08-edit",
       "title": "افزودن و تغییر",
-      "card": "با همان `[]` می‌توانی مقداری را **عوض** کنی یا کلیدِ **جدید** اضافه کنی:\n\n```python\nperson = {\"name\": \"سارا\"}\nperson[\"age\"] = 20      # کلید جدید\nperson[\"name\"] = \"مینا\" # تغییر مقدار\nprint(person)\n```\n\nاگر کلید وجود داشته باشد مقدارش عوض می‌شود؛ اگر نباشد، یک جفتِ جدید ساخته می‌شود.",
+      "card": "با همان `[]` می‌توانی مقداری را **عوض** کنی یا کلیدِ **جدید** اضافه کنی:\n\n```python\nperson = {\"name\": \"Sara\"}\nperson[\"age\"] = 20      # new key\nperson[\"name\"] = \"Mina\" # change value\nprint(person)\n```\n\nاگر کلید وجود داشته باشد مقدارش عوض می‌شود؛ اگر نباشد، یک جفتِ جدید ساخته می‌شود.",
       "predict": {
         "sql": "d = {\"x\": 1}\nd[\"y\"] = 2\nprint(len(d))",
         "question": "خروجی چیست؟",
@@ -47,7 +47,7 @@ export const p08: Module = {
         "why": "بعد از افزودنِ کلیدِ `\"y\"`، دیکشنری دو جفت دارد، پس `len` مقدار `2` می‌دهد."
       },
       "example": {
-        "sql": "score = {}\nscore[\"علی\"] = 18\nprint(score)",
+        "sql": "score = {}\nscore[\"Ali\"] = 18\nprint(score)",
         "note": "از دیکشنری خالی شروع و یک جفت اضافه شد."
       },
       "cheat": {
@@ -58,7 +58,7 @@ export const p08: Module = {
     {
       "id": "m08-loop",
       "title": "پیمایش دیکشنری",
-      "card": "با حلقهٔ `for` روی **کلیدها** حرکت می‌کنی و با هر کلید به مقدارش می‌رسی:\n\n```python\nperson = {\"name\": \"سارا\", \"age\": 20}\nfor key in person:\n    print(key, person[key])\n```\n\nهمچنین می‌توانی با `.get(\"key\")` یک مقدار را امن بگیری؛ اگر کلید نبود به‌جای خطا مقدارِ `None` می‌دهد.",
+      "card": "با حلقهٔ `for` روی **کلیدها** حرکت می‌کنی و با هر کلید به مقدارش می‌رسی:\n\n```python\nperson = {\"name\": \"Sara\", \"age\": 20}\nfor key in person:\n    print(key, person[key])\n```\n\nهمچنین می‌توانی با `.get(\"key\")` یک مقدار را امن بگیری؛ اگر کلید نبود به‌جای خطا مقدارِ `None` می‌دهد.",
       "predict": {
         "sql": "d = {\"a\": 1, \"b\": 2}\nfor k in d:\n    print(k)",
         "question": "چه چیزی چاپ می‌شود؟",
@@ -71,7 +71,7 @@ export const p08: Module = {
         "why": "حلقه روی **کلیدها** حرکت می‌کند، پس `a` و `b` چاپ می‌شوند."
       },
       "example": {
-        "sql": "ages = {\"علی\": 17, \"رضا\": 20}\nfor name in ages:\n    print(name, ages[name])",
+        "sql": "ages = {\"Ali\": 17, \"Reza\": 20}\nfor name in ages:\n    print(name, ages[name])",
         "note": "هر کلید همراه مقدارش چاپ می‌شود."
       },
       "cheat": {
@@ -82,7 +82,7 @@ export const p08: Module = {
     {
       "id": "m08-others",
       "title": "اشاره‌ای به tuple و set",
-      "card": "دو ساختارِ دیگر که خوب است بشناسی:\n\n- **`tuple`** مثل لیست است ولی داخل `()` و **تغییرناپذیر**: `point = (3, 4)`\n- **`set`** مجموعه‌ای از مقدارهای **یکتا** داخل `{}`: `s = {1, 2, 2, 3}` که می‌شود `{1, 2, 3}`\n\n```python\nnums = {1, 2, 2, 3}\nprint(len(nums))   # 3 (تکراری حذف می‌شود)\n```\n\nفعلاً فقط بدان که این‌ها هم وجود دارند؛ بعداً بیشتر با آن‌ها کار می‌کنی.",
+      "card": "دو ساختارِ دیگر که خوب است بشناسی:\n\n- **`tuple`** مثل لیست است ولی داخل `()` و **تغییرناپذیر**: `point = (3, 4)`\n- **`set`** مجموعه‌ای از مقدارهای **یکتا** داخل `{}`: `s = {1, 2, 2, 3}` که می‌شود `{1, 2, 3}`\n\n```python\nnums = {1, 2, 2, 3}\nprint(len(nums))   # 3 (duplicates are removed)\n```\n\nفعلاً فقط بدان که این‌ها هم وجود دارند؛ بعداً بیشتر با آن‌ها کار می‌کنی.",
       "predict": {
         "sql": "print(len({1, 2, 2, 3}))",
         "question": "خروجی چیست؟",
@@ -117,7 +117,7 @@ export const p08: Module = {
         "بعد `person[\"name\"]` را چاپ کن."
       ],
       "kind": "write",
-      "solution": "person = {\"name\": \"سارا\"}\nprint(person[\"name\"])",
+      "solution": "person = {\"name\": \"Sara\"}\nprint(person[\"name\"])",
       "python": {
         "nonEmpty": true
       }
@@ -152,8 +152,8 @@ export const p08: Module = {
         "برای افزودن کلید از `p[\"age\"] = ...` استفاده کن."
       ],
       "kind": "fillBlank",
-      "starterSql": "p = {\"name\": \"رضا\"}\np___ = 25\nprint(p)",
-      "solution": "p = {\"name\": \"رضا\"}\np[\"age\"] = 25\nprint(p)"
+      "starterSql": "p = {\"name\": \"Reza\"}\np___ = 25\nprint(p)",
+      "solution": "p = {\"name\": \"Reza\"}\np[\"age\"] = 25\nprint(p)"
     },
     {
       "id": "m08-p4",
@@ -195,16 +195,16 @@ export const p08: Module = {
       "kind": "parsons",
       "blocks": [
         "scores = {}",
-        "scores[\"علی\"] = 18",
+        "scores[\"Ali\"] = 18",
         "print(scores)"
       ],
       "wrongOrder": [
-        "scores[\"علی\"] = 18",
+        "scores[\"Ali\"] = 18",
         "scores = {}",
         "print(scores)"
       ],
       "distractors": [
-        "scores[\"علی\"]"
+        "scores[\"Ali\"]"
       ]
     }
   ],
@@ -215,13 +215,13 @@ export const p08: Module = {
         "m08-make"
       ],
       "prompt": "خروجی این کد چیست؟",
-      "explanation": "با کلیدِ `\"city\"` مقدارش یعنی «تهران» گرفته می‌شود.",
+      "explanation": "با کلیدِ `\"city\"` مقدارش یعنی «Tehran» گرفته می‌شود.",
       "hints": [],
       "kind": "readQuery",
-      "sql": "d = {\"city\": \"تهران\"}\nprint(d[\"city\"])",
+      "sql": "d = {\"city\": \"Tehran\"}\nprint(d[\"city\"])",
       "choices": [
         "city",
-        "تهران",
+        "Tehran",
         "خطا"
       ],
       "answer": 1
@@ -263,19 +263,19 @@ export const p08: Module = {
       "explanation": "کلید باید داخل گیومه و کروشه باشد: `p[\"name\"]`.",
       "hints": [],
       "kind": "fillBlank",
-      "starterSql": "p = {\"name\": \"آوا\", \"age\": 19}\nprint(p[___])",
-      "solution": "p = {\"name\": \"آوا\", \"age\": 19}\nprint(p[\"name\"])"
+      "starterSql": "p = {\"name\": \"Ava\", \"age\": 19}\nprint(p[___])",
+      "solution": "p = {\"name\": \"Ava\", \"age\": 19}\nprint(p[\"name\"])"
     },
     {
       "id": "m08-t5",
       "conceptIds": [
         "m08-make"
       ],
-      "prompt": "دیکشنریِ `{\"علی\": 17, \"رضا\": 20}` را بساز و با حلقه هر کلید را همراه مقدارش چاپ کن.",
+      "prompt": "دیکشنریِ `{\"Ali\": 17, \"Reza\": 20}` را بساز و با حلقه هر کلید را همراه مقدارش چاپ کن.",
       "explanation": "حلقه روی کلیدها حرکت می‌کند و با `ages[name]` به هر مقدار می‌رسی.",
       "hints": [],
       "kind": "write",
-      "solution": "ages = {\"علی\": 17, \"رضا\": 20}\nfor name in ages:\n    print(name, ages[name])"
+      "solution": "ages = {\"Ali\": 17, \"Reza\": 20}\nfor name in ages:\n    print(name, ages[name])"
     }
   ],
   "games": [

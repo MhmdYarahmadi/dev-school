@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import { setCourse } from '../shared/course';
+import { isolateContent } from '../shared/i18n';
 import { configureProgress } from '../progress/store';
 import { configureSync } from '../account/api';
 import { pythonCourse } from '../courses/python/course';
@@ -14,6 +15,8 @@ import '../styles.css';
 import '@fontsource-variable/vazirmatn';
 
 // Must run before the app renders: selects the course, its saved progress and its sync target.
+// Code in this course is English inside Persian lessons: keep each English piece in its own order.
+isolateContent(pythonCourse);
 setCourse(pythonCourse);
 configureProgress('zs-progress-python-v1');
 configureSync('python');

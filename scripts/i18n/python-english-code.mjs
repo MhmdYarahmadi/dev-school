@@ -128,6 +128,7 @@ The course owner wants ALL text INSIDE CODE to be in English. Rewrite the unit b
 - Change NOTHING else: keep every Persian explanation as it is (same wording), keep all keys, ids, kinds, numbers, answer indexes, the order and number of choices, hints and blocks, and the Markdown.
 - The code must stay correct Python: the solution must still produce exactly what the prompt asks for, a starter or wrong-order version must still be wrong, and the answer index must still point at the right choice.
 - Variable and function names stay as they are.
+Do not run commands or use any tools; answer directly from the text.
 Reply with ONLY the edited JSON object, nothing else.`;
 
 async function rewrite(unit, worker, lastTry) {

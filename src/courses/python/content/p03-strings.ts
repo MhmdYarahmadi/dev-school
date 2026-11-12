@@ -10,7 +10,7 @@ export const p03: Module = {
     {
       "id": "m03-concat",
       "title": "چسباندن متن‌ها",
-      "card": "با علامت `+` می‌توانی دو رشته را **به هم بچسبانی**:\n\n```python\nfirst = \"علی\"\ngreeting = \"سلام \" + first\nprint(greeting)   # سلام علی\n```\n\nدقت کن که فاصله‌ها را خودت باید بگذاری. اگر `+` بین دو متن باشد یعنی چسباندن، نه جمعِ ریاضی.",
+      "card": "با علامت `+` می‌توانی دو رشته را **به هم بچسبانی**:\n\n```python\nfirst = \"Ali\"\ngreeting = \"Hello \" + first\nprint(greeting)   # Hello Ali\n```\n\nدقت کن که فاصله‌ها را خودت باید بگذاری. اگر `+` بین دو متن باشد یعنی چسباندن، نه جمعِ ریاضی.",
       "predict": {
         "sql": "print(\"ab\" + \"cd\")",
         "question": "خروجی چیست؟",
@@ -23,7 +23,7 @@ export const p03: Module = {
         "why": "`+` بین دو رشته آن‌ها را به هم می‌چسباند؛ پس `abcd` بدون فاصله چاپ می‌شود."
       },
       "example": {
-        "sql": "print(\"خوش\" + \"آمدی\")",
+        "sql": "print(\"Hello\" + \"World\")",
         "note": "دو متن بدون فاصله به هم چسبیدند."
       },
       "cheat": {
@@ -34,20 +34,20 @@ export const p03: Module = {
     {
       "id": "m03-fstring",
       "title": "f-string",
-      "card": "راحت‌ترین راه برای ترکیب متن و متغیر، **f-string** است: قبل از گیومه یک `f` می‌گذاری و متغیر را داخل `{}` می‌نویسی:\n\n```python\nname = \"رضا\"\nage = 17\nprint(f\"{name} {age} سال دارد\")\n```\n\nپایتون داخل `{}` مقدار متغیر را جایگزین می‌کند. دیگر لازم نیست با `+` سروکله بزنی.",
+      "card": "راحت‌ترین راه برای ترکیب متن و متغیر، **f-string** است: قبل از گیومه یک `f` می‌گذاری و متغیر را داخل `{}` می‌نویسی:\n\n```python\nname = \"Reza\"\nage = 17\nprint(f\"{name} is {age} years old\")\n```\n\nپایتون داخل `{}` مقدار متغیر را جایگزین می‌کند. دیگر لازم نیست با `+` سروکله بزنی.",
       "predict": {
-        "sql": "x = 5\nprint(f\"عدد برابر {x} است\")",
+        "sql": "x = 5\nprint(f\"The number is {x}\")",
         "question": "خروجی چیست؟",
         "choices": [
-          "عدد برابر {x} است",
-          "عدد برابر 5 است",
-          "عدد برابر x است"
+          "The number is {x}",
+          "The number is 5",
+          "The number is x"
         ],
         "answer": 1,
         "why": "داخل f-string، `{x}` با مقدارِ `x` یعنی `5` جایگزین می‌شود."
       },
       "example": {
-        "sql": "city = \"شیراز\"\nprint(f\"من اهل {city} هستم\")",
+        "sql": "city = \"Shiraz\"\nprint(f\"I am from {city}\")",
         "note": "مقدار متغیر داخل متن جا می‌گیرد."
       },
       "cheat": {
@@ -58,7 +58,7 @@ export const p03: Module = {
     {
       "id": "m03-index",
       "title": "ایندکس و برش",
-      "card": "هر حرفِ یک رشته یک **شماره (ایندکس)** دارد که از **صفر** شروع می‌شود:\n\n```python\nword = \"پایتون\"\nprint(word[0])   # اولین حرف\nprint(word[1])   # حرف دوم\n```\n\nبا **برش** هم می‌توانی چند حرف پشت سر هم بگیری: `word[0:3]` یعنی از حرف ۰ تا قبل از ۳.",
+      "card": "هر حرفِ یک رشته یک **شماره (ایندکس)** دارد که از **صفر** شروع می‌شود:\n\n```python\nword = \"python\"\nprint(word[0])   # first letter\nprint(word[1])   # second letter\n```\n\nبا **برش** هم می‌توانی چند حرف پشت سر هم بگیری: `word[0:3]` یعنی از حرف ۰ تا قبل از ۳.",
       "predict": {
         "sql": "w = \"hello\"\nprint(w[0])",
         "question": "خروجی چیست؟",
@@ -84,15 +84,15 @@ export const p03: Module = {
       "title": "متدهای پرکاربرد",
       "card": "رشته‌ها چند **متد** مفید دارند که با نقطه صدا زده می‌شوند:\n\n```python\ns = \"Hello\"\nprint(s.upper())   # HELLO\nprint(s.lower())   # hello\nprint(len(s))      # 5\n```\n\n`.upper()` حروف را بزرگ می‌کند، `.lower()` کوچک، و `len()` **طول** رشته (تعداد حرف‌ها) را می‌دهد.",
       "predict": {
-        "sql": "print(len(\"سلام\"))",
+        "sql": "print(len(\"book\"))",
         "question": "خروجی چیست؟",
         "choices": [
           "4",
           "3",
-          "سلام"
+          "book"
         ],
         "answer": 0,
-        "why": "کلمهٔ «سلام» چهار حرف دارد، پس `len` مقدار `4` می‌دهد."
+        "why": "کلمهٔ «book» چهار حرف دارد، پس `len` مقدار `4` می‌دهد."
       },
       "example": {
         "sql": "print(\"python\".upper())",
@@ -110,27 +110,27 @@ export const p03: Module = {
       "conceptIds": [
         "m03-concat"
       ],
-      "prompt": "دو رشتهٔ `\"صبح\"` و `\"بخیر\"` را با یک فاصله به هم بچسبان و چاپ کن (باید «صبح بخیر» شود).",
-      "explanation": "با `+` سه تکه را به هم چسباندی: «صبح» + فاصله + «بخیر».",
+      "prompt": "دو رشتهٔ `\"Good\"` و `\"morning\"` را با یک فاصله به هم بچسبان و چاپ کن (باید «Good morning» شود).",
+      "explanation": "با `+` سه تکه را به هم چسباندی: «Good» + فاصله + «morning».",
       "hints": [
         "برای فاصله یک رشتهٔ \" \" بین آن‌ها بگذار."
       ],
       "kind": "write",
-      "solution": "print(\"صبح\" + \" \" + \"بخیر\")"
+      "solution": "print(\"Good\" + \" \" + \"morning\")"
     },
     {
       "id": "m03-p2",
       "conceptIds": [
         "m03-fstring"
       ],
-      "prompt": "با f-string متن «سلام علی» را بساز. جای خالی را پر کن.",
+      "prompt": "با f-string متن «Hello Ali» را بساز. جای خالی را پر کن.",
       "explanation": "حرف `f` قبل از گیومه، رشته را به f-string تبدیل می‌کند تا `{name}` جایگزین شود.",
       "hints": [
         "قبل از گیومه باید `f` بگذاری."
       ],
       "kind": "fillBlank",
-      "starterSql": "name = \"علی\"\nprint(___\"سلام {name}\")",
-      "solution": "name = \"علی\"\nprint(f\"سلام {name}\")"
+      "starterSql": "name = \"Ali\"\nprint(___\"Hello {name}\")",
+      "solution": "name = \"Ali\"\nprint(f\"Hello {name}\")"
     },
     {
       "id": "m03-p3",
@@ -156,13 +156,13 @@ export const p03: Module = {
       "conceptIds": [
         "m03-methods"
       ],
-      "prompt": "یک متغیر `name` با نامی دلخواه بساز و با f-string جملهٔ «نام من <name> است» را چاپ کن.",
+      "prompt": "یک متغیر `name` با نامی دلخواه بساز و با f-string جملهٔ «My name is <name>» را چاپ کن.",
       "explanation": "مقدار متغیر داخل f-string جایگزین شد.",
       "hints": [
         "از `f\"...\"` و `{name}` استفاده کن."
       ],
       "kind": "write",
-      "solution": "name = \"مینا\"\nprint(f\"نام من {name} است\")",
+      "solution": "name = \"Mina\"\nprint(f\"My name is {name}\")",
       "python": {
         "nonEmpty": true
       }
@@ -178,8 +178,8 @@ export const p03: Module = {
         "`len` یک دستور است و ورودی‌اش باید داخل پرانتز باشد."
       ],
       "kind": "fixBug",
-      "starterSql": "word = \"کتاب\"\nprint(len word)",
-      "solution": "word = \"کتاب\"\nprint(len(word))"
+      "starterSql": "word = \"book\"\nprint(len word)",
+      "solution": "word = \"book\"\nprint(len(word))"
     },
     {
       "id": "m03-p6",
@@ -193,15 +193,15 @@ export const p03: Module = {
       ],
       "kind": "parsons",
       "blocks": [
-        "name = \"آوا\"",
-        "print(f\"سلام {name}\")"
+        "name = \"Ava\"",
+        "print(f\"Hello {name}\")"
       ],
       "wrongOrder": [
-        "print(f\"سلام {name}\")",
-        "name = \"آوا\""
+        "print(f\"Hello {name}\")",
+        "name = \"Ava\""
       ],
       "distractors": [
-        "print(f\"سلام {name}\")  # قبل از ساختن name"
+        "print(f\"Hello {name}\")  # before creating name"
       ]
     }
   ],
@@ -212,13 +212,13 @@ export const p03: Module = {
         "m03-concat"
       ],
       "prompt": "خروجی این کد چیست؟",
-      "explanation": "`+` دو رشته را بدون فاصله به هم می‌چسباند، پس «خوشحال».",
+      "explanation": "`+` دو رشته را بدون فاصله به هم می‌چسباند، پس «HelloWorld».",
       "hints": [],
       "kind": "readQuery",
-      "sql": "print(\"خوش\" + \"حال\")",
+      "sql": "print(\"Hello\" + \"World\")",
       "choices": [
-        "خوش حال",
-        "خوشحال",
+        "Hello World",
+        "HelloWorld",
         "خطا"
       ],
       "answer": 1
@@ -268,11 +268,11 @@ export const p03: Module = {
       "conceptIds": [
         "m03-concat"
       ],
-      "prompt": "متغیری به نام `n` با عدد سنّت بساز و با f-string جملهٔ «سن من <n> است» را چاپ کن.",
+      "prompt": "متغیری به نام `n` با عدد سنّت بساز و با f-string جملهٔ «My age is <n>» را چاپ کن.",
       "explanation": "عدد داخل f-string هم مثل متن جایگزین می‌شود.",
       "hints": [],
       "kind": "write",
-      "solution": "n = 18\nprint(f\"سن من {n} است\")",
+      "solution": "n = 18\nprint(f\"My age is {n}\")",
       "python": {
         "nonEmpty": true
       }

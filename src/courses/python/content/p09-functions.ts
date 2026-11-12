@@ -10,7 +10,7 @@ export const p09: Module = {
     {
       "id": "m09-def",
       "title": "تعریف تابع",
-      "card": "یک **تابع** یک تکه کدِ نام‌دار است که می‌توانی بارها صدایش بزنی. با `def` تعریف می‌شود:\n\n```python\ndef greet():\n    print(\"سلام\")\n\ngreet()   # صدا زدن تابع\ngreet()\n```\n\nبدنهٔ تابع **تورفته** است. تا وقتی تابع را **صدا نزنی** (با `()`)، کدِ داخلش اجرا نمی‌شود.",
+      "card": "یک **تابع** یک تکه کدِ نام‌دار است که می‌توانی بارها صدایش بزنی. با `def` تعریف می‌شود:\n\n```python\ndef greet():\n    print(\"Hello\")\n\ngreet()   # call the function\ngreet()\n```\n\nبدنهٔ تابع **تورفته** است. تا وقتی تابع را **صدا نزنی** (با `()`)، کدِ داخلش اجرا نمی‌شود.",
       "predict": {
         "sql": "def hi():\n    print(\"hi\")\n\nhi()\nhi()",
         "question": "«hi» چند بار چاپ می‌شود؟",
@@ -23,7 +23,7 @@ export const p09: Module = {
         "why": "تابع دو بار صدا زده شده (`hi()` دو خط)، پس بدنه‌اش دو بار اجرا می‌شود."
       },
       "example": {
-        "sql": "def welcome():\n    print(\"خوش آمدی\")\n\nwelcome()",
+        "sql": "def welcome():\n    print(\"Welcome\")\n\nwelcome()",
         "note": "اول تعریف، بعد صدا زدن با ()."
       },
       "cheat": {
@@ -34,7 +34,7 @@ export const p09: Module = {
     {
       "id": "m09-params",
       "title": "پارامتر و ورودی",
-      "card": "تابع می‌تواند **ورودی** بگیرد تا هر بار با مقدارِ متفاوتی کار کند. ورودی‌ها را داخل پرانتز می‌نویسی:\n\n```python\ndef greet(name):\n    print(\"سلام \" + name)\n\ngreet(\"علی\")\ngreet(\"سارا\")\n```\n\nاین‌جا `name` یک **پارامتر** است و هنگام صدا زدن، مقدارش را می‌دهی.",
+      "card": "تابع می‌تواند **ورودی** بگیرد تا هر بار با مقدارِ متفاوتی کار کند. ورودی‌ها را داخل پرانتز می‌نویسی:\n\n```python\ndef greet(name):\n    print(\"Hello \" + name)\n\ngreet(\"Ali\")\ngreet(\"Sara\")\n```\n\nاین‌جا `name` یک **پارامتر** است و هنگام صدا زدن، مقدارش را می‌دهی.",
       "predict": {
         "sql": "def double(x):\n    print(x * 2)\n\ndouble(5)",
         "question": "خروجی چیست؟",
@@ -47,8 +47,8 @@ export const p09: Module = {
         "why": "مقدارِ ۵ به پارامترِ `x` داده می‌شود، پس `x * 2` برابر `10` چاپ می‌شود."
       },
       "example": {
-        "sql": "def say(word):\n    print(word)\n\nsay(\"درود\")",
-        "note": "مقدارِ \"درود\" جای word می‌نشیند."
+        "sql": "def say(word):\n    print(word)\n\nsay(\"Hello\")",
+        "note": "مقدارِ \"Hello\" جای word می‌نشیند."
       },
       "cheat": {
         "syntax": "def f(a, b):",
@@ -82,7 +82,7 @@ export const p09: Module = {
     {
       "id": "m09-scope",
       "title": "محدودهٔ متغیر (scope)",
-      "card": "متغیری که **داخل** یک تابع ساخته می‌شود، فقط همان‌جا زنده است و بیرون شناخته نمی‌شود:\n\n```python\ndef f():\n    inside = 10\n    print(inside)   # اینجا کار می‌کند\n\nf()\n# print(inside)  ← بیرون خطا می‌دهد\n```\n\nبه این می‌گویند **محدوده (scope)**. برای این‌که مقداری از تابع بیرون بیاید، آن را `return` کن.",
+      "card": "متغیری که **داخل** یک تابع ساخته می‌شود، فقط همان‌جا زنده است و بیرون شناخته نمی‌شود:\n\n```python\ndef f():\n    inside = 10\n    print(inside)   # works here\n\nf()\n# print(inside)  ← error outside\n```\n\nبه این می‌گویند **محدوده (scope)**. برای این‌که مقداری از تابع بیرون بیاید، آن را `return` کن.",
       "predict": {
         "sql": "def f():\n    x = 5\n    return x\n\nprint(f())",
         "question": "خروجی چیست؟",
@@ -92,14 +92,14 @@ export const p09: Module = {
           "خطا"
         ],
         "answer": 0,
-        "why": "تابع مقدارِ `x` یعنی ۵ را return می‌کند و بیرون چاپ می‌شود؛ خودِ `x` فقط داخل تابع زنده بود."
+        "why": "تابع مقدارِ `x` یعنی 5 را return می‌کند و بیرون چاپ می‌شود؛ خودِ `x` فقط داخل تابع زنده بود."
       },
       "example": {
-        "sql": "def make():\n    msg = \"داخل\"\n    return msg\n\nprint(make())",
+        "sql": "def make():\n    msg = \"inside\"\n    return msg\n\nprint(make())",
         "note": "مقدار با return بیرون آمد."
       },
       "cheat": {
-        "syntax": "return برای خروج مقدار",
+        "syntax": "return value",
         "note": "متغیرِ داخلِ تابع بیرون شناخته نمی‌شود."
       }
     }
@@ -110,14 +110,14 @@ export const p09: Module = {
       "conceptIds": [
         "m09-def"
       ],
-      "prompt": "تابعی به نام `hello` بنویس که وقتی صدا زده شد، متنِ «سلام» را چاپ کند؛ بعد یک بار صدایش بزن.",
+      "prompt": "تابعی به نام `hello` بنویس که وقتی صدا زده شد، متنِ «Hello» را چاپ کند؛ بعد یک بار صدایش بزن.",
       "explanation": "تابع را تعریف کردی و با `hello()` اجرایش کردی.",
       "hints": [
         "با `def hello():` شروع کن و بدنه را تورفته بنویس.",
         "در آخر `hello()` را صدا بزن."
       ],
       "kind": "write",
-      "solution": "def hello():\n    print(\"سلام\")\n\nhello()"
+      "solution": "def hello():\n    print(\"Hello\")\n\nhello()"
     },
     {
       "id": "m09-p2",
@@ -279,15 +279,15 @@ export const p09: Module = {
       "conceptIds": [
         "m09-scope"
       ],
-      "prompt": "تابعی به نام `greet` بنویس که یک نام بگیرد و متنِ «سلام <نام>» را **return** کند.",
+      "prompt": "تابعی به نام `greet` بنویس که یک نام بگیرد و متنِ «Hello <نام>» را **return** کند.",
       "explanation": "با `return` رشتهٔ ساخته‌شده را پس می‌دهی تا قابل‌استفاده باشد.",
       "hints": [],
       "kind": "write",
-      "solution": "def greet(name):\n    return \"سلام \" + name",
+      "solution": "def greet(name):\n    return \"Hello \" + name",
       "python": {
         "tests": [
-          "assert greet(\"علی\") == \"سلام علی\"",
-          "assert greet(\"سارا\") == \"سلام سارا\""
+          "assert greet(\"Ali\") == \"Hello Ali\"",
+          "assert greet(\"Sara\") == \"Hello Sara\""
         ]
       }
     },
@@ -296,19 +296,19 @@ export const p09: Module = {
       "conceptIds": [
         "m09-def"
       ],
-      "prompt": "پروژهٔ کوچک: تابعی به نام `grade` بنویس که یک نمره بگیرد و اگر ۱۰ یا بیشتر بود `\"قبول\"` و وگرنه `\"مردود\"` را return کند.",
+      "prompt": "پروژهٔ کوچک: تابعی به نام `grade` بنویس که یک نمره بگیرد و اگر ۱۰ یا بیشتر بود `\"Pass\"` و وگرنه `\"Fail\"` را return کند.",
       "explanation": "تابع با یک شرط تصمیم می‌گیرد و رشتهٔ مناسب را پس می‌دهد — ترکیبِ همهٔ چیزهایی که یاد گرفتی!",
       "hints": [
         "داخل تابع از `if ... else` استفاده کن.",
         "در هر شاخه یک رشته return کن."
       ],
       "kind": "write",
-      "solution": "def grade(score):\n    if score >= 10:\n        return \"قبول\"\n    else:\n        return \"مردود\"",
+      "solution": "def grade(score):\n    if score >= 10:\n        return \"Pass\"\n    else:\n        return \"Fail\"",
       "python": {
         "tests": [
-          "assert grade(15) == \"قبول\"",
-          "assert grade(10) == \"قبول\"",
-          "assert grade(8) == \"مردود\""
+          "assert grade(15) == \"Pass\"",
+          "assert grade(10) == \"Pass\"",
+          "assert grade(8) == \"Fail\""
         ]
       }
     }
