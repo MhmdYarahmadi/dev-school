@@ -134,7 +134,7 @@ export function PyExerciseCard({ exercise: ex, mode = 'practice', progressId, on
           {choice !== null && !isTest && (
             <div className={`callout ${solved ? 'good' : 'bad'}`}>
               <p>
-                <b>{solved ? '✓ درست!' : '✗ نه دقیقاً.'}</b> {ex.explanation}
+                <b>{solved ? '✓ درست!' : '✗ نه دقیقاً.'}</b> <ReactMarkdown components={{ p: 'span' }}>{ex.explanation}</ReactMarkdown>
               </p>
             </div>
           )}
@@ -213,7 +213,7 @@ export function PyExerciseCard({ exercise: ex, mode = 'practice', progressId, on
       {solved && !isTest && ex.kind !== 'readQuery' && (
         <div className="callout good">
           <p>
-            <b>✓ درست!</b> {ex.explanation}
+            <b>✓ درست!</b> <ReactMarkdown components={{ p: 'span' }}>{ex.explanation}</ReactMarkdown>
           </p>
         </div>
       )}

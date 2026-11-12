@@ -2,10 +2,11 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { offline } from './offline/plugin';
+import { pyodideFiles } from './offline/pyodide';
 
 export default defineConfig({
   // offline(): writes dist/sw.js, which saves the site in the browser so the courses work offline.
-  plugins: [react(), offline(resolve(__dirname, 'offline/sw.js'))],
+  plugins: [react(), pyodideFiles(), offline(resolve(__dirname, 'offline/sw.js'))],
   // One site, several pages: / (course list), /pg/ (PostgreSQL), /docker/ (Docker), /design/ (System Design), /git/ (Git), /python/ (Python), /admin/ (dashboard).
   base: '/',
   build: {

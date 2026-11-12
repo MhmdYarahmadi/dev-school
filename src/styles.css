@@ -385,7 +385,19 @@ table.results td.rownum { color: var(--muted); width: 1%; }
 
 /* Right to left (the Farsi Git course). Code, terminals, editors and graphs stay left to right. */
 html[lang="fa"] body { font-family: 'Vazirmatn Variable', var(--sans); }
-[dir="rtl"] pre, [dir="rtl"] .term, [dir="rtl"] .editor, [dir="rtl"] .block, [dir="rtl"] .gview, [dir="rtl"] table.results, [dir="rtl"] .cm-editor, [dir="rtl"] .py-output { direction: ltr; text-align: left; }
+/* Persian text inside code (Python strings): monospace fonts have no Persian letters and the fallback
+   breaks them apart. This font covers only Persian/Arabic letters (unicode-range), so it comes first
+   and everything else still uses the monospace font. */
+@font-face {
+  font-family: 'Vazirmatn Code';
+  src: url('../node_modules/@fontsource-variable/vazirmatn/files/vazirmatn-arabic-wght-normal.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+FB50-FDFF, U+FE70-FEFC;
+}
+html[lang="fa"] { --mono: 'Vazirmatn Code', ui-monospace, 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace; }
+html[lang="fa"] .cm-scroller { font-family: var(--mono); }
+[dir="rtl"] pre, [dir="rtl"] .term, [dir="rtl"] .editor, [dir="rtl"] .block, [dir="rtl"] .gview, [dir="rtl"] table.results, [dir="rtl"] .cm-editor { direction: ltr; text-align: left; }
 [dir="rtl"] :not(pre) > code, [dir="rtl"] .mono { direction: ltr; unicode-bidi: isolate; }
 [dir="rtl"] .flip { display: inline-block; transform: scaleX(-1); }
 @container (max-width: 560px) { [dir="rtl"] .area-arrow .flip { transform: rotate(90deg); } }
@@ -395,4 +407,6 @@ html[lang="fa"] .term-note { font-family: 'Vazirmatn Variable', var(--sans); tex
 /* ---- Python course ---- */
 /* Program output blocks (stdout / errors). */
 .py-output { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin: 0; white-space: pre-wrap; word-break: break-word; max-width: 100%; overflow-x: auto; }
+/* Program output: each line reads in the direction of its own text (a Persian line right to left). */
+[dir="rtl"] .py-output { unicode-bidi: plaintext; text-align: start; }
 .py-output.err { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }

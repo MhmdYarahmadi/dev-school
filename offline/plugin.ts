@@ -2,9 +2,11 @@ import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import type { Plugin } from 'vite';
+import { PYODIDE_VERSION } from './pyodide';
 
-/** Built files a learner never needs offline: the admin dashboard and PGlite's unused file systems. */
-const SKIP = [/^\/admin\//, /^\/assets\/admin-/, /^\/assets\/(nodefs|opfs-ahp)-/, /^\/sw\.js$/, /\.map$/];
+/** Not downloaded on install: the admin dashboard, PGlite's unused file systems, and Pyodide (13 MB,
+ * saved the first time the Python course uses it, see offline/sw.js). */
+const SKIP = [/^\/admin\//, /^\/pyodide\//, /^\/assets\/admin-/, /^\/assets\/(nodefs|opfs-ahp)-/, /^\/sw\.js$/, /\.map$/];
 
 /** Every file under `dir`, as site paths ('/assets/x.js'); index.html files become their folder ('/pg/'). */
 export function sitePaths(dir: string): string[] {
@@ -40,7 +42,8 @@ export function offline(template: string): Plugin {
       for (const f of files) hash.update(f).update(f.startsWith('/assets/') ? '' : readFileSync(join(outDir, f.endsWith('/') ? `${f}index.html` : f)));
       const sw = readFileSync(template, 'utf8')
         .replace("'__VERSION__'", JSON.stringify(hash.digest('hex').slice(0, 12)))
-        .replace('__FILES__', JSON.stringify(files));
+        .replace('__FILES__', JSON.stringify(files))
+        .replace("'__PYODIDE__'", JSON.stringify(PYODIDE_VERSION));
       writeFileSync(join(outDir, 'sw.js'), sw);
     },
   };

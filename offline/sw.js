@@ -3,6 +3,8 @@
 const VERSION = '__VERSION__';
 const FILES = __FILES__;
 const CACHE = `zs-${VERSION}`;
+/** Pyodide (Python course): saved on first use, kept across site updates until its version changes. */
+const PYODIDE = `pyodide-v${'__PYODIDE__'}`;
 /** Course sections with their own index.html (the admin dashboard is online only). */
 const SECTIONS = ['pg', 'docker', 'design', 'git', 'python'];
 const NETWORK_TIMEOUT_MS = 3000;
@@ -18,7 +20,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k.startsWith('zs-') && k !== CACHE).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => (k.startsWith('zs-') && k !== CACHE) || (k.startsWith('pyodide-v') && k !== PYODIDE)).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });
@@ -56,6 +58,23 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       withTimeout(fetch(req), NETWORK_TIMEOUT_MS).catch(() =>
         caches.match(pageFor(url), { cacheName: CACHE }).then((r) => r ?? caches.match(pageFor(url))).then((r) => r ?? Response.error()),
+      ),
+    );
+    return;
+  }
+
+  // Pyodide: the saved copy if there is one, else download it once and keep it.
+  if (url.pathname.startsWith('/pyodide/')) {
+    event.respondWith(
+      caches.open(PYODIDE).then((c) =>
+        c.match(req, { ignoreSearch: true }).then(
+          (hit) =>
+            hit ??
+            fetch(req).then((res) => {
+              if (res.ok) c.put(req, res.clone());
+              return res;
+            }),
+        ),
       ),
     );
     return;

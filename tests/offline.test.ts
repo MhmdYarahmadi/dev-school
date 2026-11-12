@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { offline, precacheList, sitePaths } from '../offline/plugin';
+import { PYODIDE_FILES, PYODIDE_VERSION } from '../offline/pyodide';
 import { emptyProgress, mergeProgress, type Progress } from '../src/progress/store';
 
 const prog = (patch: Partial<Progress>): Progress => ({ ...emptyProgress(), ...patch });
@@ -26,6 +27,12 @@ describe('service worker file list', () => {
     expect(files.filter((f) => /admin|nodefs|opfs/.test(f))).toEqual([]);
   });
 
+  it('leaves Pyodide (13 MB) out of the install list: it is saved when the Python course first uses it', () => {
+    mkdirSync(join(dist, 'pyodide', PYODIDE_VERSION), { recursive: true });
+    for (const f of PYODIDE_FILES) writeFileSync(join(dist, 'pyodide', PYODIDE_VERSION, f), f);
+    expect(precacheList(sitePaths(dist)).filter((f) => f.startsWith('/pyodide/'))).toEqual([]);
+  });
+
   it('writes sw.js with the list and a version that changes when a page changes', () => {
     const build = () => {
       const p = offline(resolve('offline/sw.js'));
@@ -38,10 +45,20 @@ describe('service worker file list', () => {
     expect(a.version).toMatch(/^[0-9a-f]{12}$/);
     expect(a.files).not.toContain('/sw.js');
     expect(a.files).toContain('/pg/');
+    expect(readFileSync(join(dist, 'sw.js'), 'utf8')).toContain('const PYODIDE = `pyodide-v${' + JSON.stringify(PYODIDE_VERSION) + '}`;');
     expect(build().version).toBe(a.version);
     writeFileSync(join(dist, 'pg/index.html'), 'a new version');
     expect(build().version).not.toBe(a.version);
     rmSync(dist, { recursive: true, force: true });
+  });
+});
+
+describe('Pyodide served by the site', () => {
+  it('the worker loads the same version as the pyodide package, from this site', () => {
+    const worker = readFileSync(resolve('public/py-worker.js'), 'utf8');
+    expect(/const PYODIDE_VERSION = '([\d.]+)'/.exec(worker)?.[1]).toBe(PYODIDE_VERSION);
+    expect(worker).toContain('const PYODIDE_URL = `/pyodide/${PYODIDE_VERSION}/`;');
+    expect(worker).not.toMatch(/cdn\.|https?:/);
   });
 });
 

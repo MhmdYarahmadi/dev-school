@@ -1,6 +1,6 @@
 /* Pyodide runner worker for the Python course (classic worker so importScripts works).
  *
- * Loads Pyodide once from the pinned CDN bundle, then runs snippets on demand. Each run
+ * Loads Pyodide once from this site (/pyodide/<version>/), then runs snippets on demand. Each run
  * executes in a FRESH namespace so exercises never leak state into each other, and
  * stdout/stderr are captured per run. input() is fed from an optional `stdin` string.
  *
@@ -10,7 +10,8 @@
  */
 /* global importScripts, loadPyodide */
 const PYODIDE_VERSION = '0.26.4';
-const PYODIDE_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+// Served by this site (offline/pyodide.ts), so the course works offline; keep in step with the pyodide package.
+const PYODIDE_URL = `/pyodide/${PYODIDE_VERSION}/`;
 
 let pyodide = null;
 let loading = null;
