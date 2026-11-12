@@ -986,3 +986,10 @@ After one online visit, all three courses open and work with no connection; prog
   - No letter-spacing on small uppercase headings in RTL (it breaks Persian joins).
 - Tried and dropped: isolating every filled-in value, which reversed "hash → hash" and "1/5".
 - Left as is: the terminal's accessibility label is still English. 1,326 tests pass; build OK. Not deployed yet.
+
+## 56. Python course merged into main (2026-11-12)
+- Merged `course/python` (commit 5324968, made Oct 28 in another session): a 5th course at `/python/`, 9 modules in Persian, real CPython in the browser through Pyodide in a Web Worker (10 s timeout respawns the worker), an Output Predictor game, and `tests/py-solutions.test.ts` (all 99 reference solutions through real CPython).
+- **Conflict:** only the end of `src/styles.css`. Kept main's right-to-left block, added the Python output styles, and added `.cm-editor` / `.py-output` to the left-to-right list. Dropped the branch's `.md` list and quote rules (main uses logical properties now).
+- **Integration:** the course is only in Persian, so `src/entries/python-lang.ts` (imported first) fixes the language to Farsi with `fixLang('fa')` (no EN/فا switch) and uses Gemini's Farsi interface table, so the shared menus, buttons, review and test pages are in Farsi too. Vazirmatn font imported.
+- **Checks:** typecheck OK; 1,470 tests pass (22 files); build OK; `/python/` served by the dev server.
+- **Not done:** browser walkthrough (the Chrome extension isn't connected) and the deploy. Pyodide loads from the jsDelivr CDN, so the Python course needs internet on first use (unlike the other courses).

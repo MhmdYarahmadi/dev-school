@@ -23,6 +23,12 @@ export function initLang(courseId: string): Lang {
   return current;
 }
 
+/** A course that is only in one language (the Persian Python course): no switch is offered. */
+export function fixLang(l: Lang) {
+  storageKey = '';
+  current = l;
+}
+
 export function lang(): Lang {
   return forced ?? current;
 }

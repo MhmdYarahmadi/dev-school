@@ -3,16 +3,18 @@ import { StreamLanguage } from '@codemirror/language';
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { yaml } from '@codemirror/legacy-modes/mode/yaml';
+import { python } from '@codemirror/legacy-modes/mode/python';
 import { Prec } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-export type Lang = 'shell' | 'dockerfile' | 'yaml' | 'text';
+export type Lang = 'shell' | 'dockerfile' | 'yaml' | 'python' | 'text';
 
 const LANGS = {
   shell: StreamLanguage.define(shell),
   dockerfile: StreamLanguage.define(dockerFile),
   yaml: StreamLanguage.define(yaml),
+  python: StreamLanguage.define(python),
 };
 
 export function usePrefersDark(): boolean {

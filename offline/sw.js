@@ -4,7 +4,7 @@ const VERSION = '__VERSION__';
 const FILES = __FILES__;
 const CACHE = `zs-${VERSION}`;
 /** Course sections with their own index.html (the admin dashboard is online only). */
-const SECTIONS = ['pg', 'docker', 'design', 'git'];
+const SECTIONS = ['pg', 'docker', 'design', 'git', 'python'];
 const NETWORK_TIMEOUT_MS = 3000;
 
 self.addEventListener('install', (event) => {

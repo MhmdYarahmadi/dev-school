@@ -385,9 +385,14 @@ table.results td.rownum { color: var(--muted); width: 1%; }
 
 /* Right to left (the Farsi Git course). Code, terminals, editors and graphs stay left to right. */
 html[lang="fa"] body { font-family: 'Vazirmatn Variable', var(--sans); }
-[dir="rtl"] pre, [dir="rtl"] .term, [dir="rtl"] .editor, [dir="rtl"] .block, [dir="rtl"] .gview, [dir="rtl"] table.results { direction: ltr; text-align: left; }
+[dir="rtl"] pre, [dir="rtl"] .term, [dir="rtl"] .editor, [dir="rtl"] .block, [dir="rtl"] .gview, [dir="rtl"] table.results, [dir="rtl"] .cm-editor, [dir="rtl"] .py-output { direction: ltr; text-align: left; }
 [dir="rtl"] :not(pre) > code, [dir="rtl"] .mono { direction: ltr; unicode-bidi: isolate; }
 [dir="rtl"] .flip { display: inline-block; transform: scaleX(-1); }
 @container (max-width: 560px) { [dir="rtl"] .area-arrow .flip { transform: rotate(90deg); } }
 html[lang="fa"] .term-note { font-family: 'Vazirmatn Variable', var(--sans); text-align: start; }
 [dir="rtl"] .gpanel-head, [dir="rtl"] .ev-head, [dir="rtl"] .module-num { letter-spacing: 0; }
+
+/* ---- Python course ---- */
+/* Program output blocks (stdout / errors). */
+.py-output { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin: 0; white-space: pre-wrap; word-break: break-word; max-width: 100%; overflow-x: auto; }
+.py-output.err { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }

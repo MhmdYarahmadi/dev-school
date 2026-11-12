@@ -81,7 +81,7 @@ describe('diagnose questions', () => {
 const answerOf = (e: Exercise, which: 'solution' | 'wrong'): string => {
   if (e.kind === 'parsons') return (which === 'solution' ? e.blocks : e.wrongOrder).join('\n');
   if (e.kind === 'readQuery') return '';
-  return which === 'solution' ? e.solution : e.wrongExample;
+  return which === 'solution' ? e.solution : e.wrongExample ?? '';
 };
 
 describe('exercises', () => {
