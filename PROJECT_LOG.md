@@ -1009,3 +1009,11 @@ After one online visit, all three courses open and work with no connection; prog
 - **Right to left:** English inside Persian sentences (**Hello, world!**, «Hello <name>») and all-English choices are wrapped in Unicode isolates (`isolateContent`, course content only), so "!" stays at the end.
 - **Tests:** a predict/choice whose real output is one of the choices must be the marked answer; a guard that no Persian is inside any Python code. 1,473 tests pass; build OK. Checked in Chrome (local server, throwaway account deleted).
 - Deployed 2026-11-12 (with the Python course and bundled Pyodide 0.26.4): live /python/ and /git/ match the local build, Pyodide served from /pyodide/0.26.4/, worker has no CDN.
+
+## 59. Python lessons: recorded voiceovers (2026-11-12)
+- **What:** a lesson (concept) can have a recording. It shows a "🔊 Listen to this lesson" button under the title; pressing it downloads the file and plays it, with the browser's player and a 1× / 1.25× / 1.5× speed button (remembered). Lessons without a file look as before.
+- **Files:** `src/courses/python/audio/<concept id>.m4a`, found by `src/courses/python/audio.ts` (Vite glob, hashed in /assets/). `scripts/audio/prepare.mjs <folder>` makes them from raw recordings in any format: trims silence at both ends, removes rumble below 80 Hz, two-pass loudness to -16 LUFS, mono AAC 64 kbit/s (~0.5 MB a minute); a very quiet recording is kept untrimmed, a silent or misnamed one is skipped. `prepare.mjs list` prints the lesson ids and titles.
+- **Offline:** not downloaded on install; the service worker keeps each recording in a `lesson-audio` cache once played (kept across updates, dropped when the file is gone). The page plays it from memory (a blob), so seeking works offline without range requests. Server serves `.m4a` as audio/mp4.
+- **Farsi:** the 3 new interface strings were translated by Gemini (translate-git.mjs).
+- **Tests:** recordings must be named after a real lesson id; the course finds each one; .m4a is not precached and is listed in sw.js. 1,476 tests pass. Checked in Chrome (local, throwaway account): plays, speed remembered, plays again with the server stopped, no button on lessons without a file.
+- No recordings yet; nothing to deploy until there are.

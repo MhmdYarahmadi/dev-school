@@ -33,6 +33,11 @@ describe('service worker file list', () => {
     expect(precacheList(sitePaths(dist)).filter((f) => f.startsWith('/pyodide/'))).toEqual([]);
   });
 
+  it('leaves lesson voiceovers out of the install list: each is saved when first played', () => {
+    writeFileSync(join(dist, 'assets', 'm01-print-k1.m4a'), 'audio');
+    expect(precacheList(sitePaths(dist)).filter((f) => f.endsWith('.m4a'))).toEqual([]);
+  });
+
   it('writes sw.js with the list and a version that changes when a page changes', () => {
     const build = () => {
       const p = offline(resolve('offline/sw.js'));
@@ -46,6 +51,8 @@ describe('service worker file list', () => {
     expect(a.files).not.toContain('/sw.js');
     expect(a.files).toContain('/pg/');
     expect(readFileSync(join(dist, 'sw.js'), 'utf8')).toContain('const PYODIDE = `pyodide-v${' + JSON.stringify(PYODIDE_VERSION) + '}`;');
+    expect(readFileSync(join(dist, 'sw.js'), 'utf8')).toContain('const AUDIO = ["/assets/m01-print-k1.m4a"];');
+    expect(a.files.filter((f) => f.endsWith('.m4a'))).toEqual([]);
     expect(build().version).toBe(a.version);
     writeFileSync(join(dist, 'pg/index.html'), 'a new version');
     expect(build().version).not.toBe(a.version);

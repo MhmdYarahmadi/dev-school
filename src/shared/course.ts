@@ -75,6 +75,8 @@ export interface CourseUI {
   PredictSetup?: ComponentType<{ code: string; env?: SandboxEnv }>;
   ProjectView: ComponentType<{ project: Project }>;
   games: Record<string, LazyExoticComponent<ComponentType>>;
+  /** Recorded voiceovers by concept id (URL of each file); lessons without one have none. */
+  lessonAudio?: Record<string, string>;
   /** Extra top-level pages, e.g. the SQL playground. */
   extraPages?: { path: string; label: string; Component: ComponentType }[];
 }

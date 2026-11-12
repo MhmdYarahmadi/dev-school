@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
 import type { Concept, Module } from '../content/types';
+import { LessonAudio } from '../components/LessonAudio';
 import { PredictPrompt } from '../components/PredictPrompt';
 import { course, h } from '../shared/course';
 import { completeVariant, getProgress, markConceptSeen, recordPrediction, setLast, useProgress } from '../progress/store';
@@ -100,12 +101,14 @@ function ConceptView({ concept, onNext, isLast }: { concept: Concept; onNext: ()
   // visible so the learner sees the feedback and the real result.
   const [alreadyPredicted] = useState(() => concept.id in getProgress().predictions);
   const [predicted, setPredicted] = useState(!concept.predict || alreadyPredicted);
-  const { ExampleRunner } = course().ui;
+  const { ExampleRunner, lessonAudio } = course().ui;
+  const audio = lessonAudio?.[concept.id];
 
   return (
     <div className="stack">
       <div className="card md">
         <h2 style={{ marginTop: 0 }}>{concept.title}</h2>
+        {audio && <LessonAudio key={concept.id} src={audio} />}
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{concept.card}</ReactMarkdown>
       </div>
       {concept.predict && !alreadyPredicted && (

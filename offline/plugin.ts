@@ -5,8 +5,9 @@ import type { Plugin } from 'vite';
 import { PYODIDE_VERSION } from './pyodide';
 
 /** Not downloaded on install: the admin dashboard, PGlite's unused file systems, and Pyodide (13 MB,
- * saved the first time the Python course uses it, see offline/sw.js). */
-const SKIP = [/^\/admin\//, /^\/pyodide\//, /^\/assets\/admin-/, /^\/assets\/(nodefs|opfs-ahp)-/, /^\/sw\.js$/, /\.map$/];
+ * saved the first time the Python course uses it, see offline/sw.js), and lesson voiceovers (saved
+ * when first played). */
+const SKIP = [/^\/admin\//, /^\/pyodide\//, /^\/assets\/admin-/, /^\/assets\/(nodefs|opfs-ahp)-/, /^\/sw\.js$/, /\.map$/, /\.m4a$/];
 
 /** Every file under `dir`, as site paths ('/assets/x.js'); index.html files become their folder ('/pg/'). */
 export function sitePaths(dir: string): string[] {
@@ -43,7 +44,8 @@ export function offline(template: string): Plugin {
       const sw = readFileSync(template, 'utf8')
         .replace("'__VERSION__'", JSON.stringify(hash.digest('hex').slice(0, 12)))
         .replace('__FILES__', JSON.stringify(files))
-        .replace("'__PYODIDE__'", JSON.stringify(PYODIDE_VERSION));
+        .replace("'__PYODIDE__'", JSON.stringify(PYODIDE_VERSION))
+        .replace('__AUDIO__', JSON.stringify(sitePaths(outDir).filter((p) => p.endsWith('.m4a'))));
       writeFileSync(join(outDir, 'sw.js'), sw);
     },
   };

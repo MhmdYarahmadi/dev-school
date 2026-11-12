@@ -410,3 +410,7 @@ html[lang="fa"] .term-note { font-family: 'Vazirmatn Variable', var(--sans); tex
 /* Program output: each line reads in the direction of its own text (a Persian line right to left). */
 [dir="rtl"] .py-output { unicode-bidi: plaintext; text-align: start; }
 .py-output.err { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }
+
+/* Lesson voiceover (Python course) */
+.lesson-audio { margin: 4px 0 12px; align-items: center; }
+.lesson-audio audio { min-width: 0; height: 40px; }

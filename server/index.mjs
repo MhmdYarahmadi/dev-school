@@ -275,6 +275,7 @@ const MIME = {
   '.ico': 'image/x-icon',
   '.tar': 'application/x-tar',
   '.gz': 'application/gzip',
+  '.m4a': 'audio/mp4',
 };
 
 function serveStatic(req, res, urlPath) {

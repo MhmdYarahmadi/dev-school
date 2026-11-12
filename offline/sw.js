@@ -5,6 +5,9 @@ const FILES = __FILES__;
 const CACHE = `zs-${VERSION}`;
 /** Pyodide (Python course): saved on first use, kept across site updates until its version changes. */
 const PYODIDE = `pyodide-v${'__PYODIDE__'}`;
+/** Lesson voiceovers: saved when first played, kept across updates; dropped once a file is gone. */
+const AUDIO_CACHE = 'lesson-audio';
+const AUDIO = __AUDIO__;
 /** Course sections with their own index.html (the admin dashboard is online only). */
 const SECTIONS = ['pg', 'docker', 'design', 'git', 'python'];
 const NETWORK_TIMEOUT_MS = 3000;
@@ -21,6 +24,8 @@ self.addEventListener('activate', (event) => {
     caches
       .keys()
       .then((keys) => Promise.all(keys.filter((k) => (k.startsWith('zs-') && k !== CACHE) || (k.startsWith('pyodide-v') && k !== PYODIDE)).map((k) => caches.delete(k))))
+      .then(() => caches.open(AUDIO_CACHE))
+      .then((c) => c.keys().then((reqs) => Promise.all(reqs.filter((r) => !AUDIO.includes(new URL(r.url).pathname)).map((r) => c.delete(r)))))
       .then(() => self.clients.claim()),
   );
 });
@@ -58,6 +63,23 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       withTimeout(fetch(req), NETWORK_TIMEOUT_MS).catch(() =>
         caches.match(pageFor(url), { cacheName: CACHE }).then((r) => r ?? caches.match(pageFor(url))).then((r) => r ?? Response.error()),
+      ),
+    );
+    return;
+  }
+
+  // Voiceovers: the saved copy if there is one, else download it (whole files only) and keep it.
+  if (url.pathname.endsWith('.m4a')) {
+    event.respondWith(
+      caches.open(AUDIO_CACHE).then((c) =>
+        c.match(req, { ignoreSearch: true }).then(
+          (hit) =>
+            hit ??
+            fetch(req).then((res) => {
+              if (res.status === 200) c.put(req, res.clone());
+              return res;
+            }),
+        ),
       ),
     );
     return;
